@@ -8,7 +8,7 @@ import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
 
 
-public class SimulationService {
+public class FireSimulationService {
 
 	public List<FireDto> getFire() {
 		String UrlGetFires = "http://127.0.0.1:8081/fire";

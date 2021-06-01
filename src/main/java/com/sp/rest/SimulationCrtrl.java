@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.project.model.dto.FireDto;
+import com.sp.service.FireSimulationService;
 
 
 
@@ -24,7 +25,8 @@ import com.project.model.dto.FireDto;
 
 public class SimulationCrtrl {
 	@Autowired
-
+	FireSimulationService fService;
+	
 	@Autowired
 	
     
@@ -43,7 +45,9 @@ public class SimulationCrtrl {
 	public List<FireDto> GetFires(HttpServletResponse response,HttpServletRequest request) {
 	  
 		 
-		return mService.buyACard(buyer, card, market);
+		return fService.getFire();
+		
+    }
 		  
 	  
 	
