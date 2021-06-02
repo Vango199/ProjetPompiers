@@ -20,7 +20,7 @@ function init() {
     mainLayer.addTo(map);
 
   GetAllFire();
-
+  GetAllCamionsBomberos();
 }
 
 function GetAllFire(){ //appel de la liste avec tous les feux
@@ -44,7 +44,7 @@ function GetAllFire(){ //appel de la liste avec tous les feux
     .catch(function(err) {
       console.log('Fetch Error :-S', err);
     });
-    setTimeout(GetAllFire, 300);
+    setTimeout(GetAllFire, 100000);
 }
 
 
@@ -101,7 +101,60 @@ function perc2color_dark(perc) { //Création d'une échelle de couleurs en fonct
 }
 
 function AffichageDonneeFeux(Feux){ //Affichage des données liées au feu
-  y = '<p><b>El Fuegooo : </b>' + '<img src="../Img/feu.jpg" width="25" height="25" />' + '<br />' + 'Id : ' + Feux.id+ '<br />' + 'Intensity : ' + Feux.intensity+ '<br />' + 'Range : ' + Feux.range+ '<br />' + 'Type : ' + Feux.type;
+  y = '<p><b>El Fuegooo : </b>' + '<img src="../Img/feu.png" width="25" height="25" />' + '<br />' + 'Id : ' + Feux.id+ '<br />' + 'Intensity : ' + Feux.intensity+ '<br />' + 'Range : ' + Feux.range+ '<br />' + 'Type : ' + Feux.type;
   return y.toString()
 
+}
+
+
+////////////////////////////////////////////////////// AFFICHAGE DES CAMIONS DE BOMBEROS /////////////////////////////////////////////////
+
+function GetAllCamionsBomberos(){ //appel de la liste avec tous les camions de pompier
+  console.log("titi")
+  fetch('http://localhost:8081/vehicle')
+  .then(
+    function(response) {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+
+      // Examine the text in the response
+      response.json().then(function(data) {
+        AffichageCamions(data);
+        return data;
+      });
+    }
+  )
+  .catch(function(err) {
+    console.log('Fetch Error :-S', err);
+  });
+  setTimeout(GetAllCamionsBomberos, 100000);
+}
+
+function AffichageCamions(AllCamionsBomberosList){
+  //AllFireList =   GetAllFire();//appel de la fonction qui retourne une liste de feux
+
+//On parcourt la liste des feux pour venir les afficher sur la map
+
+
+for (i in AllCamionsBomberosList){
+console.log(i);
+
+var myIcon = L.icon({
+  iconUrl: '../Img/my-icon.png',
+  iconSize: [40,  20],
+  iconAnchor: [39, 19],
+});
+
+var my_marker =L.marker([AllCamionsBomberosList[i].lat, AllCamionsBomberosList[i].lon], {icon: myIcon}).addTo(map);
+my_marker.bindPopup(AffichageDonneeCamionsBomberos(AllCamionsBomberosList[i])).openPopup()
+
+}
+}
+
+function AffichageDonneeCamionsBomberos(Camion){ //Affichage des données liées au feu
+  y = '<p><b>Camion de bomberooos : </b>' + 'Id : ' + Camion.id+ '<br />' + 'Type : ' + Camion.type+ '<br />' + 'Capacité : ' + Camion.crewMemberCapacity + '<br />' + 'Fuel : : ' + Camion.fuel;
+  return y.toString()
 }
