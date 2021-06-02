@@ -1,5 +1,5 @@
 let map = null;
-let TempsdeRefresh = 100000;
+let TempsdeRefresh = 5000;
 
 let fire_list =[];
 var fire = L.layerGroup();
