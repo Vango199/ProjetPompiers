@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
+import com.sp.model.Vehicle;
 import com.sp.service.FireSimulationService;
 import com.sp.service.VehicleService;
 
@@ -33,24 +34,24 @@ public class RestCrtVehicules {
 		return "Hello Hero !!!";
 	}
 	//ajouter un véhicule
-	@RequestMapping(method=RequestMethod.POST,value="/vehicle") 
-	public void PostVehicle(@RequestBody VehicleDto _vehicle, HttpServletResponse response,HttpServletRequest request) {
+	@RequestMapping(method=RequestMethod.POST,value="") 
+	public void PostVehicle(@RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
 	  
 		vService.PostVehicle(_vehicle);
 		return;
 		
     }
 	//modifier un véhicule
-	@RequestMapping(method=RequestMethod.PUT,value="/vehicle/{id}") 
-	public void PutVehicle(@PathVariable Integer _id , @RequestBody VehicleDto _vehicle, HttpServletResponse response,HttpServletRequest request) {
+	@RequestMapping(method=RequestMethod.PUT,value="/{id}") 
+	public void PutVehicle(@PathVariable Integer _id , @RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
 	  
 		vService.PutVehicle(_vehicle);
 		return;
 		
     }
 	//get un véhicule
-	@RequestMapping(method=RequestMethod.GET,value="/vehicle/{id}") 
-	public VehicleDto GetVehicle(@PathVariable Integer _id , HttpServletResponse response,HttpServletRequest request) {
+	@RequestMapping(method=RequestMethod.GET,value="/{id}") 
+	public Vehicle GetVehicle(@PathVariable Integer _id , HttpServletResponse response,HttpServletRequest request) {
 	  
 		
 		return fService.GetVehicleById(_id);
