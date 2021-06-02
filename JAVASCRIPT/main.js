@@ -1,7 +1,6 @@
 let map = null;
 let TempsdeRefresh = 5000;
 
-let fire_list =[];
 var fire = L.layerGroup();
 var fire_chill = L.layerGroup();
 var fire_hard = L.layerGroup();
@@ -37,9 +36,9 @@ function init() {
 
 
     var overlayMaps_fire = {
-      "Feux doux tranquilou" : fire_chill,
-      "Feux": fire,
-      "Feux de fou" : fire_hard,
+      "Feux soft" : fire_chill,
+      "Feux moyens": fire,
+      "Feux hard" : fire_hard,
     };
 
     var overlayMaps_type = {
@@ -256,9 +255,10 @@ var myIcon = L.icon({
   iconAnchor: [29, 19],
 });
 
-var my_marker =L.marker([AllCamionsBomberosList[i].lat, AllCamionsBomberosList[i].lon], {icon: myIcon}).addTo(pompier);
-my_marker.bindPopup(AffichageDonneeCamionsBomberos(AllCamionsBomberosList[i]))
-pompier.addTo(map)
+var my_marker =L.marker([AllCamionsBomberosList[i].lat, AllCamionsBomberosList[i].lon], {icon: myIcon});
+my_marker.bindPopup(AffichageDonneeCamionsBomberos(AllCamionsBomberosList[i]));
+my_marker.addTo(pompier);
+pompier.addTo(map);
 }
 }
 

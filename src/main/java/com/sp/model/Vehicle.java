@@ -23,7 +23,7 @@ public class Vehicle {
 	private int crewMember;
 	private int crewMemberCapacity;
 	private Integer facilityRefID;
-	private Integer idFire = 0;
+	private Integer idFire ;
 	
 	public Integer getIdFire() {
 		return idFire;
@@ -36,6 +36,7 @@ public class Vehicle {
 	public Vehicle() {
 		crewMember= CREW_MEMBER_START_VALUE;
 		liquidType=LiquidType.ALL;
+		this.idFire =0;
 	}
 
 	public Vehicle(int id,double lon, double lat, com.project.model.dto.VehicleType type, float efficiency,
@@ -55,6 +56,7 @@ public class Vehicle {
 		this.crewMember = crewMember;
 		this.crewMemberCapacity = crewMemberCapacity;
 		this.facilityRefID = facilityRefID;
+		this.idFire = 0;
 	}
 
 	public double getLon() {

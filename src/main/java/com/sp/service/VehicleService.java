@@ -1,11 +1,14 @@
 package com.sp.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
 import com.sp.model.Vehicle;
 import com.sp.repository.VehicleRepository;
@@ -17,6 +20,26 @@ public class VehicleService {
 	FireSimulationService fService;
 	@Autowired
 	VehicleRepository vRepository;
+	
+	DisplayRunnable dRunnable;
+	private Thread displayThread;
+	
+
+	public VehicleService(VehicleRepository vRepository) {
+		//Replace the @Autowire annotation....
+		this.vRepository=vRepository;
+		
+		//Create a Runnable is charge of executing cyclic actions 
+		this.dRunnable=new DisplayRunnable(this.vRepository);
+		
+		// A Runnable is held by a Thread which manage lifecycle of the Runnable
+		displayThread=new Thread(dRunnable);
+		
+		// The Thread is started and the method run() of the associated DisplayRunnable is launch
+		displayThread.start();
+		
+	}
+
 	
 	public void PostVehicle(Vehicle _vehicle) {
 		
@@ -44,7 +67,7 @@ public class VehicleService {
 		
 	}
 
-	private Vehicle findById(Integer _id) {
+	public Vehicle findById(Integer _id) {
 		
 		Optional<Vehicle> vOpt =vRepository.findById(_id);
 	    if (vOpt.isPresent()) {
@@ -59,10 +82,50 @@ public class VehicleService {
 		return vehicleDto;
 	}
 	
-	public void Moove (Vehicle _vehicle) {
+	public void stopDisplay() {
+		//Call the user defined stop method of the runnable
+		this.dRunnable.stop();
+		try {
+			//force the thread to stop
+			this.displayThread.join(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+
+
+
+
+	public void Move (Vehicle _vehicle) {
+		
+		//récupération du feu associé
+		FireDto fire = fService.GetFireById(_vehicle.getIdFire());
 		
 		//récupération des positions d'arrivée : celles du feu
-//		double lonArriv = fService. _vehicle.getIdFire()
+		
+		int deplacement = 5;
+		
+		double latArriv = fire.getLat();
+		double lonArriv = fire.getLon();
+		
+		
+		double angle = Math.atan((lonArriv-_vehicle.getLon())/(latArriv-_vehicle.getLat()));
+		
+		//On actualise les coo
+		_vehicle.setLat(Math.cos(angle)*deplacement);
+		_vehicle.setLon(Math.sin(angle)*deplacement);
+		
+		
+		System.out.println("Vehicule "+_vehicle.getId()+"-->"+_vehicle.getLat()+","+_vehicle.getLon() );
+		vRepository.save(_vehicle);
+		
+	}
+	
+	public void gestionFeux() {
+		
+		FireDto[] listFire = fService.getFire();
 	}
 }
 

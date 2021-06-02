@@ -14,9 +14,9 @@ import com.sp.model.Vehicle;
 @Service
 public class FireSimulationService {
 
-	public List<FireDto> getFire() {
+	public FireDto[] getFire() {
 		String UrlGetFires = "http://127.0.0.1:8081/fire";
-		List<FireDto> ListFire = new RestTemplate().getForObject(UrlGetFires,List.class);//pas sûr que ca va marcher
+		FireDto[] ListFire = new RestTemplate().getForObject(UrlGetFires,FireDto[].class);
 		return ListFire;
 	}
 	
@@ -50,16 +50,33 @@ public class FireSimulationService {
 		return ;
 	}
 	
-	public void DeleteVehicle( Vehicle _vehicle) {
+	public void DeleteVehicle( VehicleDto _vehicle) {
 		String UrlDeleteVehicle = "http://127.0.0.1:8081/vehicle/"+_vehicle.getId();
 		new RestTemplate().delete(UrlDeleteVehicle);
 		return ;
 	}
-	
-	public void GetFireById(Integer _fireId) {
+
+
+
+	public void deleteAll() {
+		VehicleDto[] listVehicle = this.GetVehicle();
+		for(VehicleDto vehicleDto : listVehicle) {
+			this.DeleteVehicle(vehicleDto);
+		}
 		
-		List<FireDto> listFire = this.getFire();
-//		for (FireDto)
+	}
+	
+	public FireDto GetFireById(Integer _fireId) {
+		
+		FireDto fireDtoToRet = null;
+		FireDto[] listFire = this.getFire();
+		for (FireDto fireDto: listFire) {
+			if (fireDto.getId()==_fireId) {
+				fireDtoToRet=fireDto;
+				break;
+			}
+		}
+		return fireDtoToRet;
 		
 	}
 	
