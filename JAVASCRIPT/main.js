@@ -86,8 +86,8 @@ function perc2color(perc) { //Création d'une échelle de couleurs en fonction d
 	return '#' + ('000000' + h.toString(16)).slice(-6);
 }
 
-function AffichageDonneeFeux(Feux){
-  y = 'id :' + Feux.id + ', intensity :' + Feux.intensity + ', range :' + Feux.range + ', Type :' + Feux.type;
+function AffichageDonneeFeux(Feux){ //Affichage des données liées au feu
+  y = '<p><b>El Fuegooo : </b>' + '<br />' + 'Id : ' + Feux.id+ '<br />' + 'Intensity : ' + Feux.intensity+ '<br />' + 'Range : ' + Feux.range+ '<br />' + 'Type : ' + Feux.type;
   return y.toString()
 
 }
