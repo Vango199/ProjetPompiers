@@ -68,6 +68,7 @@ for (i in AllFireList){
         fillOpacity: 0.8,
         radius: AllFireList[i].range
     }).addTo(map);
+   
 }
 }
 
