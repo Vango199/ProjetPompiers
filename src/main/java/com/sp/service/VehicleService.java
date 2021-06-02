@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
 import com.sp.model.Vehicle;
 import com.sp.repository.VehicleRepository;
@@ -59,10 +60,29 @@ public class VehicleService {
 		return vehicleDto;
 	}
 	
-	public void Moove (Vehicle _vehicle) {
+	public void Move (Vehicle _vehicle) {
+		
+		//récupération du feu associé
+		FireDto fire = fService.GetFireById(_vehicle.getIdFire());
 		
 		//récupération des positions d'arrivée : celles du feu
-//		double lonArriv = fService. _vehicle.getIdFire()
+		
+		int deplacement = 5;
+		
+		double latArriv = fire.getLat();
+		double lonArriv = fire.getLon();
+		
+		
+		double angle = Math.atan((lonArriv-_vehicle.getLon())/(latArriv-_vehicle.getLat()));
+		
+		//On actualise les coo
+		_vehicle.setLat(Math.cos(angle)*deplacement);
+		_vehicle.setLon(Math.sin(angle)*deplacement);
+		
+		
+		System.out.println("Vehicule "+_vehicle.getId()+"-->"+_vehicle.getLat()+","+_vehicle.getLon() );
+		vRepository.save(_vehicle);
+		
 	}
 }
 
