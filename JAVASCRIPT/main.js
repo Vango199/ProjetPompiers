@@ -59,9 +59,10 @@ console.log(AllFireList);
 for (i in AllFireList){
   console.log(i);
   x = perc2color((AllFireList[i].intensity)*2)
-    var circle = L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
+  console.log(x);
+     var circle = L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
      
-        color: 'red',
+        color: x,
         fillColor: x,
         fillOpacity: 0.8,
         radius: AllFireList[i].range
@@ -69,8 +70,7 @@ for (i in AllFireList){
 }
 }
 
-
-function perc2color(perc) {
+function perc2color(perc) { //Création d'une échelle de couleurs en fonction de l'intensité du feu
 	var r, g, b = 0;
 	if(perc < 50) {
 		r = 255;
