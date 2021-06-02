@@ -1,5 +1,5 @@
 let map = null;
-let TempsdeRefresh = 100000;
+let TempsdeRefresh = 5000;
 let fire_list =[];
 var fire = L.layerGroup();
 var fire_chill = L.layerGroup();
@@ -12,7 +12,6 @@ var type_E = L.layerGroup();
 
 
 function init() {
-    console.log('inside init');
     const Lyon = {
         lat: 45.75,
         lng: 4.85
@@ -31,11 +30,14 @@ function init() {
     mainLayer.addTo(map);
 
 
-    fire.addTo(map);
-    var overlayMaps = {
+
+    var overlayMaps_fire = {
       "Feux doux tranquilou" : fire_chill,
       "Feux": fire,
       "Feux de fou" : fire_hard,
+    };
+
+    var overlayMaps_type = {
       "Type A" : type_A,
       "Type B" : type_B,
       "Type C" : type_C,
@@ -43,7 +45,9 @@ function init() {
       "Type E" : type_E
     };
     
-    L.control.layers(null,overlayMaps).addTo(map);
+    
+    L.control.layers(null,overlayMaps_fire).addTo(map);
+    L.control.layers(null,overlayMaps_type).addTo(map);
 
   GetAllFire();
   GetAllCamionsBomberos();
