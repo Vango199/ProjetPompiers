@@ -1,7 +1,9 @@
 package com.sp.service;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,15 +26,15 @@ public class FireSimulationService {
 		return ;
 	}
 	
-	public void PostVehicle(Vehicle _vehicle) {
+	public void PostVehicle(VehicleDto _vehicle) {
 		String UrlPostVehicle = "http://127.0.0.1:8081/vehicle";
-		new RestTemplate().postForEntity(UrlPostVehicle, _vehicle, null);
+		ResponseEntity<VehicleDto> vDto = new RestTemplate().postForEntity(UrlPostVehicle, _vehicle, VehicleDto.class);
 		return ;
 	}
 	
-	public List<Vehicle> GetVehicle() {
+	public VehicleDto[] GetVehicle() {
 		String UrlGetVehicle = "http://127.0.0.1:8081/vehicle";
-		List<Vehicle> listVehicle = new RestTemplate().getForObject(UrlGetVehicle, List.class );
+		VehicleDto[] listVehicle = new RestTemplate().getForObject(UrlGetVehicle, VehicleDto[].class );
 		return listVehicle;
 	}
 	

@@ -1,5 +1,6 @@
 package com.sp.service;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,22 @@ public class VehicleService {
 	
 	public void PostVehicle(Vehicle _vehicle) {
 		
+		
+		fService.PostVehicle(this.toDto(_vehicle));
+		VehicleDto[] listVehicleDto = fService.GetVehicle();
+//		TreeMap<VehicleDto, Integer> treeVehicleDto = new TreeMap<VehicleDto, Integer>();
+//		treeVehicleDto.putAll(listVehicleDto);
+		VehicleDto vehicleDtos=null;
+		for(VehicleDto vehicleDto : listVehicleDto) {
+			int idcomp = 0;
+			if (idcomp < vehicleDto.getId()) {
+				idcomp = vehicleDto.getId();
+				vehicleDtos=vehicleDto;
+			}
+		}
+		
+		_vehicle.setId(vehicleDtos.getId());
 		vRepository.save(_vehicle);
-		fService.PostVehicle(_vehicle);
 	}
 
 	public void PutVehicle(Vehicle _vehicle) {
@@ -41,5 +56,25 @@ public class VehicleService {
 	    }
 }
 	
-	
+	public VehicleDto toDto(Vehicle vehicle) {
+		VehicleDto vehicleDto = new VehicleDto(vehicle.getId(),vehicle.getLon(),vehicle.getLat(),vehicle.getType(),vehicle.getEfficiency(),vehicle.getLiquidType(),vehicle.getLiquidQuantity(),vehicle.getLiquidConsumption(),vehicle.getFuel(),vehicle.getFuelConsumption(),vehicle.getCrewMember(),vehicle.getCrewMemberCapacity(),vehicle.getFacilityRefID());
+		return vehicleDto;
+	}
 }
+
+
+/*{
+	 "id": 40.0,
+	 "lon": 100,
+	 "lat": 100,
+	 "type": "CAR",
+	 "efficiency" : 1,
+	 "liquidTYpe": "ALL", 
+	 "liquidQuantity": 10.5,
+	 "liquidConsumption": 10.5,
+	 "fuel":1,
+	 "fuelConsumption": 10.5,
+	 "crewMember": 1,
+	 "crewMemberCapacity": 2,
+	 "facilityRefID" : 1
+	}*/

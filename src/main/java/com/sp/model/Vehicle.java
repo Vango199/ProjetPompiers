@@ -23,7 +23,7 @@ public class Vehicle {
 	private int crewMember;
 	private int crewMemberCapacity;
 	private Integer facilityRefID;
-	private Integer idFire = -1;
+	private Integer idFire = 0;
 	
 	public Integer getIdFire() {
 		return idFire;

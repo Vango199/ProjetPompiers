@@ -43,7 +43,7 @@ public class RestCrtVehicules {
     }
 	//modifier un véhicule
 	@RequestMapping(method=RequestMethod.PUT,value="/{id}") 
-	public void PutVehicle(@PathVariable Integer _id , @RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
+	public void PutVehicle(@PathVariable Integer id , @RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
 	  
 		vService.PutVehicle(_vehicle);
 		return;
@@ -51,10 +51,10 @@ public class RestCrtVehicules {
     }
 	//get un véhicule
 	@RequestMapping(method=RequestMethod.GET,value="/{id}") 
-	public Vehicle GetVehicle(@PathVariable Integer _id , HttpServletResponse response,HttpServletRequest request) {
+	public Vehicle GetVehicle(@PathVariable Integer id , HttpServletResponse response,HttpServletRequest request) {
 	  
 		
-		return fService.GetVehicleById(_id);
+		return fService.GetVehicleById(id);
 		
     }
 
