@@ -1,5 +1,15 @@
 let map = null;
 let TempsdeRefresh = 100000;
+let fire_list =[];
+var fire = L.layerGroup();
+var fire_chill = L.layerGroup();
+var fire_hard = L.layerGroup();
+var type_A = L.layerGroup();
+var type_B = L.layerGroup();
+var type_C = L.layerGroup();
+var type_D = L.layerGroup();
+var type_E = L.layerGroup();
+
 
 function init() {
     console.log('inside init');
@@ -19,6 +29,21 @@ function init() {
     });
     
     mainLayer.addTo(map);
+
+
+    fire.addTo(map);
+    var overlayMaps = {
+      "Feux doux tranquilou" : fire_chill,
+      "Feux": fire,
+      "Feux de fou" : fire_hard,
+      "Type A" : type_A,
+      "Type B" : type_B,
+      "Type C" : type_C,
+      "Type D" : type_D,
+      "Type E" : type_E
+    };
+    
+    L.control.layers(null,overlayMaps).addTo(map);
 
   GetAllFire();
   GetAllCamionsBomberos();
@@ -61,13 +86,86 @@ for (i in AllFireList){
   x_color = perc2color(AllFireList[i].intensity)
   x_color_dark = perc2color_dark(AllFireList[i].intensity)
   console.log(x_color)
-     var circle = L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
+   /*  var circle = L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
      
         color: x_color_dark, //color pour le contour du cercle
         fillColor: x_color, //color pour l'interieur du cercle
         fillOpacity: 0.8,
         radius: 4*AllFireList[i].range
     }).addTo(map);
+    */
+   
+
+
+/*
+    fire_list.add(L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
+     
+      color: x_color_dark, //color pour le contour du cercle
+      fillColor: x_color, //color pour l'interieur du cercle
+      fillOpacity: 0.8,
+      radius: 4*AllFireList[i].range
+  }));
+  */
+ 
+  var circle = L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
+     
+        color: x_color_dark, //color pour le contour du cercle
+        fillColor: x_color, //color pour l'interieur du cercle
+        fillOpacity: 0.8,
+        radius: 4*AllFireList[i].range
+    });
+  if (AllFireList[i].intensity < 17) {
+
+  circle.addTo(fire_chill);
+  }
+  else if (AllFireList[i].intensity < 34) {
+
+    circle.addTo(fire);
+    }
+  else {
+    circle.addTo(fire_hard);
+
+  }
+if (AllFireList[i].type == "A") {
+  circle.addTo(type_A);
+}
+
+if ((AllFireList[i].type == "B_Gasoline") || (AllFireList[i].type == "B_Alcohol") || (AllFireList[i].type == "B_Plastics")) {
+  circle.addTo(type_B);
+}
+
+if (AllFireList[i].type == "C_Flammable_Gases") {
+  circle.addTo(type_C);
+}
+
+if (AllFireList[i].type == "D_Metals") {
+  circle.addTo(type_D);
+}
+
+if (AllFireList[i].type == "E_Electric") {
+  circle.addTo(type_E);
+}
+
+
+
+
+  //A,B_Gasoline,B_Alcohol,B_Plastics,C_Flammable_Gases,D_Metals,E_Electric;
+  
+  
+
+
+
+
+  //var fire = L.layerGroup(fire_list);
+// tu créées tes l.layergroup vide
+//tu les add a ta map
+// et tu add tes cirles a ton layer goru
+
+
+
+
+
+
     circle.bindPopup(AffichageDonneeFeux(AllFireList[i]))
 }
 }
