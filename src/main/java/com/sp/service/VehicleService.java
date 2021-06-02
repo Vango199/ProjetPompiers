@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
 import com.sp.model.Vehicle;
 import com.sp.repository.VehicleRepository;
@@ -44,19 +45,17 @@ public class VehicleService {
 		
 		
 		fService.PostVehicle(this.toDto(_vehicle));
-		VehicleDto[] listVehicleDto = fService.GetVehicle();
-//		TreeMap<VehicleDto, Integer> treeVehicleDto = new TreeMap<VehicleDto, Integer>();
-//		treeVehicleDto.putAll(listVehicleDto);
-		VehicleDto vehicleDtos=null;
-		for(VehicleDto vehicleDto : listVehicleDto) {
-			int idcomp = 0;
-			if (idcomp < vehicleDto.getId()) {
-				idcomp = vehicleDto.getId();
-				vehicleDtos=vehicleDto;
-			}
-		}
+//		VehicleDto[] listVehicleDto = fService.GetVehicle(); Utile pour après
+		VehicleDto vehicleDto=fService.PostVehicle(this.toDto(_vehicle));
+//		for(VehicleDto vehicleDto : listVehicleDto) {
+//			int idcomp = 0;
+//			if (idcomp < vehicleDto.getId()) {
+//				idcomp = vehicleDto.getId();
+//				vehicleDtos=vehicleDto;
+//			}
+//		}
 		
-		_vehicle.setId(vehicleDtos.getId());
+		_vehicle.setId(vehicleDto.getId());
 		vRepository.save(_vehicle);
 	}
 
@@ -94,14 +93,35 @@ public class VehicleService {
 		}
 	}
 	
-	public void Move(Vehicle vehicle) {       
-		return                                ;
+
+
+
+
+
+	public void Move (Vehicle _vehicle) {
+		
+		//récupération du feu associé
+		FireDto fire = fService.GetFireById(_vehicle.getIdFire());
+		
+		//récupération des positions d'arrivée : celles du feu
+		
+		int deplacement = 5;
+		
+		double latArriv = fire.getLat();
+		double lonArriv = fire.getLon();
+		
+		
+		double angle = Math.atan((lonArriv-_vehicle.getLon())/(latArriv-_vehicle.getLat()));
+		
+		//On actualise les coo
+		_vehicle.setLat(Math.cos(angle)*deplacement);
+		_vehicle.setLon(Math.sin(angle)*deplacement);
+		
+		
+		System.out.println("Vehicule "+_vehicle.getId()+"-->"+_vehicle.getLat()+","+_vehicle.getLon() );
+		vRepository.save(_vehicle);
+		
 	}
-
-
-
-
-
 }
 
 
