@@ -60,6 +60,7 @@ for (i in AllFireList){
   console.log(i);
   x = perc2color((AllFireList[i].intensity)*2)
   console.log(x);
+  console.log(x);
      var circle = L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
      
         color: x,
