@@ -1,9 +1,11 @@
 package com.sp.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.project.model.dto.FireDto;
@@ -18,6 +20,26 @@ public class VehicleService {
 	FireSimulationService fService;
 	@Autowired
 	VehicleRepository vRepository;
+	
+	DisplayRunnable dRunnable;
+	private Thread displayThread;
+	
+
+	public VehicleService(VehicleRepository vRepository) {
+		//Replace the @Autowire annotation....
+		this.vRepository=vRepository;
+		
+		//Create a Runnable is charge of executing cyclic actions 
+		this.dRunnable=new DisplayRunnable(this.vRepository);
+		
+		// A Runnable is held by a Thread which manage lifecycle of the Runnable
+		displayThread=new Thread(dRunnable);
+		
+		// The Thread is started and the method run() of the associated DisplayRunnable is launch
+		displayThread.start();
+		
+	}
+
 	
 	public void PostVehicle(Vehicle _vehicle) {
 		
@@ -45,7 +67,7 @@ public class VehicleService {
 		
 	}
 
-	private Vehicle findById(Integer _id) {
+	public Vehicle findById(Integer _id) {
 		
 		Optional<Vehicle> vOpt =vRepository.findById(_id);
 	    if (vOpt.isPresent()) {
@@ -60,6 +82,22 @@ public class VehicleService {
 		return vehicleDto;
 	}
 	
+	public void stopDisplay() {
+		//Call the user defined stop method of the runnable
+		this.dRunnable.stop();
+		try {
+			//force the thread to stop
+			this.displayThread.join(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+
+
+
+
 	public void Move (Vehicle _vehicle) {
 		
 		//récupération du feu associé

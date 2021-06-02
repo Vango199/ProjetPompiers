@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
 import com.sp.model.Vehicle;
+import com.sp.repository.VehicleRepository;
 import com.sp.service.FireSimulationService;
 import com.sp.service.VehicleService;
 
@@ -24,7 +25,8 @@ public class RestCrtVehicules {
 	
 	@Autowired
 	VehicleService vService;
-	
+	@Autowired
+	VehicleRepository vRepository;
 	@Autowired
 	FireSimulationService fService;
 	
@@ -44,7 +46,6 @@ public class RestCrtVehicules {
 	//modifier un véhicule
 	@RequestMapping(method=RequestMethod.PUT,value="/{id}") 
 	public void PutVehicle(@PathVariable Integer id , @RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
-	  
 		vService.PutVehicle(_vehicle);
 		return;
 		
@@ -54,8 +55,19 @@ public class RestCrtVehicules {
 	public Vehicle GetVehicle(@PathVariable Integer id , HttpServletResponse response,HttpServletRequest request) {
 	  
 		
-		return fService.GetVehicleById(id);
+		return vService.findById(id);
 		
     }
+	
+	@RequestMapping(method=RequestMethod.GET,value="/getall") 
+	public List<Vehicle> GetVehicles(HttpServletResponse response,HttpServletRequest request){
+		return vRepository.findAll();
+	}
+	
+	@RequestMapping(method=RequestMethod.GET,value="/stopdisplay")
+	public void stopDisplay() {
+		vService.stopDisplay();
+	}
+
 
 }
