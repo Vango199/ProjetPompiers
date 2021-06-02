@@ -1,4 +1,8 @@
 let map = null;
+let fire_list =[];
+var fire = L.layerGroup();
+var fire_chill = L.layerGroup();
+var fire_hard = L.layerGroup();
 
 function init() {
     console.log('inside init');
@@ -18,6 +22,17 @@ function init() {
     });
     
     mainLayer.addTo(map);
+
+
+    fire.addTo(map);
+    var overlayMaps = {
+      "Feux doux tranquilou" : fire_chill,
+      "Feux": fire,
+      "Feux de fou" : fire_hard
+
+    };
+    
+    L.control.layers(null,overlayMaps).addTo(map);
 
   GetAllFire();
 
@@ -60,13 +75,60 @@ for (i in AllFireList){
   x_color = perc2color(AllFireList[i].intensity)
   x_color_dark = perc2color_dark(AllFireList[i].intensity)
   console.log(x_color)
-     var circle = L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
+   /*  var circle = L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
      
         color: x_color_dark, //color pour le contour du cercle
         fillColor: x_color, //color pour l'interieur du cercle
         fillOpacity: 0.8,
         radius: 4*AllFireList[i].range
     }).addTo(map);
+    */
+   
+
+
+/*
+    fire_list.add(L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
+     
+      color: x_color_dark, //color pour le contour du cercle
+      fillColor: x_color, //color pour l'interieur du cercle
+      fillOpacity: 0.8,
+      radius: 4*AllFireList[i].range
+  }));
+  */
+ 
+  var circle = L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
+     
+        color: x_color_dark, //color pour le contour du cercle
+        fillColor: x_color, //color pour l'interieur du cercle
+        fillOpacity: 0.8,
+        radius: 4*AllFireList[i].range
+    });
+  if (AllFireList[i].intensity < 17) {
+
+  circle.addTo(fire_chill);
+  }
+  else if (AllFireList[i].intensity < 34) {
+
+    circle.addTo(fire);
+    }
+  else {
+    circle.addTo(fire_hard);
+
+  }
+
+
+
+
+  //var fire = L.layerGroup(fire_list);
+// tu créées tes l.layergroup vide
+//tu les add a ta map
+// et tu add tes cirles a ton layer goru
+
+
+
+
+
+
     circle.bindPopup(AffichageDonneeFeux(AllFireList[i]))
 }
 }
