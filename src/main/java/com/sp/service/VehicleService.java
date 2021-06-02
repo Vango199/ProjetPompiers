@@ -84,6 +84,11 @@ public class VehicleService {
 		vRepository.save(_vehicle);
 		
 	}
+	
+	public void gestionFeux() {
+		
+		FireDto[] listFire = fService.getFire();
+	}
 }
 
 
