@@ -68,7 +68,7 @@ for (i in AllFireList){
         fillOpacity: 0.8,
         radius: AllFireList[i].range
     }).addTo(map);
-   
+    circle.bindPopup(AffichageDonneeFeux(AllFireList[i]))
 }
 }
 
@@ -84,4 +84,10 @@ function perc2color(perc) { //Création d'une échelle de couleurs en fonction d
 	}
 	var h = r * 0x10000 + g * 0x100 + b * 0x1;
 	return '#' + ('000000' + h.toString(16)).slice(-6);
+}
+
+function AffichageDonneeFeux(Feux){
+  y = 'id :' + Feux.id + ', intensity :' + Feux.intensity + ', range :' + Feux.range + ', Type :' + Feux.type;
+  return y.toString()
+
 }
