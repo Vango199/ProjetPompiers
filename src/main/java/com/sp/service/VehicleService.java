@@ -44,7 +44,7 @@ public class VehicleService {
 	public void PostVehicle(Vehicle _vehicle) {
 		
 		
-		fService.PostVehicle(this.toDto(_vehicle));
+		//fService.PostVehicle(this.toDto(_vehicle));
 //		VehicleDto[] listVehicleDto = fService.GetVehicle(); Utile pour après
 		VehicleDto vehicleDto=fService.PostVehicle(this.toDto(_vehicle));
 //		for(VehicleDto vehicleDto : listVehicleDto) {
