@@ -100,7 +100,7 @@ function perc2color_dark(perc) { //Création d'une échelle de couleurs en fonct
 }
 
 function AffichageDonneeFeux(Feux){ //Affichage des données liées au feu
-  y = '<p><b>El Fuegooo : </b>' + '<br />' + 'Id : ' + Feux.id+ '<br />' + 'Intensity : ' + Feux.intensity+ '<br />' + 'Range : ' + Feux.range+ '<br />' + 'Type : ' + Feux.type;
+  y = '<p><b>El Fuegooo : </b>' + '<img src="../Img/feu.jpg" width="25" height="25" />' + '<br />' + 'Id : ' + Feux.id+ '<br />' + 'Intensity : ' + Feux.intensity+ '<br />' + 'Range : ' + Feux.range+ '<br />' + 'Type : ' + Feux.type;
   return y.toString()
 
 }
