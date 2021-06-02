@@ -26,10 +26,10 @@ public class FireSimulationService {
 		return ;
 	}
 	
-	public void PostVehicle(VehicleDto _vehicle) {
+	public VehicleDto PostVehicle(VehicleDto _vehicle) {
 		String UrlPostVehicle = "http://127.0.0.1:8081/vehicle";
 		ResponseEntity<VehicleDto> vDto = new RestTemplate().postForEntity(UrlPostVehicle, _vehicle, VehicleDto.class);
-		return ;
+		return vDto.getBody();
 	}
 	
 	public VehicleDto[] GetVehicle() {
@@ -54,6 +54,13 @@ public class FireSimulationService {
 		String UrlDeleteVehicle = "http://127.0.0.1:8081/vehicle/"+_vehicle.getId();
 		new RestTemplate().delete(UrlDeleteVehicle);
 		return ;
+	}
+	
+	public void GetFireById(Integer _fireId) {
+		
+		List<FireDto> listFire = this.getFire();
+//		for (FireDto)
+		
 	}
 	
 }

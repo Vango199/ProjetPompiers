@@ -22,19 +22,17 @@ public class VehicleService {
 		
 		
 		fService.PostVehicle(this.toDto(_vehicle));
-		VehicleDto[] listVehicleDto = fService.GetVehicle();
-//		TreeMap<VehicleDto, Integer> treeVehicleDto = new TreeMap<VehicleDto, Integer>();
-//		treeVehicleDto.putAll(listVehicleDto);
-		VehicleDto vehicleDtos=null;
-		for(VehicleDto vehicleDto : listVehicleDto) {
-			int idcomp = 0;
-			if (idcomp < vehicleDto.getId()) {
-				idcomp = vehicleDto.getId();
-				vehicleDtos=vehicleDto;
-			}
-		}
+//		VehicleDto[] listVehicleDto = fService.GetVehicle(); Utile pour après
+		VehicleDto vehicleDto=fService.PostVehicle(this.toDto(_vehicle));
+//		for(VehicleDto vehicleDto : listVehicleDto) {
+//			int idcomp = 0;
+//			if (idcomp < vehicleDto.getId()) {
+//				idcomp = vehicleDto.getId();
+//				vehicleDtos=vehicleDto;
+//			}
+//		}
 		
-		_vehicle.setId(vehicleDtos.getId());
+		_vehicle.setId(vehicleDto.getId());
 		vRepository.save(_vehicle);
 	}
 
@@ -59,6 +57,12 @@ public class VehicleService {
 	public VehicleDto toDto(Vehicle vehicle) {
 		VehicleDto vehicleDto = new VehicleDto(vehicle.getId(),vehicle.getLon(),vehicle.getLat(),vehicle.getType(),vehicle.getEfficiency(),vehicle.getLiquidType(),vehicle.getLiquidQuantity(),vehicle.getLiquidConsumption(),vehicle.getFuel(),vehicle.getFuelConsumption(),vehicle.getCrewMember(),vehicle.getCrewMemberCapacity(),vehicle.getFacilityRefID());
 		return vehicleDto;
+	}
+	
+	public void Moove (Vehicle _vehicle) {
+		
+		//récupération des positions d'arrivée : celles du feu
+//		double lonArriv = fService. _vehicle.getIdFire()
 	}
 }
 
