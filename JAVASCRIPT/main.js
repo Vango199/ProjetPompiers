@@ -88,6 +88,7 @@ function perc2color_dark(perc) { //Création d'une échelle de couleurs en fonct
 	var r, g, b = 0;
 	//if(perc < 50) {
 		r = 255;
+    console.log(r);
 		g = (255-(Math.round(5.1 * perc)));
 	//}
 	//else {
