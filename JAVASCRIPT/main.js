@@ -3,6 +3,12 @@ let fire_list =[];
 var fire = L.layerGroup();
 var fire_chill = L.layerGroup();
 var fire_hard = L.layerGroup();
+var type_A = L.layerGroup();
+var type_B = L.layerGroup();
+var type_C = L.layerGroup();
+var type_D = L.layerGroup();
+var type_E = L.layerGroup();
+
 
 function init() {
     console.log('inside init');
@@ -28,8 +34,12 @@ function init() {
     var overlayMaps = {
       "Feux doux tranquilou" : fire_chill,
       "Feux": fire,
-      "Feux de fou" : fire_hard
-
+      "Feux de fou" : fire_hard,
+      "Type A" : type_A,
+      "Type B" : type_B,
+      "Type C" : type_C,
+      "Type D" : type_D,
+      "Type E" : type_E
     };
     
     L.control.layers(null,overlayMaps).addTo(map);
@@ -115,6 +125,32 @@ for (i in AllFireList){
     circle.addTo(fire_hard);
 
   }
+if (AllFireList[i].type == "A") {
+  circle.addTo(type_A);
+}
+
+if ((AllFireList[i].type == "B_Gasoline") || (AllFireList[i].type == "B_Alcohol") || (AllFireList[i].type == "B_Plastics")) {
+  circle.addTo(type_B);
+}
+
+if (AllFireList[i].type == "C_Flammable_Gases") {
+  circle.addTo(type_C);
+}
+
+if (AllFireList[i].type == "D_Metals") {
+  circle.addTo(type_D);
+}
+
+if (AllFireList[i].type == "E_Electric") {
+  circle.addTo(type_E);
+}
+
+
+
+
+  //A,B_Gasoline,B_Alcohol,B_Plastics,C_Flammable_Gases,D_Metals,E_Electric;
+  
+  
 
 
 
