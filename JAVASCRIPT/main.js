@@ -36,7 +36,6 @@ function GetAllFire(){ //appel de la liste avec tous les feux
   
         // Examine the text in the response
         response.json().then(function(data) {
-          console.log(data);
           AffichageFeux(data);
           return data;
         });
@@ -45,6 +44,7 @@ function GetAllFire(){ //appel de la liste avec tous les feux
     .catch(function(err) {
       console.log('Fetch Error :-S', err);
     });
+    setTimeout(GetAllFire, 300);
 }
 
 
@@ -54,34 +54,54 @@ function AffichageFeux(AllFireList){
 
 //On parcourt la liste des feux pour venir les afficher sur la map
 
-console.log('le poulet');
-console.log(AllFireList);
+
 for (i in AllFireList){
   console.log(i);
-  x = perc2color((AllFireList[i].intensity)*2)
-  console.log(x);
-  console.log(x);
+  x_color = perc2color(AllFireList[i].intensity)
+  x_color_dark = perc2color_dark(AllFireList[i].intensity)
+  console.log(x_color)
      var circle = L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
      
-        color: x,
-        fillColor: x,
+        color: x_color_dark, //color pour le contour du cercle
+        fillColor: x_color, //color pour l'interieur du cercle
         fillOpacity: 0.8,
-        radius: AllFireList[i].range
+        radius: 4*AllFireList[i].range
     }).addTo(map);
-   
+    circle.bindPopup(AffichageDonneeFeux(AllFireList[i]))
 }
 }
 
-function perc2color(perc) { //Création d'une échelle de couleurs en fonction de l'intensité du feu
+function perc2color(perc) { //Création d'une échelle de couleurs en fonction de l'intensité du feu pour l'interieur du cercle
 	var r, g, b = 0;
-	if(perc < 50) {
-		r = 255;
-		g = Math.round(5.1 * perc);
-	}
-	else {
-		g = 255;
-		r = Math.round(510 - 5.10 * perc);
-	}
+	//if(perc < 50) {
+		r = 253;
+		g = 255-(Math.round(5.1 * perc));
+	//}
+	//else {
+	//	r = 200;
+	//	g = Math.round(510 - 5.10 * perc);
+	//}
 	var h = r * 0x10000 + g * 0x100 + b * 0x1;
 	return '#' + ('000000' + h.toString(16)).slice(-6);
+}
+
+function perc2color_dark(perc) { //Création d'une échelle de couleurs en fonction de l'intensité du feu pour le contour du cercle
+	var r, g, b = 0;
+	//if(perc < 50) {
+		r = 255;
+    console.log(r);
+		g = (255-(Math.round(5.1 * perc)));
+	//}
+	//else {
+	//	r = 200;
+	//	g = Math.round(510 - 5.10 * perc);
+	//}
+	var h = r * 0x10000 + g * 0x100 + b * 0x1;
+	return '#' + ('000000' + h.toString(16)).slice(-6);
+}
+
+function AffichageDonneeFeux(Feux){ //Affichage des données liées au feu
+  y = '<p><b>El Fuegooo : </b>' + '<img src="../Img/feu.jpg" width="25" height="25" />' + '<br />' + 'Id : ' + Feux.id+ '<br />' + 'Intensity : ' + Feux.intensity+ '<br />' + 'Range : ' + Feux.range+ '<br />' + 'Type : ' + Feux.type;
+  return y.toString()
+
 }
