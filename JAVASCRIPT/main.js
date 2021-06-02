@@ -254,9 +254,10 @@ var myIcon = L.icon({
   iconAnchor: [29, 19],
 });
 
-var my_marker =L.marker([AllCamionsBomberosList[i].lat, AllCamionsBomberosList[i].lon], {icon: myIcon}).addTo(pompier);
-my_marker.bindPopup(AffichageDonneeCamionsBomberos(AllCamionsBomberosList[i])).openPopup()
-pompier.addTo(map)
+var my_marker =L.marker([AllCamionsBomberosList[i].lat, AllCamionsBomberosList[i].lon], {icon: myIcon});
+my_marker.bindPopup(AffichageDonneeCamionsBomberos(AllCamionsBomberosList[i]));
+my_marker.addTo(pompier);
+pompier.addTo(map);
 }
 }
 
