@@ -1,5 +1,6 @@
 let map = null;
-let TempsdeRefresh = 5000;
+let TempsdeRefresh = 100000;
+
 let fire_list =[];
 var fire = L.layerGroup();
 var fire_chill = L.layerGroup();
@@ -9,6 +10,8 @@ var type_B = L.layerGroup();
 var type_C = L.layerGroup();
 var type_D = L.layerGroup();
 var type_E = L.layerGroup();
+
+var pompier = L.layerGroup();
 
 
 function init() {
@@ -251,9 +254,9 @@ var myIcon = L.icon({
   iconAnchor: [29, 19],
 });
 
-var my_marker =L.marker([AllCamionsBomberosList[i].lat, AllCamionsBomberosList[i].lon], {icon: myIcon}).addTo(map);
+var my_marker =L.marker([AllCamionsBomberosList[i].lat, AllCamionsBomberosList[i].lon], {icon: myIcon}).addTo(pompier);
 my_marker.bindPopup(AffichageDonneeCamionsBomberos(AllCamionsBomberosList[i])).openPopup()
-
+pompier.addTo(map)
 }
 }
 
