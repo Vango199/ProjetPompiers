@@ -1,7 +1,6 @@
 let map = null;
 let TempsdeRefresh = 5000;
 
-let fire_list =[];
 var fire = L.layerGroup();
 var fire_chill = L.layerGroup();
 var fire_hard = L.layerGroup();
@@ -12,6 +11,8 @@ var type_D = L.layerGroup();
 var type_E = L.layerGroup();
 
 var pompier = L.layerGroup();
+
+////////////////////////////////////////////////////// AFFICHAGE DE LA MAP /////////////////////////////////////////////////
 
 
 function init() {
@@ -35,9 +36,9 @@ function init() {
 
 
     var overlayMaps_fire = {
-      "Feux doux tranquilou" : fire_chill,
-      "Feux": fire,
-      "Feux de fou" : fire_hard,
+      "Feux soft" : fire_chill,
+      "Feux moyens": fire,
+      "Feux hard" : fire_hard,
     };
 
     var overlayMaps_type = {
@@ -55,6 +56,9 @@ function init() {
   GetAllFire();
   GetAllCamionsBomberos();
 }
+
+////////////////////////////////////////////////////// AFFICHAGE DES FEUX /////////////////////////////////////////////////
+
 
 function GetAllFire(){ //appel de la liste avec tous les feux
     console.log("toto")
@@ -101,8 +105,7 @@ for (i in AllFireList){
         radius: 4*AllFireList[i].range
     }).addTo(map);
     */
-   
-
+  
 
 /*
     fire_list.add(L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
@@ -240,12 +243,10 @@ function GetAllCamionsBomberos(){ //appel de la liste avec tous les camions de p
 }
 
 function AffichageCamions(AllCamionsBomberosList){
-  //AllFireList =   GetAllFire();//appel de la fonction qui retourne une liste de feux
-
-//On parcourt la liste des feux pour venir les afficher sur la map
 
 
-for (i in AllCamionsBomberosList){
+
+for (i in AllCamionsBomberosList){//On parcourt la liste des feux pour venir les afficher sur la map
 console.log(i);
 
 var myIcon = L.icon({
@@ -254,14 +255,82 @@ var myIcon = L.icon({
   iconAnchor: [29, 19],
 });
 
-var my_marker =L.marker([AllCamionsBomberosList[i].lat, AllCamionsBomberosList[i].lon], {icon: myIcon}).addTo(pompier);
-my_marker.bindPopup(AffichageDonneeCamionsBomberos(AllCamionsBomberosList[i])).openPopup()
-pompier.addTo(map)
+var my_marker =L.marker([AllCamionsBomberosList[i].lat, AllCamionsBomberosList[i].lon], {icon: myIcon});
+my_marker.bindPopup(AffichageDonneeCamionsBomberos(AllCamionsBomberosList[i]));
+my_marker.addTo(pompier);
+pompier.addTo(map);
 }
 }
 
 function AffichageDonneeCamionsBomberos(Camion){ //Affichage des données liées au feu
-  y = '<p>' + '<img src="../Img/my-icon.png" width="25" height="25" />' + '<b>Camion de Pompier : </b>'+ '<br />' + 'Id : ' + Camion.id+ '<br />' + 'Type : ' + Camion.type+ '<br />' + 'Capacité : ' + Camion.crewMemberCapacity + '<br />' + 'Fuel : : ' + Camion.fuel;
+  y = '<p>' + '<img src="../Img/my-icon.png" width="25" height="25" />' + '<b>  Camion de Pompier : </b>'+ '<br />' + 'Id : ' + Camion.id+ '<br />' + 'Type : ' + Camion.type+ '<br />' + 'Capacité : ' + Camion.crewMemberCapacity + '<br />' + 'Fuel : : ' + Camion.fuel;
   return y.toString()
 }
 
+////////////////////////////////////////////////////// AFFICHAGE DES CAMIONS DE BOMBEROS /////////////////////////////////////////////////
+
+function RecupVehicleIncendie(){ //récupère le véhicule d'urgence avec en plus un Id du feu
+  console.log("toto")
+    fetch('http://localhost:8082/vehicle/getall')
+    .then(
+      function(response) {
+        if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+          return;
+        }
+  
+        // Examine the text in the response
+        response.json().then(function(data) {
+          return data; //On renvoie tout le vehicule
+        });
+      }
+    )
+    .catch(function(err) {
+      console.log('Fetch Error :-S', err);
+    });
+}
+
+function RecupFireFromidFire(){//récupère à partir de l'Id du feu, l'objet feu et retourne sa latitude et longitude
+  x= RecupVehicleIncendie().idFire //On appelle la F qui renvoie tout le vehicule mais seulement l'Id du feu
+  fetch('http://localhost:8082/simulation/fire/'+toString(x)) // Grace a l'id du feu, on recupere l'objet feu en entier
+  .then(
+    function(response) {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+
+      // Examine the text in the response
+      response.json().then(function(data) {
+        AffichageFeux(data);
+        return data; //On renvoie l'objet feu
+      });
+    }
+  )
+  .catch(function(err) {
+    console.log('Fetch Error :-S', err);
+  });
+}
+
+function TracerItineraire(){
+  LatDep = RecupVehicleIncendie().lat
+  LonDep = RecupVehicleIncendie().lon
+  LatAriv = RecupFireFromidFire().lat
+  LonAriv = RecupFireFromidFire().lon
+
+  var latlngs = [
+    [LatDep, LonDep],
+    [LatAriv, LonAriv],
+  ];
+
+  var latlng = [
+    [45.75, 4.85],
+    [46.5, 5],
+  ];
+
+L.polyline(latlng, {color: 'red'}).addTo(map);
+
+
+}

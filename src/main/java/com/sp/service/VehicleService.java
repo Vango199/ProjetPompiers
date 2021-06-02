@@ -97,6 +97,7 @@ public class VehicleService {
 
 
 
+<<<<<<< HEAD
 //	public void Move(Vehicle _vehicle) {
 //		
 //		//récupération du feu associé
@@ -121,6 +122,37 @@ public class VehicleService {
 //		vRepository.save(_vehicle);
 //		
 //	}
+=======
+	public void Move (Vehicle _vehicle) {
+		
+		//récupération du feu associé
+		FireDto fire = fService.GetFireById(_vehicle.getIdFire());
+		
+		//récupération des positions d'arrivée : celles du feu
+		
+		int deplacement = 5;
+		
+		double latArriv = fire.getLat();
+		double lonArriv = fire.getLon();
+		
+		
+		double angle = Math.atan((lonArriv-_vehicle.getLon())/(latArriv-_vehicle.getLat()));
+		
+		//On actualise les coo
+		_vehicle.setLat(Math.cos(angle)*deplacement);
+		_vehicle.setLon(Math.sin(angle)*deplacement);
+		
+		
+		System.out.println("Vehicule "+_vehicle.getId()+"-->"+_vehicle.getLat()+","+_vehicle.getLon() );
+		vRepository.save(_vehicle);
+		
+	}
+	
+	public void gestionFeux() {
+		
+		FireDto[] listFire = fService.getFire();
+	}
+>>>>>>> e18823f2cb2c7eda44d441ad1b0489325d96286c
 }
 
 

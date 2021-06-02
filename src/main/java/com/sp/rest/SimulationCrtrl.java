@@ -40,13 +40,32 @@ public class SimulationCrtrl {
     }
 	
     @RequestMapping(method=RequestMethod.GET,value="/fire") 
+<<<<<<< HEAD
 	public FireDto[] GetFires(HttpServletResponse response,HttpServletRequest request) {
 	  
 		 
+=======
+
+	public FireDto[] GetFires(HttpServletResponse response,HttpServletRequest request) {
+	  
+		 
+
+>>>>>>> e18823f2cb2c7eda44d441ad1b0489325d96286c
 		return fService.getFire();
 		
     }
-		 
+	
+    @RequestMapping(method=RequestMethod.GET,value="/fire{id}") 
+
+  	public FireDto GetFire(@PathVariable Integer id, HttpServletResponse response,HttpServletRequest request) {
+  	  
+  		 
+
+  		return fService.GetFireById(id);
+  		
+      }
+    
+    
     @RequestMapping(method=RequestMethod.DELETE,value="/deleteallvehicle") 
 	public void deleteAll(HttpServletResponse response,HttpServletRequest request) {
 		 fService.deleteAll();
