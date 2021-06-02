@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.model.dto.FireDto;
@@ -67,6 +68,12 @@ public class RestCrtVehicules {
 	@RequestMapping(method=RequestMethod.GET,value="/stopdisplay")
 	public void stopDisplay() {
 		vService.stopDisplay();
+	}
+	@RequestMapping(method=RequestMethod.PUT,value="/idfire")
+	public void PutVehicle(Integer idFire ,Integer idVehicle, HttpServletResponse response,HttpServletRequest request) {
+		Vehicle vehicle = vService.findById(idVehicle);
+		vehicle.setIdFire(idFire);
+		vRepository.save(vehicle);
 	}
 
 

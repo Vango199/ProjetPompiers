@@ -16,21 +16,20 @@ import com.sp.repository.VehicleRepository;
 @Service 
 public class VehicleService {
 	
-	@Autowired
 	FireSimulationService fService;
-	@Autowired
 	VehicleRepository vRepository;
 	
 	DisplayRunnable dRunnable;
 	private Thread displayThread;
 	
 
-	public VehicleService(VehicleRepository vRepository) {
+	public VehicleService(VehicleRepository vRepository,FireSimulationService fService) {
 		//Replace the @Autowire annotation....
 		this.vRepository=vRepository;
+		this.fService=fService;
 		
 		//Create a Runnable is charge of executing cyclic actions 
-		this.dRunnable=new DisplayRunnable(this.vRepository);
+		this.dRunnable=new DisplayRunnable(this.vRepository,this.fService);
 		
 		// A Runnable is held by a Thread which manage lifecycle of the Runnable
 		displayThread=new Thread(dRunnable);
@@ -44,7 +43,7 @@ public class VehicleService {
 	public void PostVehicle(Vehicle _vehicle) {
 		
 		
-		fService.PostVehicle(this.toDto(_vehicle));
+		//fService.PostVehicle(this.toDto(_vehicle));
 //		VehicleDto[] listVehicleDto = fService.GetVehicle(); Utile pour après
 		VehicleDto vehicleDto=fService.PostVehicle(this.toDto(_vehicle));
 //		for(VehicleDto vehicleDto : listVehicleDto) {
@@ -98,30 +97,30 @@ public class VehicleService {
 
 
 
-	public void Move (Vehicle _vehicle) {
-		
-		//récupération du feu associé
-		FireDto fire = fService.GetFireById(_vehicle.getIdFire());
-		
-		//récupération des positions d'arrivée : celles du feu
-		
-		int deplacement = 5;
-		
-		double latArriv = fire.getLat();
-		double lonArriv = fire.getLon();
-		
-		
-		double angle = Math.atan((lonArriv-_vehicle.getLon())/(latArriv-_vehicle.getLat()));
-		
-		//On actualise les coo
-		_vehicle.setLat(Math.cos(angle)*deplacement);
-		_vehicle.setLon(Math.sin(angle)*deplacement);
-		
-		
-		System.out.println("Vehicule "+_vehicle.getId()+"-->"+_vehicle.getLat()+","+_vehicle.getLon() );
-		vRepository.save(_vehicle);
-		
-	}
+//	public void Move(Vehicle _vehicle) {
+//		
+//		//récupération du feu associé
+//		FireDto fire = fService.GetFireById(_vehicle.getIdFire());
+//		
+//		//récupération des positions d'arrivée : celles du feu
+//		
+//		int deplacement = 5;
+//		
+//		double latArriv = fire.getLat();
+//		double lonArriv = fire.getLon();
+//		
+//		
+//		double angle = Math.atan((lonArriv-_vehicle.getLon())/(latArriv-_vehicle.getLat()));
+//		
+//		//On actualise les coo
+//		_vehicle.setLat(Math.cos(angle)*deplacement);
+//		_vehicle.setLon(Math.sin(angle)*deplacement);
+//		
+//		
+//		System.out.println("Vehicule "+_vehicle.getId()+"-->"+_vehicle.getLat()+","+_vehicle.getLon() );
+//		vRepository.save(_vehicle);
+//		
+//	}
 }
 
 
@@ -140,3 +139,8 @@ public class VehicleService {
 	 "crewMemberCapacity": 2,
 	 "facilityRefID" : 1
 	}*/
+
+//associer vehicule a feu automatiquement(capacité type eau)
+//créatiob vehicule au lancement
+//deplacement en fonction de la carte
+//
