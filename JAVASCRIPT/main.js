@@ -1,4 +1,5 @@
 let map = null;
+let TempsdeRefresh = 100000;
 
 function init() {
     console.log('inside init');
@@ -44,7 +45,7 @@ function GetAllFire(){ //appel de la liste avec tous les feux
     .catch(function(err) {
       console.log('Fetch Error :-S', err);
     });
-    setTimeout(GetAllFire, 100000);
+    setTimeout(GetAllFire, TempsdeRefresh);
 }
 
 
@@ -130,7 +131,7 @@ function GetAllCamionsBomberos(){ //appel de la liste avec tous les camions de p
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
   });
-  setTimeout(GetAllCamionsBomberos, 100000);
+  setTimeout(GetAllCamionsBomberos, TempsdeRefresh);
 }
 
 function AffichageCamions(AllCamionsBomberosList){
@@ -144,8 +145,8 @@ console.log(i);
 
 var myIcon = L.icon({
   iconUrl: '../Img/my-icon.png',
-  iconSize: [40,  20],
-  iconAnchor: [39, 19],
+  iconSize: [30,  20],
+  iconAnchor: [29, 19],
 });
 
 var my_marker =L.marker([AllCamionsBomberosList[i].lat, AllCamionsBomberosList[i].lon], {icon: myIcon}).addTo(map);
@@ -155,6 +156,7 @@ my_marker.bindPopup(AffichageDonneeCamionsBomberos(AllCamionsBomberosList[i])).o
 }
 
 function AffichageDonneeCamionsBomberos(Camion){ //Affichage des données liées au feu
-  y = '<p><b>Camion de bomberooos : </b>' + 'Id : ' + Camion.id+ '<br />' + 'Type : ' + Camion.type+ '<br />' + 'Capacité : ' + Camion.crewMemberCapacity + '<br />' + 'Fuel : : ' + Camion.fuel;
+  y = '<p>' + '<img src="../Img/my-icon.png" width="25" height="25" />' + '<b>Camion de Pompier : </b>'+ '<br />' + 'Id : ' + Camion.id+ '<br />' + 'Type : ' + Camion.type+ '<br />' + 'Capacité : ' + Camion.crewMemberCapacity + '<br />' + 'Fuel : : ' + Camion.fuel;
   return y.toString()
 }
+
