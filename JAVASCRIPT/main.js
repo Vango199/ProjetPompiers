@@ -269,7 +269,7 @@ function AffichageDonneeCamionsBomberos(Camion){ //Affichage des données liées
 
 ////////////////////////////////////////////////////// AFFICHAGE DES CAMIONS DE BOMBEROS /////////////////////////////////////////////////
 
-function RecupVehicleIncendie(){
+function RecupVehicleIncendie(){ //récupère le véhicule d'urgence avec en plus un Id du feu
   console.log("toto")
     fetch('http://localhost:8082/vehicle/getall')
     .then(
@@ -282,12 +282,55 @@ function RecupVehicleIncendie(){
   
         // Examine the text in the response
         response.json().then(function(data) {
-          AffichageFeux(data);
-          return data;
+          return data; //On renvoie tout le vehicule
         });
       }
     )
     .catch(function(err) {
       console.log('Fetch Error :-S', err);
     });
+}
+
+function RecupFireFromidFire(){//récupère à partir de l'Id du feu, l'objet feu et retourne sa latitude et longitude
+  x= RecupVehicleIncendie().idFire //On appelle la F qui renvoie tout le vehicule mais seulement l'Id du feu
+  fetch('http://localhost:8082/simulation/fire/'+toString(x)) // Grace a l'id du feu, on recupere l'objet feu en entier
+  .then(
+    function(response) {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+
+      // Examine the text in the response
+      response.json().then(function(data) {
+        AffichageFeux(data);
+        return data; //On renvoie l'objet feu
+      });
+    }
+  )
+  .catch(function(err) {
+    console.log('Fetch Error :-S', err);
+  });
+}
+
+function TracerItineraire(){
+  LatDep = RecupVehicleIncendie().lat
+  LonDep = RecupVehicleIncendie().lon
+  LatAriv = RecupFireFromidFire().lat
+  LonAriv = RecupFireFromidFire().lon
+
+  var latlngs = [
+    [LatDep, LonDep],
+    [LatAriv, LonAriv],
+  ];
+
+  var latlng = [
+    [45.75, 4.85],
+    [46.5, 5],
+  ];
+
+L.polyline(latlng, {color: 'red'}).addTo(map);
+
+
 }
