@@ -45,7 +45,7 @@ function displayVehicle(body){
               var Vehicle = L.marker([vehicle.lat, vehicle.lon], {
                   icon: FiretruckIcon
               }).addTo(map);
-               Vehicle.bindPopup("Id : " + vehicle.id + "<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType + " " + vehicle.liquidQuantity + "L<br>" + "Fuel : " + vehicle.fuel + "<br><button type='button' id=" + vehicle.id + " onclick=deleteVehicle(this.id, this.lon, this.lat, this.type, this.efficiency, this.liqiudType, this.liquidQuantity, this.liquidConsumption, this.fuel, this.fuelConsumption, this.crewMember, this.crewMemberCapacity, this.facilityRefID)>Supprimer</button><button id=" + vehicle.id + " type='button' onclick=editVehicle(this.id)>Modifier</button>");
+               Vehicle.bindPopup("Id : " + vehicle.id + "<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType + " " + vehicle.liquidQuantity + "L<br>" + "Fuel : " + vehicle.fuel + "<br><button type='button' id=" + vehicle.id + " onclick=deleteVehicle(this.id)>Supprimer</button><button id=" + vehicle.id + " type='button' onclick=editVehicle(this.id)>Modifier</button>");
 
               
 
@@ -71,15 +71,17 @@ function displayVehicle(body){
           }
 }
 
+
+/*
 function deleteVehicle(id, lon, lat, type, efficiency, liquidType, liquidQuantity, liquidConsumption, fuel, fuelConsumption, crewMember, crewMemberCapacity, facilityRefID) {
   mymap.closePopup();
   var charge_delete = {
     "id": id,
     "lon": lon,
     "lat": lat,
-    "type": document.getElementById('TruckType').value,
+    "type": type,
     "efficiency": efficiency,
-    "liquidType": document.getElementById('LiquidType').value,
+    "liquidType": liquidType,
     "liquidQuantity": liquidQuantity,
     "liquidConsumption": liquidConsumption,
     "fuel": fuel,
@@ -99,6 +101,19 @@ function deleteVehicle(id, lon, lat, type, efficiency, liquidType, liquidQuantit
       .then()
       .catch(error => console.log(error))
 }
+
+*/
+
+function deleteVehicle(id) {
+  mymap.closePopup();
+  const context = {
+      method: 'DELETE',
+  }
+  fetch('http://localhost:8082/vehicule/deletevehicle/'+id, context)
+      .then()
+      .catch(error => console.log(error))
+}
+
 
 
 
