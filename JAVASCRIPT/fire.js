@@ -1,5 +1,5 @@
 function GetAllFire(){ //appel de la liste avec tous les feux
-    fetch('http://localhost:8081/fire')
+    fetch('http://localhost:8082/simulation/fire/')
     .then(
       function(response) {
         if (response.status !== 200) {
