@@ -2,6 +2,7 @@ package com.sp.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import com.sp.model.Vehicle;
 public class FireSimulationService {
 
 	public FireDto[] getFire() {
-		String UrlGetFires = "http://127.0.0.1:8081/fire";
+		String UrlGetFires = "http://127.0.0.1:8081/fire/";
 		FireDto[] ListFire = new RestTemplate().getForObject(UrlGetFires,FireDto[].class);
 		return ListFire;
 	}
