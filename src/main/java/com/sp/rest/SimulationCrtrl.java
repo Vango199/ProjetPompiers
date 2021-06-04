@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.project.model.dto.FireDto;
+import com.sp.model.Vehicle;
 import com.sp.service.FireSimulationService;
-
 
 
 
@@ -73,6 +73,8 @@ public class SimulationCrtrl {
 		 return;
 		
     }	  
+    
+
 	
 }
 

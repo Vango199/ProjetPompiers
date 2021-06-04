@@ -34,7 +34,7 @@ function GetAllVehicle(){ //appel de la liste avec tous les feux
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
   });
-  setTimeout(GetAllFire, TempsdeRefresh);
+  setTimeout(GetAllVehicle, TempsdeRefresh);
 }
 
 function displayVehicle(body){
