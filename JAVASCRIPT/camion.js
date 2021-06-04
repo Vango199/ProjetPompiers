@@ -68,7 +68,7 @@ function displayVehicle(body){
               var Vehicle = L.marker([vehicle.lat, vehicle.lon], {
                   icon: FiretruckIcon
               }).addTo(map);
-              Vehicle.bindPopup("Id : " + vehicle.id + "<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType +" " +vehicle.liquidQuantity + "L<br>" + "Fuel : "+ vehicle.fuel+ "<br><button type='button' id="+vehicle.id+" onclick=deleteVehicle(this.id)>Supprimer</button>");
+              Vehicle.bindPopup("Id : " + vehicle.id + "<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType +" " +vehicle.liquidQuantity + "L<br>" + "Fuel : "+ vehicle.fuel+ "<br><button type='button' id="+vehicle.id+' onclick=deleteVehicle(this.id)>Supprimer</button>');
               
 
               if(vehicle.type == "CAR"){
@@ -102,7 +102,9 @@ function deleteVehicle(id){
 
 TruckTypeSelect = '<label for="TruckType">Choose a type of car :<br></label><select id="TruckType" name="TruckType"><option value="CAR">CAR</option><option value="WATER_TENDERS">WATER_TENDERS</option><option value="TURNTABLE_LADDER_TRUCK">TURNTABLE_LADDER_TRUCK</option><option value="TRUCK">TRUCK</option><option value="FIRE_ENGINE">FIRE_ENGINE</option><option value="PUMPER_TRUCK">PUMPER_TRUCK</option></select>';    
 LiquidTypeSelect = '<label for="LiquidType">Choose a type of liquid :</label><select id="LiquidType" name="LiquidType"><option value="ALL">ALL</option><option value="WATER">WATER</option><option value="WATER_WITH_ADDITIVES">WATER_WITH_ADDITIVES</option><option value="CARBON_DIOXIDE">CARBON_DIOXIDE</option><option value="POWDER">POWDER</option></select>';
-var AddPopup = L.popup().setContent('Define what vehicule you desire<br><form onsubmit=AddVehicle(event) method="POST" id="AddVehicle">'+TruckTypeSelect+'<br>'+LiquidTypeSelect+'<br><input type="submit"></form>');
+LatEnter = '<label for="POST-lat">Latitude :</label><input id="POST-lat" type="text" name="POST-lat"></input>';
+LonEnter = '<label for="POST-lon">Longitude :</label><input id="POST-lon" type="text" name="POST-lon"></input>';
+var AddPopup = L.popup().setContent('<b>Choisissez votre véhicule :</b><br><form onsubmit=AddVehicle(event) method="POST" id="AddVehicle">'+LatEnter +'<br>' + LonEnter + '<br>' + TruckTypeSelect+'<br>'+LiquidTypeSelect+'<br><input type="submit"></form>');
 
 AddButton = L.easyButton('<img title = "Add a vehicle" src="../Img/my-icon.png" height=16 width=24 lenght=9>', function(btn, imap){
 
@@ -117,8 +119,8 @@ function AddVehicle(event){
   var DataVehicule = document.getElementById("AddVehicule");
   var charge = {
       
-      "lon": 4.228066,
-      "lat": 45.747389,
+      "lon": 45.7, //document.getElementById('POST-lat'),
+      "lat": 4.85,//document.getElementById('POST-lon'),
       "type": document.getElementById('TruckType').value,
       "efficiency": 10.0,
       "liquidType": document.getElementById('LiquidType').value,
