@@ -41,6 +41,15 @@ public class RestCrtVehicules {
 		return;
 		
     }
+    @RequestMapping(method=RequestMethod.DELETE,value="/deletevehicle") 
+	public void deleteAll(@RequestBody Vehicle _vehicle,HttpServletResponse response,HttpServletRequest request) {
+		 VehicleDto vehicledto = vService.toDto(_vehicle);
+    	fService.DeleteVehicle(vehicledto);
+		 return;
+		
+    }
+	
+	
 	//modifier un véhicule
 	@RequestMapping(method=RequestMethod.PUT,value="/{id}") 
 	public void PutVehicle(@PathVariable Integer id , @RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
