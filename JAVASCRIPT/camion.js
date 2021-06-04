@@ -12,7 +12,7 @@ function displayInfoVehiculeMap(){
       setTimeout(displayInfoVehiculeMap, TempsdeRefresh);
 }
 
-
+/*
 function GetAllVehicle(){ //appel de la liste avec tous les feux
   fetch('http://localhost:8082/vehicle/getall')
   .then(
@@ -36,7 +36,7 @@ function GetAllVehicle(){ //appel de la liste avec tous les feux
   });
   setTimeout(GetAllVehicle, TempsdeRefresh);
 }
-
+*/
 function displayVehicle(body){
 
           mapIdVehiculeLayerNew = new Map();
@@ -72,44 +72,14 @@ function displayVehicle(body){
 }
 
 
-/*
-function deleteVehicle(id, lon, lat, type, efficiency, liquidType, liquidQuantity, liquidConsumption, fuel, fuelConsumption, crewMember, crewMemberCapacity, facilityRefID) {
-  mymap.closePopup();
-  var charge_delete = {
-    "id": id,
-    "lon": lon,
-    "lat": lat,
-    "type": type,
-    "efficiency": efficiency,
-    "liquidType": liquidType,
-    "liquidQuantity": liquidQuantity,
-    "liquidConsumption": liquidConsumption,
-    "fuel": fuel,
-    "fuelConsumption": fuelConsumption,
-    "crewMember": crewMemberCapacity,
-    "crewMemberCapacity": crewMemberCapacity,
-    "facilityRefID": facilityRefID
-}
-  const context = {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-        },
-    body: JSON.stringify( charge_delete ) 
-  }
-  fetch('http://localhost:8082/vehicle/deletevehicle', context)
-      .then()
-      .catch(error => console.log(error))
-}
-
-*/
 
 function deleteVehicle(id) {
-  mymap.closePopup();
+  
+  map.closePopup();
   const context = {
       method: 'DELETE',
   }
-  fetch('http://localhost:8082/vehicule/deletevehicle/'+id, context)
+  fetch('http://localhost:8082/vehicle/deletevehicle/'+id, context)
       .then()
       .catch(error => console.log(error))
 }
@@ -134,6 +104,7 @@ AddPopup.setLatLng(imap.getCenter()).openOn(imap);
       
 function AddVehicle(event){
   event.preventDefault();
+  map.closePopup();
   var DataVehicule = document.getElementById("AddVehicule");
   var charge = {
       "id": 40.0,

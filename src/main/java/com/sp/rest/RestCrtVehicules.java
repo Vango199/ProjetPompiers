@@ -48,6 +48,7 @@ public class RestCrtVehicules {
 		Vehicle _vehicle = vService.findById(id);
     	VehicleDto vehicledto = vService.toDto(_vehicle);
     	fService.DeleteVehicle(vehicledto);
+    	vRepository.delete(_vehicle);
 		return;
 		
     }
