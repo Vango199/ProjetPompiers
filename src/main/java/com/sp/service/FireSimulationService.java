@@ -2,6 +2,7 @@ package com.sp.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import org.springframework.http.ResponseEntity;
@@ -81,5 +82,22 @@ public class FireSimulationService {
 		return fireDtoToRet;
 		
 	}
+	
+	public List<Integer> getlistidFire(FireDto firedto){
+		
+		List<Integer> listidfire = new ArrayList<Integer>();
+		FireDto[] listfiredto =this.getFire();
+		for (FireDto fireDto : listfiredto) {
+			listidfire.add(fireDto.getId());
+		}
+		
+	
+	return listidfire;
+	
+	}
+	
+	
+	
+	
 	
 }

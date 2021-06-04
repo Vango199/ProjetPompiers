@@ -43,11 +43,12 @@ public class RestCrtVehicules {
 		return;
 		
     }
-    @RequestMapping(method=RequestMethod.DELETE,value="/deletevehicle") 
-	public void deleteAll(@RequestBody Vehicle _vehicle,HttpServletResponse response,HttpServletRequest request) {
-		 VehicleDto vehicledto = vService.toDto(_vehicle);
+    @RequestMapping(method=RequestMethod.DELETE,value="/deletevehicle/{id}") 
+	public void delete(@PathVariable Integer id,HttpServletResponse response,HttpServletRequest request) {
+		Vehicle _vehicle = vService.findById(id);
+    	VehicleDto vehicledto = vService.toDto(_vehicle);
     	fService.DeleteVehicle(vehicledto);
-		 return;
+		return;
 		
     }
 	
