@@ -40,17 +40,9 @@ public class SimulationCrtrl {
     }
 	
     @RequestMapping(method=RequestMethod.GET,value="/fire") 
-<<<<<<< HEAD
 	public FireDto[] GetFires(HttpServletResponse response,HttpServletRequest request) {
 	  
 		 
-=======
-
-	public FireDto[] GetFires(HttpServletResponse response,HttpServletRequest request) {
-	  
-		 
-
->>>>>>> e18823f2cb2c7eda44d441ad1b0489325d96286c
 		return fService.getFire();
 		
     }

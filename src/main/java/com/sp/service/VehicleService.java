@@ -74,7 +74,19 @@ public class VehicleService {
 	    }else {
 	        return null;
 	    }
-}
+	}
+	
+	
+	public Integer find(Integer _id) {
+		
+		Optional<Vehicle> vOpt =vRepository.findById(_id);
+	    if (vOpt.isPresent()) {
+	        return vOpt.get().getIdFire();
+	    }else {
+	        return null;
+	    }
+	}
+	
 	
 	public VehicleDto toDto(Vehicle vehicle) {
 		VehicleDto vehicleDto = new VehicleDto(vehicle.getId(),vehicle.getLon(),vehicle.getLat(),vehicle.getType(),vehicle.getEfficiency(),vehicle.getLiquidType(),vehicle.getLiquidQuantity(),vehicle.getLiquidConsumption(),vehicle.getFuel(),vehicle.getFuelConsumption(),vehicle.getCrewMember(),vehicle.getCrewMemberCapacity(),vehicle.getFacilityRefID());
@@ -97,7 +109,6 @@ public class VehicleService {
 
 
 
-<<<<<<< HEAD
 //	public void Move(Vehicle _vehicle) {
 //		
 //		//récupération du feu associé
@@ -122,37 +133,6 @@ public class VehicleService {
 //		vRepository.save(_vehicle);
 //		
 //	}
-=======
-	public void Move (Vehicle _vehicle) {
-		
-		//récupération du feu associé
-		FireDto fire = fService.GetFireById(_vehicle.getIdFire());
-		
-		//récupération des positions d'arrivée : celles du feu
-		
-		int deplacement = 5;
-		
-		double latArriv = fire.getLat();
-		double lonArriv = fire.getLon();
-		
-		
-		double angle = Math.atan((lonArriv-_vehicle.getLon())/(latArriv-_vehicle.getLat()));
-		
-		//On actualise les coo
-		_vehicle.setLat(Math.cos(angle)*deplacement);
-		_vehicle.setLon(Math.sin(angle)*deplacement);
-		
-		
-		System.out.println("Vehicule "+_vehicle.getId()+"-->"+_vehicle.getLat()+","+_vehicle.getLon() );
-		vRepository.save(_vehicle);
-		
-	}
-	
-	public void gestionFeux() {
-		
-		FireDto[] listFire = fService.getFire();
-	}
->>>>>>> e18823f2cb2c7eda44d441ad1b0489325d96286c
 }
 
 
