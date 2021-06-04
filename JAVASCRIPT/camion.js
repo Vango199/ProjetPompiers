@@ -104,7 +104,7 @@ TruckTypeSelect = '<label for="TruckType">Choose a type of car :<br></label><sel
 LiquidTypeSelect = '<label for="LiquidType">Choose a type of liquid :</label><select id="LiquidType" name="LiquidType"><option value="ALL">ALL</option><option value="WATER">WATER</option><option value="WATER_WITH_ADDITIVES">WATER_WITH_ADDITIVES</option><option value="CARBON_DIOXIDE">CARBON_DIOXIDE</option><option value="POWDER">POWDER</option></select>';
 var AddPopup = L.popup().setContent('Define what vehicule you desire<br><form onsubmit=AddVehicle(event) method="POST" id="AddVehicle">'+TruckTypeSelect+'<br>'+LiquidTypeSelect+'<br><input type="submit"></form>');
 
-AddButton = L.easyButton('<img title = "Add a vehicle" src="../Img/my-icon.png">', function(btn, imap){
+AddButton = L.easyButton('<img title = "Add a vehicle" src="../Img/my-icon.png" height=16 width=24 lenght=9>', function(btn, imap){
 
 AddPopup.setLatLng(imap.getCenter()).openOn(imap); 
 
