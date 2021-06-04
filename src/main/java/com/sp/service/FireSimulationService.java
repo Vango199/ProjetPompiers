@@ -23,7 +23,8 @@ public class FireSimulationService {
 	
 	public void resetFire() {
 		String UrlResetFires = "http://127.0.0.1:8081/fire/reset";
-		new RestTemplate().put( UrlResetFires, null);
+		 RestTemplate restemplate = new RestTemplate();
+		 restemplate.getForEntity(UrlResetFires, null, new Object[] {});
 		return ;
 	}
 	

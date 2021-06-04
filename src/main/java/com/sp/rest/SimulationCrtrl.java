@@ -40,6 +40,13 @@ public class SimulationCrtrl {
     public String test() {
         return "hello";
     }
+    
+    @RequestMapping(method=RequestMethod.GET,value="/fire/reset") 
+	public void ResetFires(HttpServletResponse response,HttpServletRequest request) {
+	  
+		 fService.resetFire();
+		
+    }
 	
     @RequestMapping(method=RequestMethod.GET,value="/fire") 
 	public FireDto[] GetFires(HttpServletResponse response,HttpServletRequest request) {
