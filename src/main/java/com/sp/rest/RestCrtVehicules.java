@@ -32,10 +32,7 @@ public class RestCrtVehicules {
 	FireSimulationService fService;
 	
 	
-	@RequestMapping("/hello")
-	public String sayHello() {
-		return "Hello Hero !!!";
-	}
+
 	//ajouter un véhicule
 	@RequestMapping(method=RequestMethod.POST,value="") 
 	public void PostVehicle(@RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
