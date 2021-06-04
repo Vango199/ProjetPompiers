@@ -49,53 +49,61 @@ public class DisplayRunnable implements Runnable {
 	
 	public void Move(Vehicle _vehicle) {
 		
-		//récupération du feu associé
-		FireDto fire = fService.GetFireById(_vehicle.getIdFire());
-		
-		//récupération des positions d'arrivée : celles du feu
-		
-		
-		
-		double latArriv = fire.getLat();
-		double lonArriv = fire.getLon();
-		Coord coordvehicle = new Coord(_vehicle.getLat(),_vehicle.getLon());
-		coordvehicle.setProjection("4326");
-		Coord coordArriv = new Coord(latArriv, lonArriv);
-		coordArriv.setProjection("4326");
-		new GisTools();
-		Coord newbasevehicle = GisTools.transformCoord(coordvehicle,"3857");
-		Coord newbasefire = GisTools.transformCoord(coordArriv,"3857");
-		//System.out.println(newbasevehicle.getLat());
 		
 		int deplacement = 5;
-		double angle = Math.atan((newbasefire.getLon()-newbasevehicle.getLon())/(newbasefire.getLon()-newbasevehicle.getLat()));
+		double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).get(0);
+		double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).get(1);
 		
-		//On actualise les coo
-		newbasevehicle.setLat(Math.cos(angle)*deplacement+newbasevehicle.getLat());
-		newbasevehicle.setLon(Math.sin(angle)*deplacement+newbasevehicle.getLon());
+		new GisTools();
+		//transpositions en coordonnées en metres	
+		Coord coordVehicle = new Coord(_vehicle.getLat(),_vehicle.getLon());
+		coordVehicle.setProjection("4326");
+		Coord coordArriv = new Coord(latArriv, lonArriv);
+		coordArriv.setProjection("4326");
+		
+		coordVehicle = GisTools.transformCoord(coordVehicle,"3857");
+		coordArriv = GisTools.transformCoord(coordArriv,"3857");
 		
 		
-		//On actualise les coo
-		/*if ((latArriv-0.01 < _vehicle.getLat() &  _vehicle.getLat()< latArriv+0.01)) {
-
+		if ((Math.abs(coordVehicle.getLat()-coordArriv.getLat())<deplacement) &&(Math.abs(coordVehicle.getLon()-coordArriv.getLon())<deplacement)) {
+			_vehicle.setTrajetEtape(_vehicle.getTrajetEtape()+1);
+			coordVehicle.setLat(coordArriv.getLat());
+			coordVehicle.setLon(coordArriv.getLon());
+			
 		}
-		else {
-			double deplacement = Math.random()*(5-1)+1;
-			double angle = Math.atan((lonArriv-_vehicle.getLon())/(latArriv-_vehicle.getLat()));
-			if (latArriv -_vehicle.getLat() < 0) {
-				_vehicle.setLat(Math.cos(angle+Math.PI)*deplacement+_vehicle.getLat());
-				_vehicle.setLon(Math.sin(angle+Math.PI)*deplacement+_vehicle.getLon());
-			}
-			else {
-			_vehicle.setLat(Math.cos(angle)*deplacement+_vehicle.getLat());
-			_vehicle.setLon(Math.sin(angle)*deplacement+_vehicle.getLon());
+		else if (_vehicle.getTrajetEtape()<_vehicle.getTrajet().size()) {
+			
 		
-			}
-		}*/
-		System.out.println("Vehicule "+_vehicle.getId()+"-->"+newbasevehicle.getLat()+","+newbasevehicle.getLon() );
+
+			
+
+			double angle = Math.atan((coordArriv.getLon()-coordVehicle.getLon())/(coordArriv.getLon()-coordVehicle.getLat()));
+			
+			//On actualise les coo
+			coordVehicle.setLat(Math.cos(angle)*deplacement+coordVehicle.getLat());
+			coordVehicle.setLon(Math.sin(angle)*deplacement+coordVehicle.getLon());
+			
+			
+			
+			
+		
+			
+		}
+		
+		//on repasse en base lat long 
+		coordVehicle = GisTools.transformCoord(coordVehicle,"4326");
+		
+		_vehicle.setLat(coordVehicle.getLat());
+		_vehicle.setLon(coordVehicle.getLon());
+		
+		
+		
+		System.out.println("Vehicule "+_vehicle.getId()+"-->"+coordVehicle.getLat()+","+coordVehicle.getLon() );
 		vRepo.save(_vehicle);
 		
 	}
+	
+
 	
 	/*public void vehicleToFire() {
 		FireDto[] listfiredto =fService.getFire();

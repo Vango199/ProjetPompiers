@@ -12,4 +12,5 @@ import com.sp.model.Vehicle;
 public interface VehicleRepository extends CrudRepository<Vehicle, Integer> {
   
 	public List<Vehicle> findAll();
+	
 }

@@ -1,5 +1,6 @@
 package com.sp.rest;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,8 @@ import com.sp.repository.VehicleRepository;
 import com.sp.service.FireSimulationService;
 import com.sp.service.VehicleService;
 
+import DTO.RouteDTO;
+
 @RestController
 @RequestMapping("/vehicle")
 public class RestCrtVehicules {
@@ -36,6 +39,18 @@ public class RestCrtVehicules {
 	public String sayHello() {
 		return "Hello Hero !!!";
 	}
+	
+	//get un trajet
+		@RequestMapping(method=RequestMethod.GET,value="/trajet") 
+		public void GetTrajet(HttpServletResponse response,HttpServletRequest request) throws IOException {
+		  
+			
+			 vService.getTrajetVJson(4.828066,45.747389,  4.845696,45.699825);
+			
+	    }
+	
+	
+	
 	//ajouter un véhicule
 	@RequestMapping(method=RequestMethod.POST,value="") 
 	public void PostVehicle(@RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
@@ -80,11 +95,12 @@ public class RestCrtVehicules {
 	public void stopDisplay() {
 		vService.stopDisplay();
 	}
+	
+	//ajout d'un feu à un véhicule et du chemin pour accéder à ce feu
 	@RequestMapping(method=RequestMethod.PUT,value="/idfire")
-	public void PutVehicle(Integer idFire ,Integer idVehicle, HttpServletResponse response,HttpServletRequest request) {
-		Vehicle vehicle = vService.findById(idVehicle);
-		vehicle.setIdFire(idFire);
-		vRepository.save(vehicle);
+	public void PutVehicleFire(Integer idFire ,Integer idVehicle, HttpServletResponse response,HttpServletRequest request) throws IOException {
+		
+		vService.addFireAndSetup(idFire, idVehicle);
 	}
 
 
