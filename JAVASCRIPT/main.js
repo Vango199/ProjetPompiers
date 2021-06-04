@@ -1,14 +1,22 @@
 map = L.map('mapid').setView([45.75, 4.85], 11);
 let TempsdeRefresh = 5000;
 
-var fire = L.layerGroup();
-var fire_chill = L.layerGroup();
-var fire_hard = L.layerGroup();
-var type_A = L.layerGroup();
-var type_B = L.layerGroup();
-var type_C = L.layerGroup();
-var type_D = L.layerGroup();
-var type_E = L.layerGroup();
+mapIdFireLayerOld = new Map();
+
+var A = L.layerGroup();
+var B_Gasoline = L.layerGroup();
+var B_Alcohol = L.layerGroup();
+var B_Plastics = L.layerGroup();
+var C_Flammable_Gases = L.layerGroup();
+var D_Metals = L.layerGroup();
+var E_Electric = L.layerGroup();
+
+var start_fire = L.layerGroup();
+var medium_fire = L.layerGroup();
+var big_fire = L.layerGroup();
+var fire_emergency = L.layerGroup();
+
+
 
 var itineraire = L.layerGroup();
 
@@ -47,14 +55,21 @@ function init() {
 
     itineraire.addTo(map);
     
-    fire_chill.addTo(map);
-    fire.addTo(map);
-    fire_hard.addTo(map); //commence avec les cases cochées
-    type_A.addTo(map);
-    type_B.addTo(map);
-    type_C.addTo(map);
-    type_D.addTo(map);
-    type_E.addTo(map);
+ 
+    start_fire.addTo(map);
+    medium_fire.addTo(map);
+    big_fire.addTo(map);
+    fire_emergency.addTo(map);
+
+    A.addTo(map);
+    B_Gasoline.addTo(map);
+    B_Alcohol.addTo(map);
+    B_Plastics.addTo(map);
+    C_Flammable_Gases.addTo(map);
+    D_Metals.addTo(map);
+    E_Electric.addTo(map);
+
+
 
     var overlayMaps_mode = {
       "Light mode" : mainLayer,
@@ -66,18 +81,23 @@ function init() {
     }
 
     var overlayMaps_fire = {
-      "Feux soft" : fire_chill,
-      "Feux moyens": fire,
-      "Feux hard" : fire_hard,
+        "Start fire": start_fire,
+        "Medium Fire": medium_fire,
+        "Big Fire": big_fire,
+        "Fire Emergency": fire_emergency
+    
     };
 
     var overlayMaps_type = {
-      "Type A" : type_A,
-      "Type B" : type_B,
-      "Type C" : type_C,
-      "Type D" : type_D,
-      "Type E" : type_E
-    };
+        "A": A,
+        "B_Gasoline": B_Gasoline,
+        "B_Alcohol": B_Alcohol,
+        "B_Plastics": B_Plastics,
+        "C_Flammable_Gases": C_Flammable_Gases,
+        "D_Metals": D_Metals,
+        "E_Electric": E_Electric,
+    }
+    
     
 
     L.control.layers(overlayMaps_mode, overlayMaps_itineraire).addTo(map);
@@ -104,7 +124,8 @@ function GetAllFire(){ //appel de la liste avec tous les feux
   
         // Examine the text in the response
         response.json().then(function(data) {
-          AffichageFeux(data);
+            displayFire(data);
+       //   AffichageFeux(data);
           return data;
         });
       }
@@ -117,99 +138,132 @@ function GetAllFire(){ //appel de la liste avec tous les feux
 
 
 
-function AffichageFeux(AllFireList){
-    //AllFireList =   GetAllFire();//appel de la fonction qui retourne une liste de feux
 
-//On parcourt la liste des feux pour venir les afficher sur la map
+function getColor(i) {//get a color in function of the intensity of the fire
+    return perc2color(i);
+}
+
+function getColorDark(i) {//get a color in function of the intensity of the fire
+    return perc2colorDark(i);
+}
+
+function displayFire(body){
+
+    mapIdFireLayerNew = new Map(); 
+        
+    for(const fire of body){
+
+        if (!mapIdFireLayerOld.has(fire.id)){//if the fire doesn't have a marker
+            var circle = L.circle([fire.lat, fire.lon], {//creation of a marker
+                color: getColorDark(fire.intensity),
+                fillColor: getColor(fire.intensity),
+                fillOpacity: 1.0,
+                radius: 3*fire.range
+            })
+
+            switch (fire.type){//add the marker to a layer group to be able to filter the fire with his type
+                case 'A':
+                    type = A;
+                    circle.addTo(A);
+                    break;
+                case 'B_Gasoline':
+                    type = B_Gasoline;
+                    circle.addTo(B_Gasoline);
+                    break;
+                case 'B_Alcohol':
+                    type = B_Alcohol;
+                    circle.addTo(B_Alcohol);
+                    break;
+                case 'B_Plastics':
+                    type = B_Plastics;
+                    circle.addTo(B_Plastics);
+                    break;
+                case 'C_Flammable_Gases':
+                    type = C_Flammable_Gases;
+                    circle.addTo(C_Flammable_Gases);
+                    break;
+                case 'D_Metals':
+                    type = D_Metals;
+                    circle.addTo(D_Metals);
+                    break;
+                case 'E_Electric':
+                    type = E_Electric;
+                    circle.addTo(E_Electric);
+                    break;
+                default:
+                    break;
+            }
 
 
-for (i in AllFireList){
-  x_color = perc2color(AllFireList[i].intensity)
-  x_color_dark = perc2color_dark(AllFireList[i].intensity)
-   /*  var circle = L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
-     
-        color: x_color_dark, //color pour le contour du cercle
-        fillColor: x_color, //color pour l'interieur du cercle
-        fillOpacity: 0.8,
-        radius: 4*AllFireList[i].range
-    }).addTo(map);
-    */
-  
+            circle.bindPopup("<img alt='fire image' src=../Img/feu.png height=30 width=25 lenght=30 ><br>Fire " + fire.type + "<br>Intensity: " + Math.round(fire.intensity * 100) / 100 + "<br>Range: " + fire.range);
+            //add popup to the marker to display the information about the fire
 
-/*
-    fire_list.add(L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
-     
-      color: x_color_dark, //color pour le contour du cercle
-      fillColor: x_color, //color pour l'interieur du cercle
-      fillOpacity: 0.8,
-      radius: 4*AllFireList[i].range
-  }));
-  */
- 
-  var circle = L.circle([AllFireList[i].lat, AllFireList[i].lon], { //Pb format JSON
-     
-        color: x_color_dark, //color pour le contour du cercle
-        fillColor: x_color, //color pour l'interieur du cercle
-        fillOpacity: 0.8,
-        radius: 3*AllFireList[i].range
-    });
-  if (AllFireList[i].intensity < 17) {
+            if (fire.intensity > 49){//add the fire to a layer group based on his intensity
+                group = fire_emergency;
+                circle.addTo(fire_emergency);
+            }
+            else if (fire.intensity > 35){
+                group = big_fire;
+                circle.addTo(big_fire);
+            }
+            else if (fire.intensity > 15){
+                group = medium_fire;
+                circle.addTo(medium_fire);
+            }
+            else{
+                group = start_fire;
+                circle.addTo(start_fire);
+            }
+            mapIdFireLayerNew.set(fire.id,[circle,group,type])//add the fire to a map (=dico in python), key = id fire, value = [marker,layergroupIntensity,layergroupType]
+        }
+        else {//if the fire has a marker
+            mapIdFireLayerOld.get(fire.id)[0].getPopup().setContent("<img src=../Img/feu.png height=30 lenght=30 width=25><br>Fire " + fire.type + "<br>Intensity: " + Math.round(fire.intensity * 100) / 100 + "<br>Range: " + fire.range);
+            //we update his information in the popup
 
-  circle.addTo(fire_chill);
-  }
-  else if (AllFireList[i].intensity < 34) {
+            if (fire.intensity > 49){
+                group = fire_emergency;
+            }
+            else if (fire.intensity > 35){
+                group = big_fire;
+            }
+            else if (fire.intensity > 15){
+                group = medium_fire;
+            }
+            else{
+                group = start_fire;
+            }
 
-    circle.addTo(fire);
+            if (group._leaflet_id != mapIdFireLayerOld.get(fire.id)[1]._leaflet_id){//if he is in a different intensity category
+                mapIdFireLayerOld.get(fire.id)[1].removeLayer(mapIdFireLayerOld.get(fire.id)[0]);//we remove the marker from his old layergroup
+                mapIdFireLayerOld.get(fire.id)[0].addTo(group);//we add the marker to his new layergroup
+                mapIdFireLayerOld.get(fire.id)[0].setStyle({//we change the color of the marker
+                    color: getColorDark(fire.intensity),
+                    fillColor: getColor(fire.intensity)
+                })
+            }
+            mapIdFireLayerNew.set(fire.id,[mapIdFireLayerOld.get(fire.id)[0],group,mapIdFireLayerOld.get(fire.id)[2]]);//add the fire to the new map
+            mapIdFireLayerOld.delete(fire.id);//delete the fire from the old map
+        }
     }
-  else {
-    circle.addTo(fire_hard);
 
-  }
+    if (mapIdFireLayerOld.size != 0){//if there is still fires in the old map, it means that there is fire that doesn't exist anymore
+        mapIdFireLayerOld.forEach(function(value, key) {//so for every fire that died
+            value[1].removeLayer(value[0]);//we remove the marker from the layer groups
+            value[2].removeLayer(value[0]);
+            map.removeLayer(value[0]);//we remove the marker from the map
+            mapIdFireLayerOld.delete(key);//we delete the fire from the old map
+          });
+    }
 
-  
-  if (AllFireList[i].type == "A") {
-    circle.addTo(type_A);
-  }
-
-  if ((AllFireList[i].type == "B_Gasoline") || (AllFireList[i].type == "B_Alcohol") || (AllFireList[i].type == "B_Plastics")) {
-    circle.addTo(type_B);
-  }
-
-  if (AllFireList[i].type == "C_Flammable_Gases") {
-    circle.addTo(type_C);
-  }
-
-  if (AllFireList[i].type == "D_Metals") {
-    circle.addTo(type_D);
-  }
-
-  if (AllFireList[i].type == "E_Electric") {
-    circle.addTo(type_E);
+    mapIdFireLayerOld = new Map(mapIdFireLayerNew);//we copy the new map into the old one
 }
 
 
 
 
-  //A,B_Gasoline,B_Alcohol,B_Plastics,C_Flammable_Gases,D_Metals,E_Electric;
-  
-  
 
 
 
-
-  //var fire = L.layerGroup(fire_list);
-// tu créées tes l.layergroup vide
-//tu les add a ta map
-// et tu add tes cirles a ton layer goru
-
-
-
-
-
-
-    circle.bindPopup(AffichageDonneeFeux(AllFireList[i]))
-}
-}
 
 function perc2color(perc) { //Création d'une échelle de couleurs en fonction de l'intensité du feu pour l'interieur du cercle
 	var r, g, b = 0;
@@ -225,7 +279,8 @@ function perc2color(perc) { //Création d'une échelle de couleurs en fonction d
 	return '#' + ('000000' + h.toString(16)).slice(-6);
 }
 
-function perc2color_dark(perc) { //Création d'une échelle de couleurs en fonction de l'intensité du feu pour le contour du cercle
+
+function perc2colorDark(perc) { //Création d'une échelle de couleurs en fonction de l'intensité du feu pour le contour du cercle
 	var r, g, b = 0;
 	//if(perc < 50) {
 		r = 255;
@@ -239,11 +294,6 @@ function perc2color_dark(perc) { //Création d'une échelle de couleurs en fonct
 	return '#' + ('000000' + h.toString(16)).slice(-6);
 }
 
-function AffichageDonneeFeux(Feux){ //Affichage des données liées au feu
-  y = '<p><b>El Fuegooo : </b>' + '<img src="../Img/feu.png" width="25" height="25" />' + '<br />' + 'Id : ' + Feux.id+ '<br />' + 'Intensity : ' + Feux.intensity+ '<br />' + 'Range : ' + Feux.range+ '<br />' + 'Type : ' + Feux.type;
-  return y.toString()
-
-}
 
 
 ////////////////////////////////////////////////////// AFFICHAGE DES CAMIONS DE BOMBEROS /////////////////////////////////////////////////
@@ -341,79 +391,7 @@ function RecupFireFromidFire(){//récupère à partir de l'Id du feu, l'objet fe
   });
 }
 
-function TracerItineraire(){
-  //LatDep = RecupVehicleIncendie().lat
-  //LonDep = RecupVehicleIncendie().lon
-  //LatAriv = RecupFireFromidFire().lat
-  //LonAriv = RecupFireFromidFire().lon
-*/
 
-/*
-  var latlngs = [
-    [LatDep, LonDep],
-    [LatAriv, LonAriv],
-  ];
-
-  var latlng = [
-    [45.75, 4.85],
-    [46.5, 5],
-  ];
-
-L.polyline(latlng, {color: 'red'}).addTo(map);
-
-
-}
-*/
-//var tooltip = L.Draw.Tooltip();
-//TracerItineraire();
-
-// create a red polyline from an array of LatLng points
-/*
-var latlngs = [
-  [45.51, -122.68],
-  [37.77, -122.43],
-  [34.04, -118.2]
-];
-
-var polyline = L.polyline(latlngs).addTo(map);
-console.log('a');
-*/
-/*
-var pointA = new L.LatLng(45.75, 4.85);
-var pointB = new L.LatLng(46.30, 5.0);
-var pointList = [pointA, pointB];
-
-//var firstpolyline = new L.Polyline(pointList, {
-//    color: 'red',
-//    weight: 3,
-//    opacity: 0.5,
-//    smoothFactor: 1
-//});
-//firstpolyline.addTo(map);
-
-
-
-center=[45.75,4.85];
-// Create the map
-var map2 = L.map('map').setView(center, 6);
-
-// Set up the OSM layer
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 18
-  }).addTo(map2);
-
-
-
-var polylinePoints = [
-  [37.781814, -122.404740],
-  [37.781719, -122.404637],
-  [37.781489, -122.404949],
-  [37.780704, -122.403945],
-  [37.780012, -122.404827]
-];            
-
-var polyline = L.polyline(polylinePoints).addTo(map2);  
 */
 coords = [
   [
@@ -1035,8 +1013,8 @@ coords = [
   
   var firstpolyline = new L.Polyline(pointList, {
   color: 'blue',
-  weight: 3,
-  opacity: 0.7,
+  weight: 3.5,
+  opacity: 0.8,
   smoothFactor: 1
   
   });
