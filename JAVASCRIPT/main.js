@@ -22,6 +22,37 @@ var itineraire = L.layerGroup();
 
 var pompier = L.layerGroup();
 
+var FiretruckIcon = new L.Icon({
+    iconUrl: '../Img/my-icon.png',
+    iconSize:     [30, 30],
+    iconAnchor: new L.Point(16, 16),
+    });
+  var CarIcon = new L.Icon({
+    iconUrl: '../Img/my-icon.png',
+    iconSize:     [30, 30],
+    iconAnchor: new L.Point(16, 16),
+    });
+  var PumperTruckIcon = new L.Icon({
+    iconUrl: '../Img/my-icon.png',
+    iconSize:     [30, 30],
+    iconAnchor: new L.Point(16, 16),
+    });
+  var WaterTenderIcon = new L.Icon({
+    iconUrl: '../Img/my-icon.png',
+    iconSize:     [30, 30],
+    iconAnchor: new L.Point(16, 16),
+    });
+  var LadderTruckIcon = new L.Icon({
+    iconUrl: '../Img/my-icon.png',
+    iconSize:     [30, 30],
+    iconAnchor: new L.Point(16, 16),
+    });    
+  var TruckIcon = new L.Icon({
+    iconUrl: '../Img/my-icon.png',
+    iconSize:     [30, 30],
+    iconAnchor: new L.Point(16, 16),
+    });
+
 ////////////////////////////////////////////////////// AFFICHAGE DE LA MAP /////////////////////////////////////////////////
 
 
@@ -103,49 +134,3 @@ function init() {
   //GetAllCamionsBomberos();
 }
 
-
-/*
-function RecupVehicleIncendie(){ //récupère le véhicule d'urgence avec en plus un Id du feu
-    fetch('http://localhost:8082/vehicle/getall')
-    .then(
-      function(response) {
-        if (response.status !== 200) {
-          console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-          return;
-        }
-  
-        // Examine the text in the response
-        response.json().then(function(data) {
-          return data; //On renvoie tout le vehicule
-        });
-      }
-    )
-    .catch(function(err) {
-      console.log('Fetch Error :-S', err);
-    });
-}
-
-function RecupFireFromidFire(){//récupère à partir de l'Id du feu, l'objet feu et retourne sa latitude et longitude
-  x= RecupVehicleIncendie().idFire //On appelle la F qui renvoie tout le vehicule mais seulement l'Id du feu
-  fetch('http://localhost:8082/simulation/fire/'+toString(x)) // Grace a l'id du feu, on recupere l'objet feu en entier
-  .then(
-    function(response) {
-      if (response.status !== 200) {
-        console.log('Looks like there was a problem. Status Code: ' +
-          response.status);
-        return;
-      }
-
-      // Examine the text in the response
-      response.json().then(function(data) {
-        AffichageFeux(data);
-        return data; //On renvoie l'objet feu
-      });
-    }
-  )
-  .catch(function(err) {
-    console.log('Fetch Error :-S', err);
-  });
-}
-*/

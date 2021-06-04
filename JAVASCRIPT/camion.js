@@ -1,3 +1,4 @@
+/* 
 function GetAllCamionsBomberos(){ //appel de la liste avec tous les camions de pompier
     fetch('http://localhost:8081/vehicle')
     .then(
@@ -44,39 +45,9 @@ function GetAllCamionsBomberos(){ //appel de la liste avec tous les camions de p
     y = '<p>' + '<img src="../Img/my-icon.png" width="25" height="25" />' + '<b>  Camion de Pompier : </b>'+ '<br />' + 'Id : ' + Camion.id+ '<br />' + 'Type : ' + Camion.type+ '<br />' + 'Capacité : ' + Camion.crewMemberCapacity + '<br />' + 'Fuel : : ' + Camion.fuel;
     return y.toString()
   }
-
+*/
   
 ////////////////////////////////////////////////////// AFFICHAGE DES CAMIONS DE BOMBEROS /////////////////////////////////////////////////
-var FiretruckIcon = new L.Icon({
-  iconUrl: '../Img/my-icon.png',
-  iconSize:     [30, 30],
-  iconAnchor: new L.Point(16, 16),
-  });
-var CarIcon = new L.Icon({
-  iconUrl: '../Img/my-icon.png',
-  iconSize:     [30, 30],
-  iconAnchor: new L.Point(16, 16),
-  });
-var PumperTruckIcon = new L.Icon({
-  iconUrl: '../Img/my-icon.png',
-  iconSize:     [30, 30],
-  iconAnchor: new L.Point(16, 16),
-  });
-var WaterTenderIcon = new L.Icon({
-  iconUrl: '../Img/my-icon.png',
-  iconSize:     [30, 30],
-  iconAnchor: new L.Point(16, 16),
-  });
-var LadderTruckIcon = new L.Icon({
-  iconUrl: '../Img/my-icon.png',
-  iconSize:     [30, 30],
-  iconAnchor: new L.Point(16, 16),
-  });    
-var TruckIcon = new L.Icon({
-  iconUrl: '../Img/my-icon.png',
-  iconSize:     [30, 30],
-  iconAnchor: new L.Point(16, 16),
-  });
 
 
 function displayInfoVehiculeMap(){
