@@ -49,25 +49,44 @@ function GetAllCamionsBomberos(){ //appel de la liste avec tous les camions de p
   
 ////////////////////////////////////////////////////// AFFICHAGE DES CAMIONS DE BOMBEROS /////////////////////////////////////////////////
 
+flag = false;
 
 function displayInfoVehiculeMap(){
-  const context = {
-      method: 'GET'
-  }
-  fetch('http://localhost:8081/vehicle', context)
-      .then(response => response.json().then(body => displayVehicle(body)))
-      .catch(error => console.log(error))
-      setTimeout(displayInfoVehiculeMap, TempsdeRefresh);
+
+  fetch('http://localhost:8081/vehicle')
+  .then(
+    function(response) {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+      response.json().then(function(data) {
+        displayVehicle(data);
+        return;
+      });
+    }
+  )
+  .catch(function(err) {
+    console.log('Fetch Error :-S', err);
+  });
+  console.log('tot');
+  setTimeout(displayInfoVehiculeMap, 1000);
+
 }
 
 function displayVehicle(body){
-
-          mapIdVehiculeLayerNew = new Map();
-          
-          for(const vehicle of body){
-              var Vehicle = L.marker([vehicle.lat, vehicle.lon], {
-                  icon: FiretruckIcon
-              }).addTo(map);
+  if(!flag){
+    mapIdVehicleLayerOld = new Map();
+    console.log(flag);
+    flag = true;
+  }
+  mapIdVehicleLayerNew = new Map();
+  for(const vehicle of body){
+      if (!mapIdVehicleLayerOld.has(vehicle.id)){
+          var Vehicle = L.marker([vehicle.lat, vehicle.lon], {
+              icon: FiretruckIcon
+          }).addTo(map);
               Vehicle.bindPopup("Id : " + vehicle.id + "<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType +" " +vehicle.liquidQuantity + "L<br>" + "Fuel : "+ vehicle.fuel+ "<br><button type='button' id="+vehicle.id+' onclick=deleteVehicle(this.id)>Supprimer</button>');
               
 
@@ -89,9 +108,23 @@ function displayVehicle(body){
               if(vehicle.type == "TRUCK"){
                   Vehicle.setIcon(TruckIcon);
               }
-              
-          }
+      mapIdVehicleLayerNew.set(vehicle.id,[vehicle.type,vehicle.liquidType,Vehicle,vehicle.facilityRefID,vehicle.liquidQuantity,vehicle.fuel])
+    }  
+    else{
+    mapIdVehicleLayerNew.set(vehicle.id,[mapIdVehicleLayerOld.get(vehicle.id)[0],mapIdVehicleLayerOld.get(vehicle.id)[1],mapIdVehicleLayerOld.get(vehicle.id)[2],mapIdVehicleLayerOld.get(vehicle.id)[3],mapIdVehicleLayerOld.get(vehicle.id)[4],mapIdVehicleLayerOld.get(vehicle.id)[5]]);
+    mapIdVehicleLayerOld.delete(vehicle.id);
+    }
+                 
+  }
+    mapIdVehicleLayerOld.forEach(function(value, key) {
+    //console.log("Deleting unnecessary Vehicle Markers");
+    map.removeLayer(value[2]);
+    mapIdVehicleLayerOld.delete(key);
+    });
+mapIdVehicleLayerOld = new Map(mapIdVehicleLayerNew);  
 }
+
+
 
 function deleteVehicle(id){
   const context = {
@@ -119,8 +152,8 @@ function AddVehicle(event){
   var DataVehicule = document.getElementById("AddVehicule");
   var charge = {
       
-      "lon": 45.7, //document.getElementById('POST-lat'),
-      "lat": 4.85,//document.getElementById('POST-lon'),
+      "lon": document.getElementById('POST-lat'),
+      "lat": document.getElementById('POST-lon'),
       "type": document.getElementById('TruckType').value,
       "efficiency": 10.0,
       "liquidType": document.getElementById('LiquidType').value,
@@ -175,4 +208,4 @@ function UpdateVehicle(event){
 }
 
 
-  displayInfoVehiculeMap();
+displayInfoVehiculeMap();
