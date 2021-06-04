@@ -60,10 +60,21 @@ public class RestCrtVehicules {
 		
     }
 	
+	
+	@RequestMapping(method=RequestMethod.GET,value="/getidfire/{id}") 
+	public Integer GetidVehicle(@PathVariable Integer id , HttpServletResponse response,HttpServletRequest request) {
+	  
+		
+		return vService.find(id);
+		
+    }
+	
 	@RequestMapping(method=RequestMethod.GET,value="/getall") 
 	public List<Vehicle> GetVehicles(HttpServletResponse response,HttpServletRequest request){
 		return vRepository.findAll();
 	}
+	
+	
 	
 	@RequestMapping(method=RequestMethod.GET,value="/stopdisplay")
 	public void stopDisplay() {
