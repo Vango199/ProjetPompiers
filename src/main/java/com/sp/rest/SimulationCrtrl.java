@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,11 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.project.model.dto.FireDto;
+import com.sp.model.Vehicle;
 import com.sp.service.FireSimulationService;
 
 
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/simulation")
 
@@ -37,6 +39,13 @@ public class SimulationCrtrl {
     @GetMapping("/test")
     public String test() {
         return "hello";
+    }
+    
+    @RequestMapping(method=RequestMethod.GET,value="/fire/reset") 
+	public void ResetFires(HttpServletResponse response,HttpServletRequest request) {
+	  
+		 fService.resetFire();
+		
     }
 	
     @RequestMapping(method=RequestMethod.GET,value="/fire") 
@@ -64,6 +73,8 @@ public class SimulationCrtrl {
 		 return;
 		
     }	  
+    
+
 	
 }
 

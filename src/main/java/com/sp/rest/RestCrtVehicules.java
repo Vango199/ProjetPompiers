@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import com.sp.service.VehicleService;
 
 import DTO.RouteDTO;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/vehicle")
 public class RestCrtVehicules {
@@ -51,6 +53,7 @@ public class RestCrtVehicules {
 	
 	
 	
+
 	//ajouter un véhicule
 	@RequestMapping(method=RequestMethod.POST,value="") 
 	public void PostVehicle(@RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
@@ -59,6 +62,16 @@ public class RestCrtVehicules {
 		return;
 		
     }
+    @RequestMapping(method=RequestMethod.DELETE,value="/deletevehicle/{id}") 
+	public void delete(@PathVariable Integer id,HttpServletResponse response,HttpServletRequest request) {
+		Vehicle _vehicle = vService.findById(id);
+    	VehicleDto vehicledto = vService.toDto(_vehicle);
+    	fService.DeleteVehicle(vehicledto);
+		return;
+		
+    }
+	
+	
 	//modifier un véhicule
 	@RequestMapping(method=RequestMethod.PUT,value="/{id}") 
 	public void PutVehicle(@PathVariable Integer id , @RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {

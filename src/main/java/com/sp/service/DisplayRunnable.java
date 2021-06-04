@@ -29,12 +29,13 @@ public class DisplayRunnable implements Runnable {
 			try {
 				Thread.sleep(1000);
 				//this.vehicleToFire();
-				for (Vehicle vehicle : this.vRepo.findAll()) {
-					if (vehicle.getIdFire().intValue() != 0) {
+				//for (Vehicle vehicle : this.vRepo.findAll()) {
+					/*if (vehicle.getIdFire().intValue() != 0) {
 						this.Move(vehicle);
-					}
-					System.out.println(vehicle.getId());
-				}
+					}*/
+					this.vehicleToFire2();
+					//System.out.println(vehicle.getId());
+				//}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -47,7 +48,7 @@ public class DisplayRunnable implements Runnable {
 		this.isEnd = true;
 	}
 	
-	public void Move(Vehicle _vehicle) {
+	/*public void Move(Vehicle _vehicle) {
 		
 		
 		int deplacement = 5;
@@ -99,39 +100,111 @@ public class DisplayRunnable implements Runnable {
 		
 		
 		System.out.println("Vehicule "+_vehicle.getId()+"-->"+coordVehicle.getLat()+","+coordVehicle.getLon() );
+			}
+		}
+		System.out.println("Vehicule "+_vehicle.getId()+"-->"+newbasevehicle.getLat()+","+newbasevehicle.getLon() );
 		vRepo.save(_vehicle);
 		
-	}
+	}*/
 	
 
 	
 	/*public void vehicleToFire() {
+/*	public void vehicleToFire() {
 		FireDto[] listfiredto =fService.getFire();
 		for (FireDto fireDto : listfiredto) {
-			List<Vehicle> listvehicle = this.vRepo.findAll();
 			Vehicle vehicleRet = null;
-			double distanceRet = 10000;
-			double latFire = fireDto.getLat();
-			double lonFire = fireDto.getLon();
-			//VehicleDto[] listvehicleDto = fService.GetVehicle();
+			double distanceRet = 1000000000;
+			Coord coordFire = new Coord(fireDto.getLat(),fireDto.getLat());
+
 			for (Vehicle vehicle : this.vRepo.findAll()) {
-				double distance = Math.sqrt(Math.pow(latFire-vehicle.getLat(), 2)+(Math.pow(lonFire-vehicle.getLon(),2)) );
-				if (distance < distanceRet) {
-					distanceRet = distance;
-					vehicleRet = vehicle;
+				
+				if (vehicle.getIdFire() == 0) {
+					
+					Coord coordVehicle = new Coord(vehicle.getLat(),vehicle.getLat());
+					new GisTools();
+					int distance = GisTools.computeDistance2(coordVehicle, coordFire);
+					
+					if (distance < distanceRet) {
+						distanceRet = distance;
+						vehicleRet = vehicle;
+					}
 				}
 			}
+			
 			if (vehicleRet != null) {
 				vehicleRet.setIdFire(fireDto.getId());
 				vRepo.save(vehicleRet);
 			}
+
+		}
+	}
+	*/
+	
+	public void  vehicleToFire2() {
+		FireDto[] listfiredto =fService.getFire();
+		for (FireDto fireDto : listfiredto) {
+			
+			Vehicle vehicleRet = null;
+			double distanceRet = 1000000000;
+			double efficaciteRet = 0;
+			int distance;
+			Coord coordFire = new Coord(fireDto.getLat(),fireDto.getLat());
+			
+
+				// récupère la distance maximale
+				for (Vehicle vehicle : this.vRepo.findAll()) {
+					
+					if (vehicle.getIdFire() == 0) {
+						
+						Coord coordVehicle = new Coord(vehicle.getLat(),vehicle.getLat());
+						new GisTools();
+						distance = GisTools.computeDistance2(coordVehicle, coordFire);
+						
+						if (distance < distanceRet) {
+							distanceRet = distance;
+							vehicleRet = vehicle;
+						}
+					}
+				}
+				//recupere le vehicule avec l'efficaité maximale
+				for (Vehicle vehicle : this.vRepo.findAll()) {
+	
+						if (vehicle.getIdFire() == 0) {
+							
+							Coord coordVehicle = new Coord(vehicle.getLat(),vehicle.getLat());
+							new GisTools();
+							double efficacite = GisTools.computeDistance2(coordVehicle, coordFire) / distanceRet;
+							double sommeEfficacite = efficacite + (double) vehicle.getLiquidType().getEfficiency(fireDto.getType());
+						
+							if (efficaciteRet <= sommeEfficacite) {
+								if (efficaciteRet == sommeEfficacite) {
+									if (vehicle.getLiquidType().getEfficiency(fireDto.getType()) > vehicleRet.getLiquidType().getEfficiency(fireDto.getType())) {
+										efficaciteRet= sommeEfficacite;
+										vehicleRet = vehicle;	
+									}
+								}
+								else {
+									efficaciteRet= sommeEfficacite;
+									vehicleRet = vehicle;
+								}
+							}
+		
+						}
+	
+					
+				}
+				if (vehicleRet != null) {
+					vehicleRet.setIdFire(fireDto.getId());
+					vRepo.save(vehicleRet);
+				}
+				
 			
 		}
-		
-		
-		
-		// distance entre deux point : d(A,B)=√(x2−x1)²+(y2−y1)²
-	}*/
-
+		return ;
+	}
+	
+	
+	
 }
 

@@ -2,6 +2,7 @@ package com.sp.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,8 @@ public class FireSimulationService {
 	
 	public void resetFire() {
 		String UrlResetFires = "http://127.0.0.1:8081/fire/reset";
-		new RestTemplate().put( UrlResetFires, null);
+		 RestTemplate restemplate = new RestTemplate();
+		 restemplate.getForEntity(UrlResetFires, null, new Object[] {});
 		return ;
 	}
 	
@@ -80,5 +82,22 @@ public class FireSimulationService {
 		return fireDtoToRet;
 		
 	}
+	
+	public List<Integer> getlistidFire(FireDto firedto){
+		
+		List<Integer> listidfire = new ArrayList<Integer>();
+		FireDto[] listfiredto =this.getFire();
+		for (FireDto fireDto : listfiredto) {
+			listidfire.add(fireDto.getId());
+		}
+		
+	
+	return listidfire;
+	
+	}
+	
+	
+	
+	
 	
 }
