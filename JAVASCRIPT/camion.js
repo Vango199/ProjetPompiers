@@ -68,7 +68,7 @@ function displayVehicle(body){
               var Vehicle = L.marker([vehicle.lat, vehicle.lon], {
                   icon: FiretruckIcon
               }).addTo(map);
-              Vehicle.bindPopup("Id : " + vehicle.id + "<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType +" " +vehicle.liquidQuantity + "L<br>" + "Fuel : "+ vehicle.fuel+ "<br><button type='button' id="+vehicle.id+" onclick=deleteVehicle(this.id)>Supprimer</button>");
+              Vehicle.bindPopup("Id : " + vehicle.id + "<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType +" " +vehicle.liquidQuantity + "L<br>" + "Fuel : "+ vehicle.fuel+ "<br><button type='button' id="+vehicle.id+' onclick=deleteVehicle(this.id)>Supprimer</button>');
               
 
               if(vehicle.type == "CAR"){
