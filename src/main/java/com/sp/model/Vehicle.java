@@ -1,12 +1,26 @@
 package com.sp.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 
+import com.project.model.dto.Coord;
 import com.project.model.dto.LiquidType;
 import com.project.model.dto.VehicleType;
 
-@Entity
+import DTO.Geometry;
+
+@Entity(name="Vehicle")
+@Table(name="Vehicles")
+
 public class Vehicle {
 	public static final int CREW_MEMBER_START_VALUE=-1;
 	@Id
@@ -24,6 +38,15 @@ public class Vehicle {
 	private int crewMemberCapacity;
 	private Integer facilityRefID;
 	private Integer idFire ;
+//	@ManyToMany
+//	@JoinTable(
+//			  name = "Geometry", 
+//			  joinColumns = @JoinColumn(name = "vehicle_id"), 
+//			  inverseJoinColumns = @JoinColumn(name = "geometry_id")
+//			  )
+	@Embedded
+	private List<List <Double>> trajet ;
+	private int trajetEtape = 0;
 	
 	public Integer getIdFire() {
 		return idFire;
@@ -37,6 +60,7 @@ public class Vehicle {
 		crewMember= CREW_MEMBER_START_VALUE;
 		liquidType=LiquidType.ALL;
 		this.idFire =0;
+		
 	}
 
 	public Vehicle(int id,double lon, double lat, com.project.model.dto.VehicleType type, float efficiency,
@@ -57,6 +81,7 @@ public class Vehicle {
 		this.crewMemberCapacity = crewMemberCapacity;
 		this.facilityRefID = facilityRefID;
 		this.idFire = 0;
+		
 	}
 
 	public double getLon() {
@@ -161,6 +186,23 @@ public class Vehicle {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public List<List<Double>> getTrajet() {
+		return trajet;
+	}
+	
+
+	public void setTrajet(List<List<Double>> trajet) {
+		this.trajet = trajet;
+	}
+
+	public int getTrajetEtape() {
+		return trajetEtape;
+	}
+
+	public void setTrajetEtape(int trajetEtape) {
+		this.trajetEtape = trajetEtape;
 	}
 	
 
