@@ -14,7 +14,7 @@ import com.sp.repository.VehicleRepository;
 
 public class DisplayRunnable implements Runnable {
 	private VehicleRepository vRepo;
-	//private VehicleService vService;
+	private VehicleService vService;
 	boolean isEnd = false;
 	private FireSimulationService fService;
 
@@ -196,6 +196,7 @@ public class DisplayRunnable implements Runnable {
 				}
 				if (vehicleRet != null) {
 					vehicleRet.setIdFire(fireDto.getId());
+					
 					vRepo.save(vehicleRet);
 				}
 				
