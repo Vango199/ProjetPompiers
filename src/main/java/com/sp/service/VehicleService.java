@@ -1,6 +1,7 @@
 package com.sp.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -124,9 +125,9 @@ public class VehicleService {
 		JsonNode route = this.getTrajetVJson(vehicle.getLat(), vehicle.getLon(),fire.getLat(), fire.getLon());
 		
 		
-		List<List<Double>> ListRoute = null;
+		List<List<Double>> ListRoute = new ArrayList();
 		for ( int i = 0;i< route.get("geometry").get("coordinates").size();i++) {
-			List<Double> coo = null;
+			List<Double> coo = new ArrayList();
 			coo.add(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
 			coo.add(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
 			
