@@ -51,6 +51,44 @@ function GetAllCamionsBomberos(){ //appel de la liste avec tous les camions de p
 
 flag = false;
 
+ //// AJOUT THOMAS : LES ICON 
+ 
+var FiretruckIcon = new L.Icon({
+  iconUrl: '../Img/firetruck.png',
+  iconSize:     [30, 30],
+  iconAnchor: new L.Point(16, 16),
+  });
+var CarIcon = new L.Icon({
+  iconUrl: '../Img/car.png',
+  iconSize:     [30, 30],
+  iconAnchor: new L.Point(16, 16),
+  });
+var PumperTruckIcon = new L.Icon({
+  iconUrl: '../Img/pumptruck.png',
+  iconSize:     [30, 30],
+  iconAnchor: new L.Point(16, 16),
+  });
+var WaterTenderIcon = new L.Icon({
+  iconUrl: '../Img/tendertruck.png',
+  iconSize:     [30, 30],
+  iconAnchor: new L.Point(16, 16),
+  });
+var LadderTruckIcon = new L.Icon({
+  iconUrl: '../Img/laddertruck.png',
+  iconSize:     [30, 30],
+  iconAnchor: new L.Point(16, 16),
+  });    
+var TruckIcon = new L.Icon({
+  iconUrl: '../Img/truck.png',
+  iconSize:     [30, 30],
+  iconAnchor: new L.Point(16, 16),
+  });
+
+
+
+
+
+
 function displayInfoVehiculeMap(){
 
   fetch('http://localhost:8082/vehicle/getall')
@@ -169,35 +207,48 @@ function AddVehicle(event){
   fetch("http://localhost:8082/vehicle", context)
       
 }
-/*
-function UpdateVehicle(event){
+
+
+
+
+
+////////////// AJOUT THOMAS CE WEEKEND : CES DEUX FONTIONS ////////
+function editVehicle(id) {
+
+  TruckTypeSelect = '<label for="TruckTypeEdit">Choose a type of car :<br></label><select id="TruckTypeEdit" name="TruckTypeEdit"><option value="CAR">CAR</option><option value="WATER_TENDERS">WATER_TENDERS</option><option value="TURNTABLE_LADDER_TRUCK">TURNTABLE_LADDER_TRUCK</option><option value="TRUCK">TRUCK</option><option value="FIRE_ENGINE">FIRE_ENGINE</option><option value="PUMPER_TRUCK">PUMPER_TRUCK</option></select>';
+  LiquidTypeSelect = '<label for="LiquidTypeEdit">Choose a type of liquid :</label><select id="LiquidTypeEdit" name="LiquidTypeEdit"><option value="ALL">ALL</option><option value="WATER">WATER</option><option value="WATER_WITH_ADDITIVES">WATER_WITH_ADDITIVES</option><option value="CARBON_DIOXIDE">CARBON_DIOXIDE</option><option value="POWDER">POWDER</option></select>';
+  var EditPopup = L.popup().setContent('Define what vehicule you desire<br><form onsubmit=UpdateVehicle(event,' + id + ') method="POST" id="UpdateVehicle">' + TruckTypeSelect + '<br>' + LiquidTypeSelect + '<br> <label for="latEdit">Latitude (between 45.666 and 45.8373):</label><input type="number" id="latEdit" name="latEdit" min="45.666" max="45.8373" value = "45.7" step="0.0001"><label for="lonEdit">Longitude (between 4.688 and 4.97):</label><input type="number" id="lonEdit" name="lonEdit" min="4.688" max="4.97" value = "4.8" step="0.001"><input type="submit"></form>');
+  EditPopup.setLatLng(mymap.getCenter()).openOn(mymap);
+}
+function UpdateVehicle(event, id) {
   event.preventDefault();
-  var DataVehicule = document.getElementById("AddVehicule");
+  mymap.closePopup();
   var charge = {
-      
-      "lon": 4.828066,
-      "lat": 45.747389,
-      "type": document.getElementById('TruckType').value,
+      "id": id,
+      "lon": document.getElementById('lonEdit').value,
+      "lat": document.getElementById('latEdit').value,
+      "type": document.getElementById('TruckTypeEdit').value,
       "efficiency": 10.0,
-      "liquidType": document.getElementById('LiquidType').value,
+      "liquidType": document.getElementById('LiquidTypeEdit').value,
       "liquidQuantity": 100.0,
-      "liquidConsumption": 1.0,
+      "liquidConsumption": 0.1,
       "fuel": 100.0,
       "fuelConsumption": 10.0,
       "crewMember": 8,
       "crewMemberCapacity": 8,
       "facilityRefID": 0
   }
-  console.log(charge);
   const context = {
-      method:'POST',
+      method: 'PUT',
       headers: {
           'Content-Type': 'application/json'
-          },
-      body: JSON.stringify( charge ) 
+      },
+      body: JSON.stringify(charge)
   }
-  fetch("http://localhost:8082/vehicle", context)
-      
+  fetch("http://localhost:8082/Vehicule/modif/" + id, context)
+
 }
-*/
+
+
+
 displayInfoVehiculeMap();
