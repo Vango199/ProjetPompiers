@@ -39,7 +39,7 @@ public class VehicleService {
 		this.fService=fService;
 		
 		//Create a Runnable is charge of executing cyclic actions 
-		this.dRunnable=new DisplayRunnable(this.vRepository,this.fService);
+		this.dRunnable=new DisplayRunnable(this.vRepository,this.fService, this);
 		
 		// A Runnable is held by a Thread which manage lifecycle of the Runnable
 		displayThread=new Thread(dRunnable);
@@ -72,7 +72,7 @@ public class VehicleService {
 		Vehicle vehicle = this.findById(_vehicle.getId());
 		vehicle= _vehicle;
 		vRepository.save(vehicle);
-		fService.PutVehicle(_vehicle);
+		fService.PutVehicle(this.toDto(vehicle));
 		
 	}
 
@@ -142,6 +142,7 @@ public class VehicleService {
 		
 		
 		vRepository.save(vehicle);
+		
 	}
 	
 	

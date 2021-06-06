@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -55,9 +58,12 @@ public class FireSimulationService {
 		return vehicle;
 	}
 	
-	public void PutVehicle( Vehicle _vehicle) {
+	public void PutVehicle( VehicleDto _vehicle) {
 		String UrlPutVehicle = "http://127.0.0.1:8081/vehicle/"+_vehicle.getId();
-		new RestTemplate().put(UrlPutVehicle, _vehicle );
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+		HttpEntity<VehicleDto> request = new HttpEntity<>(_vehicle,headers );
+		new RestTemplate().put(UrlPutVehicle, request );
 		return ;
 	}
 	

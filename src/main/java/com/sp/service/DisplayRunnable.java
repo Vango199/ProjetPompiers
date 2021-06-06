@@ -18,9 +18,10 @@ public class DisplayRunnable implements Runnable {
 	boolean isEnd = false;
 	private FireSimulationService fService;
 
-	public DisplayRunnable(VehicleRepository vRepo,FireSimulationService fService) {
+	public DisplayRunnable(VehicleRepository vRepo,FireSimulationService fService,VehicleService vService) {
 		this.vRepo = vRepo;
 		this.fService=fService;
+		this.vService= vService;
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class DisplayRunnable implements Runnable {
 		this.isEnd = true;
 	}
 	
-	/*public void Move(Vehicle _vehicle) {
+	public void Move(Vehicle _vehicle) {
 		
 		
 		int deplacement = 5;
@@ -65,7 +66,7 @@ public class DisplayRunnable implements Runnable {
 		coordVehicle = GisTools.transformCoord(coordVehicle,"3857");
 		coordArriv = GisTools.transformCoord(coordArriv,"3857");
 		
-		
+		//on rejoint le prochain checkpoint si on est assez près
 		if ((Math.abs(coordVehicle.getLat()-coordArriv.getLat())<deplacement) &&(Math.abs(coordVehicle.getLon()-coordArriv.getLon())<deplacement)) {
 			_vehicle.setTrajetEtape(_vehicle.getTrajetEtape()+1);
 			coordVehicle.setLat(coordArriv.getLat());
@@ -74,10 +75,7 @@ public class DisplayRunnable implements Runnable {
 		}
 		else if (_vehicle.getTrajetEtape()<_vehicle.getTrajet().size()) {
 			
-		
-
-			
-
+	
 			double angle = Math.atan((coordArriv.getLon()-coordVehicle.getLon())/(coordArriv.getLon()-coordVehicle.getLat()));
 			
 			//On actualise les coo
@@ -100,13 +98,16 @@ public class DisplayRunnable implements Runnable {
 		
 		
 		System.out.println("Vehicule "+_vehicle.getId()+"-->"+coordVehicle.getLat()+","+coordVehicle.getLon() );
-			}
-		}
-		System.out.println("Vehicule "+_vehicle.getId()+"-->"+newbasevehicle.getLat()+","+newbasevehicle.getLon() );
-		vRepo.save(_vehicle);
+			
 		
-	}*/
-	
+		System.out.println("Vehicule "+_vehicle.getId()+"-->"+coordArriv.getLat()+","+coordArriv.getLon() );
+		
+		//on put en repo et en simu le nouveau vehicle avec les coo actualisées
+		
+		vService.PutVehicle(_vehicle);
+		
+		
+	}	
 
 	
 	/*public void vehicleToFire() {
