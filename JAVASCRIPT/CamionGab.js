@@ -133,7 +133,7 @@ function deleteVehicle(id){
   const context = {
       method: 'DELETE'
   }
-  fetch('http://localhost:8082/vehicle/'+id, context)
+  fetch('http://localhost:8081/vehicle/'+id, context)
 }
 
 TruckTypeSelect = '<label for="TruckType">Choose a type of car :<br></label><select id="TruckType" name="TruckType"><option value="CAR">CAR</option><option value="WATER_TENDERS">WATER_TENDERS</option><option value="TURNTABLE_LADDER_TRUCK">TURNTABLE_LADDER_TRUCK</option><option value="TRUCK">TRUCK</option><option value="FIRE_ENGINE">FIRE_ENGINE</option><option value="PUMPER_TRUCK">PUMPER_TRUCK</option></select>';    
