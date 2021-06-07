@@ -133,6 +133,7 @@ function init() {
     L.control.layers(null,overlayMaps_type).addTo(map);
 
   GetAllFire();
+
   //GetAllCamionsBomberos();
 }
 

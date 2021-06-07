@@ -671,6 +671,7 @@ function colorAlea(){
 function displayJourneyReshaped(body) {
     var pointList = [];
     body.forEach(trajet => {
+        console.log(trajet.id, trajet.lon, trajet.lat);
     pointList.push(new L.LatLng(trajet.lon, trajet.lat));
     });
     
