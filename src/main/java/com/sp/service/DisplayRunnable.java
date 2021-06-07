@@ -41,9 +41,6 @@ public class DisplayRunnable implements Runnable {
 				//}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 		
@@ -110,7 +107,7 @@ public class DisplayRunnable implements Runnable {
 			System.out.println("Vehicule "+_vehicle.getId()+"-->"+coordVehicle.getLat()+","+coordVehicle.getLon() );
 				
 			
-			System.out.println("Vehicule "+_vehicle.getId()+"-->"+coordArriv.getLat()+","+coordArriv.getLon() );
+			System.out.println("Arrivée-->"+coordArriv.getLon()+","+coordArriv.getLat() );
 			
 			//on put en repo et en simu le nouveau vehicle avec les coo actualisées
 			
