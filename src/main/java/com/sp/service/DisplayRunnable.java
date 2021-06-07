@@ -117,38 +117,47 @@ public class DisplayRunnable implements Runnable {
 		
 	}	
 
-	
-	/*public void vehicleToFire() {
-/*	public void vehicleToFire() {
-		FireDto[] listfiredto =fService.getFire();
-		for (FireDto fireDto : listfiredto) {
-			Vehicle vehicleRet = null;
-			double distanceRet = 1000000000;
-			Coord coordFire = new Coord(fireDto.getLat(),fireDto.getLat());
 
-			for (Vehicle vehicle : this.vRepo.findAll()) {
+	
+	public void vehicleToFire() {
+
+			FireDto[] listfiredto =fService.getFire();
+			for (FireDto fireDto : listfiredto) {
 				
-				if (vehicle.getIdFire() == 0) {
-					
-					Coord coordVehicle = new Coord(vehicle.getLat(),vehicle.getLat());
-					new GisTools();
-					int distance = GisTools.computeDistance2(coordVehicle, coordFire);
-					
-					if (distance < distanceRet) {
-						distanceRet = distance;
-						vehicleRet = vehicle;
+				
+				Vehicle vehicleRet = null;
+				double distanceRet = 1000000000;
+				Coord coordFire = new Coord(fireDto.getLat(),fireDto.getLat());
+	
+				for (Vehicle vehicle : this.vRepo.findAll()) {
+					if (vehicle.getIdFire() == fireDto.getId()) {
+						vehicleRet = null;
+						break;
+					}
+					if (vehicle.getIdFire() == 0) {
+						
+						Coord coordVehicle = new Coord(vehicle.getLat(),vehicle.getLat());
+						new GisTools();
+						int distance = GisTools.computeDistance2(coordVehicle, coordFire);
+						
+						if (distance < distanceRet) {
+							distanceRet = distance;
+							vehicleRet = vehicle;
+						}
 					}
 				}
+				
+				if (vehicleRet != null) {
+					vehicleRet.setIdFire(fireDto.getId());
+					vRepo.save(vehicleRet);
+				}
+	
 			}
-			
-			if (vehicleRet != null) {
-				vehicleRet.setIdFire(fireDto.getId());
-				vRepo.save(vehicleRet);
-			}
-
-		}
+		
 	}
-	*/
+	
+	
+	
 	
 	public void  vehicleToFire2() {
 		FireDto[] listfiredto =fService.getFire();
@@ -178,7 +187,11 @@ public class DisplayRunnable implements Runnable {
 				}
 				//recupere le vehicule avec l'efficaité maximale
 				for (Vehicle vehicle : this.vRepo.findAll()) {
-	
+				
+						if (vehicle.getIdFire() == fireDto.getId()) {
+							vehicleRet = null;
+							break;
+						}
 						if (vehicle.getIdFire() == 0) {
 							
 							Coord coordVehicle = new Coord(vehicle.getLat(),vehicle.getLat());
