@@ -72,19 +72,12 @@ public class FireSimulationService {
 		String UrlDeleteVehicle = "http://127.0.0.1:8081/vehicle/"+String.valueOf(_vehicle.getId());
 		new RestTemplate().delete(UrlDeleteVehicle);
 		
-		
 		return ;
 	}
 
 
 
-	public void deleteAll() {
-		VehicleDto[] listVehicle = this.GetVehicle();
-		for(VehicleDto vehicleDto : listVehicle) {
-			this.DeleteVehicle(vehicleDto);
-		}
-		
-	}
+
 	
 	public FireDto GetFireById(Integer _fireId) {
 		
@@ -101,6 +94,7 @@ public class FireSimulationService {
 		return fireDtoToRet;
 		
 	}
+	
 	
 	public List<Integer> getlistidFire(FireDto firedto){
 		

@@ -31,12 +31,12 @@ public class DisplayRunnable implements Runnable {
 			try {
 				Thread.sleep(1000);
 				//this.vehicleToFire();
-				this.vehicleToFire2();
-				for (Vehicle vehicle : this.vRepo.findAll()) {
+				//this.vehicleToFire2();
+				/*for (Vehicle vehicle : this.vRepo.findAll()) {
 					if (vehicle.getIdFire().intValue() != 0) {
 						this.Move(vehicle);
 					}
-				}	
+				}*/	
 					//System.out.println(vehicle.getId());
 				//}
 			} catch (InterruptedException e) {
@@ -172,10 +172,10 @@ public class DisplayRunnable implements Runnable {
 		for (FireDto fireDto : listfiredto) {
 			
 			Vehicle vehicleRet = null;
-			double distanceRet = 1000000000;
+			double distanceRet = 0;
 			double efficaciteRet = 0;
 			int distance;
-			Coord coordFire = new Coord(fireDto.getLat(),fireDto.getLat());
+			Coord coordFire = new Coord(fireDto.getLon(),fireDto.getLat());
 			
 
 				// récupère la distance maximale
@@ -183,11 +183,11 @@ public class DisplayRunnable implements Runnable {
 					
 					if (vehicle.getIdFire() == 0) {
 						
-						Coord coordVehicle = new Coord(vehicle.getLat(),vehicle.getLat());
+						Coord coordVehicle = new Coord(vehicle.getLon(),vehicle.getLat());
 						new GisTools();
 						distance = GisTools.computeDistance2(coordVehicle, coordFire);
 						
-						if (distance < distanceRet) {
+						if (distance > distanceRet) {
 							distanceRet = distance;
 							vehicleRet = vehicle;
 						}
@@ -202,9 +202,9 @@ public class DisplayRunnable implements Runnable {
 						}
 						if (vehicle.getIdFire() == 0) {
 							
-							Coord coordVehicle = new Coord(vehicle.getLat(),vehicle.getLat());
+							Coord coordVehicle = new Coord(vehicle.getLon(),vehicle.getLat());
 							new GisTools();
-							double efficacite = GisTools.computeDistance2(coordVehicle, coordFire) / distanceRet;
+							double efficacite =1 - GisTools.computeDistance2(coordVehicle, coordFire) / distanceRet;
 							double sommeEfficacite = efficacite + (double) vehicle.getLiquidType().getEfficiency(fireDto.getType());
 						
 							if (efficaciteRet <= sommeEfficacite) {

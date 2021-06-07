@@ -67,14 +67,8 @@ public class SimulationCrtrl {
       }
     
     
-    @RequestMapping(method=RequestMethod.DELETE,value="/deleteallvehicle") 
-	public void deleteAll(HttpServletResponse response,HttpServletRequest request) {
-		 fService.deleteAll();
-		 
-		 
-		 return;
-		
-    }	  
+
+			  
     
 
 	
