@@ -31,15 +31,18 @@ public class DisplayRunnable implements Runnable {
 			try {
 				Thread.sleep(1000);
 				//this.vehicleToFire();
-				//this.vehicleToFire2();
-				/*for (Vehicle vehicle : this.vRepo.findAll()) {
+				this.vehicleToFire2();
+				for (Vehicle vehicle : this.vRepo.findAll()) {
 					if (vehicle.getIdFire().intValue() != 0) {
 						this.Move(vehicle);
 					}
-				}*/	
+				}
 					//System.out.println(vehicle.getId());
 				//}
 			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
