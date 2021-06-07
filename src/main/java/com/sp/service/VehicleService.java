@@ -142,8 +142,8 @@ public class VehicleService {
 //			coo.setLon(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
 			
 			CoordEm coo = new CoordEm();
-			coo.setLat(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
-			coo.setLon(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
+			coo.setLat(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
+			coo.setLon(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
 	
 			ListRoute.add(coo);
 	    }
@@ -173,8 +173,19 @@ public class VehicleService {
 //	}
 	
 	public JsonNode getTrajetVJson(double intLat, double intLon, double finLat, double finLon) throws IOException {
-		String UrlGetTrajet = "https://api.mapbox.com/directions/v5/mapbox/driving/"+String.valueOf(intLat)+","+String.valueOf(intLon)+"; "+String.valueOf(finLat)+","+String.valueOf(finLon)+"?overview=full&geometries=geojson&access_token=pk.eyJ1IjoidG90by1ldC1nYWJvdSIsImEiOiJja3BlMTJwMHIwM2RvMndvNjVjNWcyeTdkIn0.8DWPSvTRKHCwUmXACaZP0w";
-		String recupMapBox= new RestTemplate().getForObject(UrlGetTrajet, String.class);
+		//String UrlGetTrajet = "https://api.mapbox.com/directions/v5/mapbox/driving/"+String.valueOf(intLat)+","+String.valueOf(intLon)+"; "+String.valueOf(finLat)+","+String.valueOf(finLon)+"?overview=full&geometries=geojson&access_token=pk.eyJ1IjoidG90by1ldC1nYWJvdSIsImEiOiJja3BlMTJwMHIwM2RvMndvNjVjNWcyeTdkIn0.8DWPSvTRKHCwUmXACaZP0w";
+		String url_mapbox = "https://api.mapbox.com/directions/v5/mapbox/driving/";
+		String mapboxSettings = "?geometries=geojson&access_token=";
+		String mapboxKey = "pk.eyJ1IjoidGhlbWRlaWwiLCJhIjoiY2twZTBuMXBzMXNzNjJubnhkdjU2YWVnaSJ9.JQOr5slR2vCCmEUEWNjI2A";
+				
+
+		
+		String url_request = url_mapbox + String.valueOf(intLon) + "," + String.valueOf(intLat)
+		 + ";" + String.valueOf(finLon) + "," + String.valueOf(finLat)
+		 + mapboxSettings + mapboxKey;
+
+		
+		String recupMapBox= new RestTemplate().getForObject(url_request, String.class);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode jsn = objectMapper.readTree(recupMapBox);

@@ -30,7 +30,7 @@ public class DisplayRunnable implements Runnable {
 	public void run() {
 		while (!this.isEnd) {//uyghgfchgvchgv
 			try {
-				Thread.sleep(10);
+				Thread.sleep(1);
 				this.vehicleToFire2();
 				//this.vehicleToFire();
 				for (Vehicle vehicle : this.vRepo.findAll()) {
@@ -55,6 +55,64 @@ public class DisplayRunnable implements Runnable {
 		this.isEnd = true;
 	}
 	
+	public void Move2(Vehicle _vehicle) {
+		System.out.println("try to move vehicle "+_vehicle.getId());
+		
+		double angle = 0;
+		
+		FireDto fire = fService.GetFireById(_vehicle.getIdFire());
+		
+		double deplacement = 0.000001;
+		
+		
+		double latArriv = fire.getLat();
+		double lonArriv = fire.getLon();
+		
+		if ((Math.abs(_vehicle.getLat()-latArriv)>deplacement) &&(Math.abs(_vehicle.getLon()-lonArriv)>deplacement)){
+			System.out.println("Arrivé");
+			_vehicle.setLat(latArriv);
+			_vehicle.setLon(lonArriv);
+			vService.PutVehicle(_vehicle);
+		
+		}
+//		else {
+//			//x>0 ety>0
+//			if (((latArriv-_vehicle.getLat())> 0) && ((lonArriv-_vehicle.getLon())>0)) {
+//				angle = Math.atan((lonArriv-_vehicle.getLon())/(latArriv-_vehicle.getLat()));
+//			}
+//				//x>0 et y<0
+//			if (((latArriv-_vehicle.getLat())> 0) && ((lonArriv-_vehicle.getLon())<0)) {
+//				angle = Math.atan((lonArriv-_vehicle.getLon())/(latArriv-_vehicle.getLat())) + 2* Math.PI;
+//			}
+//			//x<0
+//			if((latArriv-_vehicle.getLat())< 0) {
+//				angle = Math.atan((lonArriv-_vehicle.getLon())/(latArriv-_vehicle.getLat())) + Math.PI;
+//			}
+//			
+//			_vehicle.setLat(Math.cos(angle)*deplacement+_vehicle.getLat());
+//			_vehicle.setLon(Math.sin(angle)*deplacement+_vehicle.getLon());
+//		
+//
+//			System.out.println("Vehicule "+_vehicle.getId()+"-->"+_vehicle.getLat()+","+_vehicle.getLon() );
+//			
+//			
+//			System.out.println("Arrivée-->"+latArriv+","+lonArriv );
+//			
+//			//on put en repo et en simu le nouveau vehicle avec les coo actualisées
+//			
+//			vService.PutVehicle(_vehicle);
+//			
+//		}
+//		
+	}
+		
+		
+	
+	
+	
+	
+	
+	
 	public void Move(Vehicle _vehicle) {
 		System.out.println("try to move vehicle "+_vehicle.getId());
 		double angle = 0;
@@ -62,7 +120,7 @@ public class DisplayRunnable implements Runnable {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
-			double deplacement = 0.0001;
+			double deplacement = 0.000001;
 //			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 //			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
