@@ -22,8 +22,9 @@ import com.sp.repository.VehicleRepository;
 public class FireSimulationService {
 
 	
-
+	VehicleRepository vRepository;
 	
+	VehicleService vService;
 	
 	
 	
@@ -112,6 +113,12 @@ public class FireSimulationService {
 	
 	}
 	
+	/*public FireDto fire_vehicle() {
+		FireDto fireDtoToRet = null;
+		FireDto[] listFire = this.getFire();
+		
+		Vehicle vehicle = vService.find
+	}*/
 	
 	
 	

@@ -37,10 +37,7 @@ public class RestCrtVehicules {
 	FireSimulationService fService;
 	
 	
-	@RequestMapping("/hello")
-	public String sayHello() {
-		return "Hello Hero !!!";
-	}
+
 	
 	//get un trajet
 		@RequestMapping(method=RequestMethod.GET,value="/trajet") 
