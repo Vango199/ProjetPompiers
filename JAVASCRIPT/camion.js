@@ -124,7 +124,7 @@ function displayVehicle(body){
           var Vehicle = L.marker([vehicle.lat, vehicle.lon])
           console.log('test'+vehicle.lon, vehicle.lat, vehicle.id)
           Vehicle.addTo(map);
-          Vehicle.bindPopup("Id : " + vehicle.id + "<br>Etat :"+vehicle.etat+"<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType + " " + vehicle.liquidQuantity + "L<br>" + "Fuel : " + vehicle.fuel + "<br><button type='button' id=" + vehicle.id + " onclick=deleteVehicle(this.id)>Supprimer</button><button id=" + vehicle.id + " type='button' onclick=editVehicle(this.id,"+vehicle.lat+","+vehicle.lon+")>Modifier</button>");
+          Vehicle.bindPopup("Id : " + vehicle.id + "<br>Etat :"+vehicle.etat+"<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType + " " + vehicle.liquidQuantity + "L<br>" + "Fuel : " + vehicle.fuel + "<br><button type='button' id=" + vehicle.id + " onclick=deleteVehicle(this.id)>Supprimer</button><button id=" + vehicle.id + " type='button' onclick=editVehicle(this.id,"+vehicle.lat+","+vehicle.lon+")>changeier</button>");
               
 
               if(vehicle.type == "CAR"){
@@ -256,7 +256,7 @@ function UpdateVehicle(event, id) {
       },
       body: JSON.stringify(charge)
   }
-  fetch("http://localhost:8082/vehicule/modif/" + id, context)
+  fetch("http://localhost:8082/vehicule/change/" + id, context)
 
 }
 
