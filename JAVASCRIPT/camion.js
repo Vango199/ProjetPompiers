@@ -108,7 +108,7 @@ function displayInfoVehiculeMap(){
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
   });
-  setTimeout(displayInfoVehiculeMap, 1000);
+  setTimeout(displayInfoVehiculeMap, 10000);
 
 }
 
@@ -117,10 +117,12 @@ function displayVehicle(body){
     mapIdVehicleLayerOld = new Map();
     flag = true;
   }
+  
   mapIdVehicleLayerNew = new Map();
   for(const vehicle of body){
       if (!mapIdVehicleLayerOld.has(vehicle.id)){
           var Vehicle = L.marker([vehicle.lat, vehicle.lon])
+          console.log('test'+vehicle.lon, vehicle.lat, vehicle.id)
           Vehicle.addTo(map);
           Vehicle.bindPopup("Id : " + vehicle.id + "<br>Etat :"+vehicle.etat+"<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType + " " + vehicle.liquidQuantity + "L<br>" + "Fuel : " + vehicle.fuel + "<br><button type='button' id=" + vehicle.id + " onclick=deleteVehicle(this.id)>Supprimer</button><button id=" + vehicle.id + " type='button' onclick=editVehicle(this.id,"+vehicle.lat+","+vehicle.lon+")>Modifier</button>");
               
@@ -153,10 +155,7 @@ function displayVehicle(body){
     mapIdVehicleLayerOld.delete(vehicle.id);
     }
 
-    //if (vehicle.idFire != 0){
-    //  RecupCoord();
- // }
-
+    RecupCoord(vehicle.id)
                  
   }
   
@@ -229,7 +228,7 @@ function editVehicle(id,lat,lon) {
   LiquidTypeSelect = '<label for="LiquidTypeEdit">Choose a type of liquid :<br></label><select id="LiquidTypeEdit" name="LiquidTypeEdit"><option value="ALL">ALL</option><option value="WATER">WATER</option><option value="WATER_WITH_ADDITIVES">WATER_WITH_ADDITIVES</option><option value="CARBON_DIOXIDE">CARBON_DIOXIDE</option><option value="POWDER">POWDER</option></select>';
   //CaserneNumber = '<label for="CaserneNumber">Choose a firehouse number(max 10 firehouses):<br></label><input type="number" id="CaserneEdit" name="CaserneEdit" min="0" value = "0" max="10" step="1">';
   FuelEdit = '<br><label for="FuelEdit">Fuel:</label><br><input type="number" id="FuelEdit" name="FuelEdit" min="0" max="100" value="100>';
-  var EditPopup = L.popup().setContent('Define what vehicule you desire<br><form onsubmit=UpdateVehicle(event,' + id + ') method="POST" id="UpdateVehicle">' + TruckTypeSelect + '<br>' + LiquidTypeSelect + '<br>' +FuelEdit+ '<br><label for="latEdit"> <br> Latitude (between 45.666 and 45.8373):</label><br><input type="number" id="latEdit" name="latEdit" min="45.666" max="45.8373" value = "'+lat+'" step="0.0001"><br><label for="lonEdit">Longitude (between 4.688 and 4.97):</label><br><input type="number" id="lonEdit" name="lonEdit" min="4.688" max="4.97" value = "'+lon+'" step="0.001"><input type="submit"></form>');
+  var EditPopup = L.popup().setContent('Define what vehicule you desire<br><form onsubmit=UpdateVehicle(event,' + id + ') method="POST" id="UpdateVehicle">' + TruckTypeSelect + '<br>' + LiquidTypeSelect + '<br>' +FuelEdit+ '<br><label for="latEdit"> <br> Latitude (Between 43,000 and 46,000):</label><br><input type="number" id="latEdit" name="latEdit" min="43.000" max="46.000" value = "'+lat+'" step="0.001"><br><label for="lonEdit">Longitude (Between 4,400 and 5,000):</label><br><input type="number" id="lonEdit" name="lonEdit" min="4,400" max="5.000" value = "'+lon+'" step="0.001"><input type="submit"></form>');
   EditPopup.setLatLng(map.getCenter()).openOn(map);
 }
 function UpdateVehicle(event, id) {
@@ -257,7 +256,7 @@ function UpdateVehicle(event, id) {
       },
       body: JSON.stringify(charge)
   }
-  fetch("http://localhost:8082/Vehicule/modif/" + id, context)
+  fetch("http://localhost:8082/vehicule/modif/" + id, context)
 
 }
 
