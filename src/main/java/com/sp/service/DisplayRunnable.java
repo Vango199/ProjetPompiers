@@ -1,5 +1,6 @@
 package com.sp.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +31,18 @@ public class DisplayRunnable implements Runnable {
 			try {
 				Thread.sleep(1000);
 				//this.vehicleToFire();
-				//for (Vehicle vehicle : this.vRepo.findAll()) {
-					/*if (vehicle.getIdFire().intValue() != 0) {
+				this.vehicleToFire2();
+				for (Vehicle vehicle : this.vRepo.findAll()) {
+					if (vehicle.getIdFire().intValue() != 0) {
 						this.Move(vehicle);
-					}*/
-					this.vehicleToFire2();
+					}
+				}	
 					//System.out.println(vehicle.getId());
 				//}
 			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -54,8 +59,8 @@ public class DisplayRunnable implements Runnable {
 		if (_vehicle.getTrajetEtape()>=_vehicle.getTrajet().size()) {
 			
 			int deplacement = 5;
-			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).get(0);
-			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).get(1);
+			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
+			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
 			new GisTools();
 			//transpositions en coordonnées en metres	
@@ -150,7 +155,7 @@ public class DisplayRunnable implements Runnable {
 	}
 	*/
 	
-	public void  vehicleToFire2() {
+	public void  vehicleToFire2() throws IOException {
 		FireDto[] listfiredto =fService.getFire();
 		for (FireDto fireDto : listfiredto) {
 			
@@ -204,10 +209,9 @@ public class DisplayRunnable implements Runnable {
 					
 				}
 				if (vehicleRet != null) {
-					vehicleRet.setIdFire(fireDto.getId());
-					
+					//vehicleRet.setIdFire(fireDto.getId());
+					vService.addFireAndSetup(fireDto.getId(), vehicleRet.getId());
 					vRepo.save(vehicleRet);
-					this.Move(vehicleRet);
 				}
 				
 			

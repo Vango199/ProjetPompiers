@@ -45,7 +45,7 @@ public class Vehicle {
 //			  inverseJoinColumns = @JoinColumn(name = "geometry_id")
 //			  )
 	@Embedded
-	private List<List <Double>> trajet ;
+	private ArrayList<Coord>  trajet =new ArrayList();
 	private int trajetEtape = 0;
 	
 	public Integer getIdFire() {
@@ -188,12 +188,12 @@ public class Vehicle {
 		this.id = id;
 	}
 
-	public List<List<Double>> getTrajet() {
+	public ArrayList<Coord>  getTrajet() {
 		return trajet;
 	}
 	
 
-	public void setTrajet(List<List<Double>> trajet) {
+	public void setTrajet(ArrayList<Coord> trajet) {
 		this.trajet = trajet;
 	}
 
