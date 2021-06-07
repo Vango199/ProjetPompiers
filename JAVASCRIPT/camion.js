@@ -108,7 +108,7 @@ function displayInfoVehiculeMap(){
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
   });
-  setTimeout(displayInfoVehiculeMap, 1000);
+  setTimeout(displayInfoVehiculeMap, 10000);
 
 }
 
@@ -117,12 +117,14 @@ function displayVehicle(body){
     mapIdVehicleLayerOld = new Map();
     flag = true;
   }
+  
   mapIdVehicleLayerNew = new Map();
   for(const vehicle of body){
       if (!mapIdVehicleLayerOld.has(vehicle.id)){
           var Vehicle = L.marker([vehicle.lat, vehicle.lon])
+          console.log('test'+vehicle.lon, vehicle.lat, vehicle.id)
           Vehicle.addTo(map);
-              Vehicle.bindPopup("Id : " + vehicle.id + "<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType +" " +vehicle.liquidQuantity + "L<br>" + "Fuel : "+ vehicle.fuel+ "<br><button type='button' id="+vehicle.id+' onclick=deleteVehicle(this.id)>Supprimer</button>');
+          Vehicle.bindPopup("Id : " + vehicle.id + "<br>Etat :"+vehicle.etat+"<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType + " " + vehicle.liquidQuantity + "L<br>" + "Fuel : " + vehicle.fuel + "<br><button type='button' id=" + vehicle.id + " onclick=deleteVehicle(this.id)>Supprimer</button><button id=" + vehicle.id + " type='button' onclick=editVehicle(this.id,"+vehicle.lat+","+vehicle.lon+")>Modifier</button>");
               
 
               if(vehicle.type == "CAR"){
@@ -143,6 +145,8 @@ function displayVehicle(body){
               if(vehicle.type == "TRUCK"){
                   Vehicle.setIcon(TruckIcon);
               }
+
+
       mapIdVehicleLayerNew.set(vehicle.id,[vehicle.type,vehicle.liquidType,Vehicle,vehicle.facilityRefID,vehicle.liquidQuantity,vehicle.fuel])
     }  
     else{
@@ -150,8 +154,13 @@ function displayVehicle(body){
     mapIdVehicleLayerNew.set(vehicle.id,[mapIdVehicleLayerOld.get(vehicle.id)[0],mapIdVehicleLayerOld.get(vehicle.id)[1],mapIdVehicleLayerOld.get(vehicle.id)[2],mapIdVehicleLayerOld.get(vehicle.id)[3],mapIdVehicleLayerOld.get(vehicle.id)[4],mapIdVehicleLayerOld.get(vehicle.id)[5]]);
     mapIdVehicleLayerOld.delete(vehicle.id);
     }
+
+    RecupCoord(vehicle.id)
                  
   }
+  
+
+
     mapIdVehicleLayerOld.forEach(function(value, key) {
     //console.log("Deleting unnecessary Vehicle Markers");
     map.removeLayer(value[2]);
@@ -213,16 +222,18 @@ function AddVehicle(event){
 
 
 ////////////// AJOUT THOMAS CE WEEKEND : CES DEUX FONTIONS ////////
-function editVehicle(id) {
+function editVehicle(id,lat,lon) {
 
   TruckTypeSelect = '<label for="TruckTypeEdit">Choose a type of car :<br></label><select id="TruckTypeEdit" name="TruckTypeEdit"><option value="CAR">CAR</option><option value="WATER_TENDERS">WATER_TENDERS</option><option value="TURNTABLE_LADDER_TRUCK">TURNTABLE_LADDER_TRUCK</option><option value="TRUCK">TRUCK</option><option value="FIRE_ENGINE">FIRE_ENGINE</option><option value="PUMPER_TRUCK">PUMPER_TRUCK</option></select>';
-  LiquidTypeSelect = '<label for="LiquidTypeEdit">Choose a type of liquid :</label><select id="LiquidTypeEdit" name="LiquidTypeEdit"><option value="ALL">ALL</option><option value="WATER">WATER</option><option value="WATER_WITH_ADDITIVES">WATER_WITH_ADDITIVES</option><option value="CARBON_DIOXIDE">CARBON_DIOXIDE</option><option value="POWDER">POWDER</option></select>';
-  var EditPopup = L.popup().setContent('Define what vehicule you desire<br><form onsubmit=UpdateVehicle(event,' + id + ') method="POST" id="UpdateVehicle">' + TruckTypeSelect + '<br>' + LiquidTypeSelect + '<br> <label for="latEdit">Latitude (between 45.666 and 45.8373):</label><input type="number" id="latEdit" name="latEdit" min="45.666" max="45.8373" value = "45.7" step="0.0001"><label for="lonEdit">Longitude (between 4.688 and 4.97):</label><input type="number" id="lonEdit" name="lonEdit" min="4.688" max="4.97" value = "4.8" step="0.001"><input type="submit"></form>');
-  EditPopup.setLatLng(mymap.getCenter()).openOn(mymap);
+  LiquidTypeSelect = '<label for="LiquidTypeEdit">Choose a type of liquid :<br></label><select id="LiquidTypeEdit" name="LiquidTypeEdit"><option value="ALL">ALL</option><option value="WATER">WATER</option><option value="WATER_WITH_ADDITIVES">WATER_WITH_ADDITIVES</option><option value="CARBON_DIOXIDE">CARBON_DIOXIDE</option><option value="POWDER">POWDER</option></select>';
+  //CaserneNumber = '<label for="CaserneNumber">Choose a firehouse number(max 10 firehouses):<br></label><input type="number" id="CaserneEdit" name="CaserneEdit" min="0" value = "0" max="10" step="1">';
+  FuelEdit = '<br><label for="FuelEdit">Fuel:</label><br><input type="number" id="FuelEdit" name="FuelEdit" min="0" max="100" value="100>';
+  var EditPopup = L.popup().setContent('Define what vehicule you desire<br><form onsubmit=UpdateVehicle(event,' + id + ') method="POST" id="UpdateVehicle">' + TruckTypeSelect + '<br>' + LiquidTypeSelect + '<br>' +FuelEdit+ '<br><label for="latEdit"> <br> Latitude (Between 43,000 and 46,000):</label><br><input type="number" id="latEdit" name="latEdit" min="43.000" max="46.000" value = "'+lat+'" step="0.001"><br><label for="lonEdit">Longitude (Between 4,400 and 5,000):</label><br><input type="number" id="lonEdit" name="lonEdit" min="4,400" max="5.000" value = "'+lon+'" step="0.001"><input type="submit"></form>');
+  EditPopup.setLatLng(map.getCenter()).openOn(map);
 }
 function UpdateVehicle(event, id) {
   event.preventDefault();
-  mymap.closePopup();
+  map.closePopup();
   var charge = {
       "id": id,
       "lon": document.getElementById('lonEdit').value,
@@ -232,11 +243,11 @@ function UpdateVehicle(event, id) {
       "liquidType": document.getElementById('LiquidTypeEdit').value,
       "liquidQuantity": 100.0,
       "liquidConsumption": 0.1,
-      "fuel": 100.0,
+      "fuel": document.getElementById('FuelEdit').value,
       "fuelConsumption": 10.0,
       "crewMember": 8,
       "crewMemberCapacity": 8,
-      "facilityRefID": 0
+      "facilityRefID": 0 //document.getElementById('CaserneEdit').value
   }
   const context = {
       method: 'PUT',
@@ -245,9 +256,10 @@ function UpdateVehicle(event, id) {
       },
       body: JSON.stringify(charge)
   }
-  fetch("http://localhost:8082/Vehicule/modif/" + id, context)
+  fetch("http://localhost:8082/vehicule/modif/" + id, context)
 
 }
+
 
 
 
