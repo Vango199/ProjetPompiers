@@ -134,13 +134,13 @@ public class VehicleService {
 		JsonNode route = this.getTrajetVJson(vehicle.getLat(), vehicle.getLon(),fire.getLat(), fire.getLon());
 		
 		
-		List<List<Double>> ListRoute = new ArrayList();
+		ArrayList<Coord> ListRoute = new ArrayList<Coord>();
 		for ( int i = 0;i< route.get("geometry").get("coordinates").size();i++) {
-			List<Double> coo = new ArrayList();
-			coo.add(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
-			coo.add(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
 			
-			
+			Coord coo = new Coord();
+			coo.setLat(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
+			coo.setLon(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
+	
 			ListRoute.add(coo);
 	    }
 		
@@ -150,7 +150,7 @@ public class VehicleService {
 		
 		
 		
-		vRepository.save(vehicle);
+		this.PutVehicle(vehicle);
 		
 	}
 	
