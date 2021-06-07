@@ -83,6 +83,16 @@ public class RestCrtVehicules {
 		return;
 		
     }
+
+//modif d'un vehicule
+	@RequestMapping(method=RequestMethod.PUT,value="/change/{id}") 
+		public void ChangeVehicle(@PathVariable Integer id, @RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
+		
+			vService.changeVehicle(_vehicle);
+			return;
+			
+		}
+
 	//get un véhicule
 	@RequestMapping(method=RequestMethod.GET,value="/{id}") 
 	public Vehicle GetVehicle(@PathVariable Integer id , HttpServletResponse response,HttpServletRequest request) {
