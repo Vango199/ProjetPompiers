@@ -51,60 +51,68 @@ public class DisplayRunnable implements Runnable {
 	
 	public void Move(Vehicle _vehicle) {
 		
-		
-		int deplacement = 5;
-		double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).get(0);
-		double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).get(1);
-		
-		new GisTools();
-		//transpositions en coordonnées en metres	
-		Coord coordVehicle = new Coord(_vehicle.getLat(),_vehicle.getLon());
-		coordVehicle.setProjection("4326");
-		Coord coordArriv = new Coord(latArriv, lonArriv);
-		coordArriv.setProjection("4326");
-		
-		coordVehicle = GisTools.transformCoord(coordVehicle,"3857");
-		coordArriv = GisTools.transformCoord(coordArriv,"3857");
-		
-		//on rejoint le prochain checkpoint si on est assez près
-		if ((Math.abs(coordVehicle.getLat()-coordArriv.getLat())<deplacement) &&(Math.abs(coordVehicle.getLon()-coordArriv.getLon())<deplacement)) {
-			_vehicle.setTrajetEtape(_vehicle.getTrajetEtape()+1);
-			coordVehicle.setLat(coordArriv.getLat());
-			coordVehicle.setLon(coordArriv.getLon());
+		if (_vehicle.getTrajetEtape()>=_vehicle.getTrajet().size()) {
 			
+			int deplacement = 5;
+			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).get(0);
+			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).get(1);
+			
+			new GisTools();
+			//transpositions en coordonnées en metres	
+			Coord coordVehicle = new Coord(_vehicle.getLat(),_vehicle.getLon());
+			coordVehicle.setProjection("4326");
+			Coord coordArriv = new Coord(latArriv, lonArriv);
+			coordArriv.setProjection("4326");
+			
+			coordVehicle = GisTools.transformCoord(coordVehicle,"3857");
+			coordArriv = GisTools.transformCoord(coordArriv,"3857");
+			
+			//on rejoint le prochain checkpoint si on est assez près
+			
+			
+			
+			
+			
+			if ((Math.abs(coordVehicle.getLat()-coordArriv.getLat())<deplacement) &&(Math.abs(coordVehicle.getLon()-coordArriv.getLon())<deplacement)) {
+				_vehicle.setTrajetEtape(_vehicle.getTrajetEtape()+1);
+				coordVehicle.setLat(coordArriv.getLat());
+				coordVehicle.setLon(coordArriv.getLon());
+				
+			}
+			
+			else if(_vehicle.getTrajetEtape()<=_vehicle.getTrajet().size()) {
+				
+				
+				double angle = Math.atan((coordArriv.getLon()-coordVehicle.getLon())/(coordArriv.getLon()-coordVehicle.getLat()));
+				
+				//On actualise les coo
+				coordVehicle.setLat(Math.cos(angle)*deplacement+coordVehicle.getLat());
+				coordVehicle.setLon(Math.sin(angle)*deplacement+coordVehicle.getLon());
+				
+			}
+			
+			//on repasse en base lat long 
+			coordVehicle = GisTools.transformCoord(coordVehicle,"4326");
+			
+			_vehicle.setLat(coordVehicle.getLat());
+			_vehicle.setLon(coordVehicle.getLon());
+			
+			
+			
+			System.out.println("Vehicule "+_vehicle.getId()+"-->"+coordVehicle.getLat()+","+coordVehicle.getLon() );
+				
+			
+			System.out.println("Vehicule "+_vehicle.getId()+"-->"+coordArriv.getLat()+","+coordArriv.getLon() );
+			
+			//on put en repo et en simu le nouveau vehicle avec les coo actualisées
+			
+			vService.PutVehicle(_vehicle);
 		}
-		else if (_vehicle.getTrajetEtape()<_vehicle.getTrajet().size()) {
-			
-	
-			double angle = Math.atan((coordArriv.getLon()-coordVehicle.getLon())/(coordArriv.getLon()-coordVehicle.getLat()));
-			
-			//On actualise les coo
-			coordVehicle.setLat(Math.cos(angle)*deplacement+coordVehicle.getLat());
-			coordVehicle.setLon(Math.sin(angle)*deplacement+coordVehicle.getLon());
-			
-			
-			
-			
 		
+		else {
 			
+			System.out.println("Arrivé à destination");
 		}
-		
-		//on repasse en base lat long 
-		coordVehicle = GisTools.transformCoord(coordVehicle,"4326");
-		
-		_vehicle.setLat(coordVehicle.getLat());
-		_vehicle.setLon(coordVehicle.getLon());
-		
-		
-		
-		System.out.println("Vehicule "+_vehicle.getId()+"-->"+coordVehicle.getLat()+","+coordVehicle.getLon() );
-			
-		
-		System.out.println("Vehicule "+_vehicle.getId()+"-->"+coordArriv.getLat()+","+coordArriv.getLon() );
-		
-		//on put en repo et en simu le nouveau vehicle avec les coo actualisées
-		
-		vService.PutVehicle(_vehicle);
 		
 		
 	}	
@@ -212,6 +220,7 @@ public class DisplayRunnable implements Runnable {
 					vehicleRet.setIdFire(fireDto.getId());
 					
 					vRepo.save(vehicleRet);
+					this.Move(vehicleRet);
 				}
 				
 			
