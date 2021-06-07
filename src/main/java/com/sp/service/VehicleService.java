@@ -207,7 +207,19 @@ public class VehicleService {
 		return jsonRoute;
 	}
 
-
+	public void changeVehicle(Vehicle _vehicle) {
+		// TODO Auto-generated method stub
+		Vehicle vehicle = this.findById(_vehicle.getId());
+		vehicle.setLat(_vehicle.getLat());
+		vehicle.setLon(_vehicle.getLon());
+		vehicle.setType(_vehicle.getType());
+		vehicle.setLiquidType(_vehicle.getLiquidType());
+		
+		
+		
+		Vehicle vehicletmp =vRepository.save(vehicle);
+		fService.PutVehicle(this.toDto(vehicle));
+	}
 
 
 //	public void Move(Vehicle _vehicle) {
