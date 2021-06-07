@@ -5,6 +5,10 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -12,10 +16,17 @@ import org.springframework.web.client.RestTemplate;
 import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
 import com.sp.model.Vehicle;
+import com.sp.repository.VehicleRepository;
 
 @Service
 public class FireSimulationService {
 
+	
+
+	
+	
+	
+	
 	public FireDto[] getFire() {
 		String UrlGetFires = "http://127.0.0.1:8081/fire/";
 		FireDto[] ListFire = new RestTemplate().getForObject(UrlGetFires,FireDto[].class);
@@ -47,15 +58,20 @@ public class FireSimulationService {
 		return vehicle;
 	}
 	
-	public void PutVehicle( Vehicle _vehicle) {
+	public void PutVehicle( VehicleDto _vehicle) {
 		String UrlPutVehicle = "http://127.0.0.1:8081/vehicle/"+_vehicle.getId();
-		new RestTemplate().put(UrlPutVehicle, _vehicle );
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+		HttpEntity<VehicleDto> request = new HttpEntity<>(_vehicle,headers );
+		new RestTemplate().put(UrlPutVehicle, request );
 		return ;
 	}
 	
 	public void DeleteVehicle( VehicleDto _vehicle) {
-		String UrlDeleteVehicle = "http://127.0.0.1:8081/vehicle/"+_vehicle.getId();
+		String UrlDeleteVehicle = "http://127.0.0.1:8081/vehicle/"+String.valueOf(_vehicle.getId());
 		new RestTemplate().delete(UrlDeleteVehicle);
+		
+		
 		return ;
 	}
 

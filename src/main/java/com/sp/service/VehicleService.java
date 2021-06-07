@@ -1,6 +1,7 @@
 package com.sp.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +39,7 @@ public class VehicleService {
 		this.fService=fService;
 		
 		//Create a Runnable is charge of executing cyclic actions 
-		this.dRunnable=new DisplayRunnable(this.vRepository,this.fService);
+		this.dRunnable=new DisplayRunnable(this.vRepository,this.fService, this);
 		
 		// A Runnable is held by a Thread which manage lifecycle of the Runnable
 		displayThread=new Thread(dRunnable);
@@ -71,7 +72,7 @@ public class VehicleService {
 		Vehicle vehicle = this.findById(_vehicle.getId());
 		vehicle= _vehicle;
 		vRepository.save(vehicle);
-		fService.PutVehicle(_vehicle);
+		fService.PutVehicle(this.toDto(vehicle));
 		
 	}
 
@@ -124,9 +125,9 @@ public class VehicleService {
 		JsonNode route = this.getTrajetVJson(vehicle.getLat(), vehicle.getLon(),fire.getLat(), fire.getLon());
 		
 		
-		List<List<Double>> ListRoute = null;
+		List<List<Double>> ListRoute = new ArrayList();
 		for ( int i = 0;i< route.get("geometry").get("coordinates").size();i++) {
-			List<Double> coo = null;
+			List<Double> coo = new ArrayList();
 			coo.add(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
 			coo.add(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
 			
@@ -141,6 +142,7 @@ public class VehicleService {
 		
 		
 		vRepository.save(vehicle);
+		
 	}
 	
 	
