@@ -75,7 +75,7 @@ public class RestCrtVehicules {
 		
     }
 	
-	
+ 
 	//modifier un véhicule
 	@RequestMapping(method=RequestMethod.PUT,value="/{id}") 
 	public void PutVehicle(@PathVariable Integer id , @RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
@@ -83,7 +83,7 @@ public class RestCrtVehicules {
 		return;
 		
     }
-
+	@CrossOrigin
 //modif d'un vehicule
 	@RequestMapping(method=RequestMethod.PUT,value="/change/{id}") 
 		public void ChangeVehicle(@PathVariable Integer id, @RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
