@@ -220,7 +220,7 @@ public class DisplayRunnable implements Runnable {
 					vehicleRet.setIdFire(fireDto.getId());
 					
 					vRepo.save(vehicleRet);
-					this.Move(vehicleRet);
+					
 				}
 				
 			

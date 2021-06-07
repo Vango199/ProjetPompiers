@@ -113,6 +113,15 @@ public class VehicleService {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	public void deleteAll() {
+		VehicleDto[] listVehicle = fService.GetVehicle();
+		for(VehicleDto vehicleDto : listVehicle) {
+			fService.DeleteVehicle(vehicleDto);
+		}
+		
+	}
 
 //ajout d'un feu au véhicle, et des coo du trajet
 	public void addFireAndSetup(Integer idFire, Integer idVehicle) throws IOException {

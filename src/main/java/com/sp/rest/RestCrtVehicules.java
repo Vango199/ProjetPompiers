@@ -37,7 +37,13 @@ public class RestCrtVehicules {
 	FireSimulationService fService;
 	
 	
-
+    @RequestMapping(method=RequestMethod.DELETE,value="/deleteallvehicle") 
+	public void deleteAll(HttpServletResponse response,HttpServletRequest request) {
+		 vService.deleteAll();
+		 
+		 
+		 return;
+    }
 	
 	//get un trajet
 		@RequestMapping(method=RequestMethod.GET,value="/trajet") 
