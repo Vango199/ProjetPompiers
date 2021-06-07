@@ -108,7 +108,7 @@ function displayInfoVehiculeMap(){
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
   });
-  setTimeout(displayInfoVehiculeMap, 10000);
+  setTimeout(displayInfoVehiculeMap, 1000);
 
 }
 
