@@ -224,7 +224,7 @@ public class DisplayRunnable implements Runnable {
 				if (vehicleRet != null) {
 					//vehicleRet.setIdFire(fireDto.getId());
 					vService.addFireAndSetup(fireDto.getId(), vehicleRet.getId());
-					vRepo.save(vehicleRet);
+					//vRepo.save(vehicleRet);
 				}
 				
 			
