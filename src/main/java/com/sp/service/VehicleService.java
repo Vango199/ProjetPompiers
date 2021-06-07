@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
-
+import com.sp.model.CoordEm;
 import com.sp.model.Vehicle;
 import com.sp.repository.VehicleRepository;
 
@@ -71,7 +71,7 @@ public class VehicleService {
 	public void PutVehicle(Vehicle _vehicle) {
 		Vehicle vehicle = this.findById(_vehicle.getId());
 		vehicle= _vehicle;
-		vRepository.save(vehicle);
+		Vehicle vehicletmp =vRepository.save(vehicle);
 		fService.PutVehicle(this.toDto(vehicle));
 		
 	}
@@ -125,10 +125,14 @@ public class VehicleService {
 		JsonNode route = this.getTrajetVJson(vehicle.getLat(), vehicle.getLon(),fire.getLat(), fire.getLon());
 		
 		
-		ArrayList<Coord> ListRoute = new ArrayList<Coord>();
+		ArrayList<CoordEm> ListRoute = new ArrayList<CoordEm>();
 		for ( int i = 0;i< route.get("geometry").get("coordinates").size();i++) {
 			
-			Coord coo = new Coord();
+//			Coord coo = new Coord();
+//			coo.setLat(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
+//			coo.setLon(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
+			
+			CoordEm coo = new CoordEm();
 			coo.setLat(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
 			coo.setLon(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
 	
@@ -142,6 +146,7 @@ public class VehicleService {
 		
 		
 		this.PutVehicle(vehicle);
+		System.out.println("vehicle "+vehicle.getId()+"--> fire "+vehicle.getIdFire());
 		
 	}
 	
@@ -166,8 +171,8 @@ public class VehicleService {
 		JsonNode jsn = objectMapper.readTree(recupMapBox);
 		JsonNode jsonRoute = jsn.get("routes").get(0);
 		
-		System.out.println("Weight " + jsonRoute.get("weight"));
-		System.out.println("Geom" + jsonRoute.get("geometry").get("coordinates").get(0));
+		//System.out.println("Weight " + jsonRoute.get("weight"));
+		//System.out.println("Geom" + jsonRoute.get("geometry").get("coordinates").get(0));
 		
 //		for (JsonNode route : jsonroutes) {
 //			System.out.println("Weight " + route.get("weight"));

@@ -91,7 +91,9 @@ public class FireSimulationService {
 		FireDto fireDtoToRet = null;
 		FireDto[] listFire = this.getFire();
 		for (FireDto fireDto: listFire) {
-			if (fireDto.getId()==_fireId) {
+			//System.out.println("DTO "+fireDto.getId());
+			//System.out.println("PAram"+_fireId);
+			if (fireDto.getId().intValue()==_fireId) {
 				fireDtoToRet=fireDto;
 				break;
 			}

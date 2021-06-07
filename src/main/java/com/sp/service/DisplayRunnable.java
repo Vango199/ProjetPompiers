@@ -55,10 +55,13 @@ public class DisplayRunnable implements Runnable {
 	}
 	
 	public void Move(Vehicle _vehicle) {
-		
-		if (_vehicle.getTrajetEtape()>=_vehicle.getTrajet().size()) {
+		System.out.println("try to move vehicle "+_vehicle.getId());
+		if (_vehicle.getTrajetEtape()<=_vehicle.getTrajet().size()) {
 			
 			int deplacement = 5;
+//			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
+//			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
+			
 			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
