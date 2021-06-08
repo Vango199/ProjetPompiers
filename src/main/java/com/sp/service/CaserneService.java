@@ -9,7 +9,7 @@ import com.sp.repository.CaserneRepository;
 ;
 
 public class CaserneService {
-/*
+
 	CaserneRepository cRepository;
 	
 	public Caserne findById(Integer _id) {
@@ -23,9 +23,9 @@ public class CaserneService {
 	}
 	
 	public List<Caserne> findAll(){
-		List<Caserne> listCaserne = this.cRepository.findAll();
+		List<Caserne> listCaserne = cRepository.findAll();
 		return listCaserne;
 	}
-	*/
+	
 	
 }

@@ -60,6 +60,7 @@ public class Vehicle {
 		liquidType=LiquidType.ALL;
 		this.idFire =0;
 		this.trajet=new ArrayList<CoordEm>();
+		this.etat = Etat.attenteCaserne;
 	}
 
 	public Vehicle(int id,double lon, double lat, com.project.model.dto.VehicleType type, float efficiency,
@@ -81,7 +82,7 @@ public class Vehicle {
 		this.facilityRefID = facilityRefID;
 		this.idFire = 0;
 		this.trajet=new ArrayList<CoordEm>();
-		
+		this.etat = Etat.attenteCaserne;
 	}
 
 	public double getLon() {
