@@ -192,7 +192,7 @@ public class DisplayRunnable implements Runnable {
 				
 				_vehicle.setLat(Math.cos(angle)*deplacement+_vehicle.getLat());
 				_vehicle.setLon(Math.sin(angle)*deplacement+_vehicle.getLon());
-				_vehicle.setFuel(_vehicle.getFuel() - _vehicle.getFuelConsumption()*(float)deplacement);
+				
 			}	
 			
 			
@@ -223,11 +223,12 @@ public class DisplayRunnable implements Runnable {
 			
 			_vehicle.setLat(caserne.getLat());
 			_vehicle.setLon(caserne.getLon());
-			
+			_vehicle.setFuel(30);
 			
 			System.out.println("Arrivé à la caserne");
 			_vehicle.setEtat(Etat.attenteCaserne);
 		}
+		_vehicle.setFuel(_vehicle.getFuel() - _vehicle.getFuelConsumption()*(float)0.1);
 		vService.PutVehicle(_vehicle);
 		
 	}	
@@ -302,6 +303,7 @@ public class DisplayRunnable implements Runnable {
 				_vehicle.setLat(Math.cos(angle)*deplacement+_vehicle.getLat());
 				_vehicle.setLon(Math.sin(angle)*deplacement+_vehicle.getLon());
 				
+				
 			}	
 			
 			
@@ -335,7 +337,7 @@ public class DisplayRunnable implements Runnable {
 			System.out.println("Arrivé à destination");
 			_vehicle.setEtat(Etat.EteindFeu);
 		}
-		
+		_vehicle.setFuel(_vehicle.getFuel() - _vehicle.getFuelConsumption()*(float)0.1);
 		vService.PutVehicle(_vehicle);
 	}	
 
@@ -457,7 +459,7 @@ public class DisplayRunnable implements Runnable {
 	public void  vehicleToFire3() throws IOException {
 		FireDto[] listfiredto =fService.getFire();
 		for (FireDto fireDto : listfiredto) {
-			double deplacement = 0.001;
+			double deplacement = 0.5;
 			Vehicle vehicleRet = null;
 			double distanceRet = 0;
 			double efficaciteRet = 0;
@@ -489,7 +491,7 @@ public class DisplayRunnable implements Runnable {
 
 						if (vehicle.getEtat() == Etat.attenteCaserne || vehicle.getEtat() == Etat.RetourCaserne ) {
 								
-							if ((vehicle.getFuel()-vehicle.getFuelConsumption()*vService.getDistance(vehicle.getLat(), vehicle.getLon(), fireDto.getLat(), fireDto.getLon())*2*(float)deplacement) > 0) {
+							if (vehicle.getFuel() > 10) {
 																
 								
 						
