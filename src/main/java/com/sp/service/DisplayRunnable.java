@@ -300,7 +300,7 @@ public class DisplayRunnable implements Runnable {
 				
 				_vehicle.setLat(Math.cos(angle)*deplacement+_vehicle.getLat());
 				_vehicle.setLon(Math.sin(angle)*deplacement+_vehicle.getLon());
-				_vehicle.setFuel(_vehicle.getFuel() -(_vehicle.getFuelConsumption()*(float) deplacement));
+				_vehicle.setFuel(_vehicle.getFuel() - _vehicle.getFuelConsumption()*(float)deplacement);
 			}	
 			
 			
@@ -455,7 +455,7 @@ public class DisplayRunnable implements Runnable {
 	public void  vehicleToFire3() throws IOException {
 		FireDto[] listfiredto =fService.getFire();
 		for (FireDto fireDto : listfiredto) {
-			
+			double deplacement = 0.0001;
 			Vehicle vehicleRet = null;
 			double distanceRet = 0;
 			double efficaciteRet = 0;
@@ -474,7 +474,6 @@ public class DisplayRunnable implements Runnable {
 						
 						if (distance > distanceRet) {
 							distanceRet = distance;
-							vehicleRet = vehicle;
 						}
 					}
 				}
@@ -485,28 +484,34 @@ public class DisplayRunnable implements Runnable {
 							vehicleRet = null;
 							break;
 						}
+
 						if (vehicle.getEtat() == Etat.attenteCaserne || vehicle.getEtat() == Etat.RetourCaserne ) {
-							
-							Coord coordVehicle = new Coord(vehicle.getLon(),vehicle.getLat());
-							new GisTools();
-							double efficacite =1 - GisTools.computeDistance2(coordVehicle, coordFire) / distanceRet;
-							double sommeEfficacite = efficacite + (double) vehicle.getLiquidType().getEfficiency(fireDto.getType());
+								
+							if ((vehicle.getFuel()-vehicle.getFuelConsumption()*vService.getDistance(vehicle.getLat(), vehicle.getLon(), fireDto.getLat(), fireDto.getLon())*2*(float)deplacement) > 0) {
+
+								
+								
 						
-							if (efficaciteRet <= sommeEfficacite) {
-								if (efficaciteRet == sommeEfficacite) {
-									if (vehicle.getLiquidType().getEfficiency(fireDto.getType()) > vehicleRet.getLiquidType().getEfficiency(fireDto.getType())) {
+								Coord coordVehicle = new Coord(vehicle.getLon(),vehicle.getLat());
+								new GisTools();
+								double efficacite =1 - GisTools.computeDistance2(coordVehicle, coordFire) / distanceRet;
+								double sommeEfficacite = efficacite + (double) vehicle.getLiquidType().getEfficiency(fireDto.getType());
+							
+								if (efficaciteRet <= sommeEfficacite) {
+									if (efficaciteRet == sommeEfficacite) {
+										if (vehicle.getLiquidType().getEfficiency(fireDto.getType()) > vehicleRet.getLiquidType().getEfficiency(fireDto.getType())) {
+											efficaciteRet= sommeEfficacite;
+											vehicleRet = vehicle;	
+										}
+									}
+									else {
 										efficaciteRet= sommeEfficacite;
-										vehicleRet = vehicle;	
+										vehicleRet = vehicle;
 									}
 								}
-								else {
-									efficaciteRet= sommeEfficacite;
-									vehicleRet = vehicle;
-								}
+			
 							}
-		
 						}
-	
 					
 				}
 				if (vehicleRet != null) {
