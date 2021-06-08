@@ -36,8 +36,8 @@ public class DisplayRunnable implements Runnable {
 	public void run() {
 		while (!this.isEnd) {//uyghgfchgvchgv
 			try {
-				Thread.sleep(10);
-				this.vehicleToFire3();
+				Thread.sleep(1000);
+				this.vehicleToFire2();
 				//this.vehicleToFire();
 				
 				
@@ -137,7 +137,7 @@ public class DisplayRunnable implements Runnable {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
-			double deplacement = 0.0001;
+			double deplacement = 0.001;
 //			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 //			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
@@ -245,7 +245,7 @@ public class DisplayRunnable implements Runnable {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
-			double deplacement = 0.0001;
+			double deplacement = 0.001;
 //			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 //			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
@@ -455,7 +455,7 @@ public class DisplayRunnable implements Runnable {
 	public void  vehicleToFire3() throws IOException {
 		FireDto[] listfiredto =fService.getFire();
 		for (FireDto fireDto : listfiredto) {
-			double deplacement = 0.0001;
+			double deplacement = 0.001;
 			Vehicle vehicleRet = null;
 			double distanceRet = 0;
 			double efficaciteRet = 0;
