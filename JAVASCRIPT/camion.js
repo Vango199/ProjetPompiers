@@ -1,57 +1,9 @@
-/* 
-function GetAllCamionsBomberos(){ //appel de la liste avec tous les camions de pompier
-    fetch('http://localhost:8081/vehicle')
-    .then(
-      function(response) {
-        if (response.status !== 200) {
-          console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-          return;
-        }
-  
-        // Examine the text in the response
-        response.json().then(function(data) {
-          AffichageCamions(data);
-          return data;
-        });
-      }
-    )
-    .catch(function(err) {
-      console.log('Fetch Error :-S', err);
-    });
-    setTimeout(GetAllCamionsBomberos, TempsdeRefresh);
-  }
-  
-  function AffichageCamions(AllCamionsBomberosList){
-  
-  
-  
-  for (i in AllCamionsBomberosList){//On parcourt la liste des feux pour venir les afficher sur la map
-  
-  var myIcon = L.icon({
-    iconUrl: '../Img/my-icon.png',
-    iconSize: [30,  20],
-    iconAnchor: [29, 19],
-  });
-  
-  var my_marker =L.marker([AllCamionsBomberosList[i].lat, AllCamionsBomberosList[i].lon], {icon: myIcon});
-  my_marker.bindPopup(AffichageDonneeCamionsBomberos(AllCamionsBomberosList[i]));
-  my_marker.addTo(pompier);
-  pompier.addTo(map);
-  }
-  }
-  
-  function AffichageDonneeCamionsBomberos(Camion){ //Affichage des données liées au feu
-    y = '<p>' + '<img src="../Img/my-icon.png" width="25" height="25" />' + '<b>  Camion de Pompier : </b>'+ '<br />' + 'Id : ' + Camion.id+ '<br />' + 'Type : ' + Camion.type+ '<br />' + 'Capacité : ' + Camion.crewMemberCapacity + '<br />' + 'Fuel : : ' + Camion.fuel;
-    return y.toString()
-  }
-*/
-  
 ////////////////////////////////////////////////////// AFFICHAGE DES CAMIONS DE BOMBEROS /////////////////////////////////////////////////
 
 flag = false;
 
- //// AJOUT THOMAS : LES ICON 
+
+ ///// AJOUT THOMAS : LES ICON 
  
 var FiretruckIcon = new L.Icon({
   iconUrl: '../Img/firetruck.png',
@@ -135,7 +87,7 @@ function displayVehicle(body){
               if(vehicle.type == "PUMPER_TRUCK"){
                   Vehicle.setIcon(PumperTruckIcon);
               }
-              if(vehicle.type == "WATER_TENDER"){
+              if(vehicle.type == "WATER_TENDERS"){
                   Vehicle.setIcon(WaterTenderIcon);
               }
               if(vehicle.type == "TURNTABLE_LADDER_TRUCK"){
@@ -154,11 +106,10 @@ function displayVehicle(body){
     mapIdVehicleLayerNew.set(vehicle.id,[mapIdVehicleLayerOld.get(vehicle.id)[0],mapIdVehicleLayerOld.get(vehicle.id)[1],mapIdVehicleLayerOld.get(vehicle.id)[2],mapIdVehicleLayerOld.get(vehicle.id)[3],mapIdVehicleLayerOld.get(vehicle.id)[4],mapIdVehicleLayerOld.get(vehicle.id)[5]]);
     mapIdVehicleLayerOld.delete(vehicle.id);
     }
-    //ADD IF IL SE DEPLACE
-    if (vehicle.idFire != 0){
+    if (vehicle.idFire != 0){ // si le camion est associé à un feu (donc va se déplacer)
     RecupCoord(vehicle.id)
     }   
-    if (vehicle.etat == 'EteindFeu'){
+    if (vehicle.etat == 'EteindFeu'){ // si il est en train d'éteindre le feu, on envoie a test_iti pour supprimer l'itinéraire sur la map
       test_iti(vehicle);
     }          
   }
@@ -166,7 +117,6 @@ function displayVehicle(body){
 
 
     mapIdVehicleLayerOld.forEach(function(value, key) {
-    //console.log("Deleting unnecessary Vehicle Markers");
     map.removeLayer(value[2]);
     mapIdVehicleLayerOld.delete(key);
     });
@@ -183,12 +133,12 @@ function deleteVehicle(id){
   fetch('http://localhost:8082/vehicle/deletevehicle/'+id, context)
 }
 
-
+CaserneNumber = '<label for="CaserneNumber">Choose a firehouse (max 3 firehouses):<br></label><input type="number" id="Caserne" name="Caserne" min="1" max="3" value= "1" step="1">';
 TruckTypeSelect = '<label for="TruckType">Choose a type of car :<br></label><select id="TruckType" name="TruckType"><option value="CAR">CAR</option><option value="WATER_TENDERS">WATER_TENDERS</option><option value="TURNTABLE_LADDER_TRUCK">TURNTABLE_LADDER_TRUCK</option><option value="TRUCK">TRUCK</option><option value="FIRE_ENGINE">FIRE_ENGINE</option><option value="PUMPER_TRUCK">PUMPER_TRUCK</option></select>';    
 LiquidTypeSelect = '<label for="LiquidType">Choose a type of liquid :</label><select id="LiquidType" name="LiquidType"><option value="ALL">ALL</option><option value="WATER">WATER</option><option value="WATER_WITH_ADDITIVES">WATER_WITH_ADDITIVES</option><option value="CARBON_DIOXIDE">CARBON_DIOXIDE</option><option value="POWDER">POWDER</option></select>';
-LatEnter = '<label for="POST-lat">Latitude : (Entre 45.600 et 45.825)</label><input id="POST-lat" type="number" name="POST-lat" min="45.600" max="45.825"></input>';
-LonEnter = '<label for="POST-lon">Longitude : (Entre 4.700 et 5.100) </label><input id="POST-lon" type="number" name="POST-lon" min="4.700" max="5.100"></input>';
-var AddPopup = L.popup().setContent('<b>Choisissez votre véhicule :</b><br><form onsubmit=AddVehicle(event) method="POST" id="AddVehicle">'+LatEnter +'<br>' + LonEnter + '<br>' + TruckTypeSelect+'<br>'+LiquidTypeSelect+'<br><input type="submit"></form>');
+LatEnter = '<label for="POST-lat">Latitude : (Entre 45.65 et 45.82)</label><input id="POST-lat" type="number" name="POST-lat" min="45.65" max="45.82" step="0.01" value="45.75" value=></input>';
+LonEnter = '<label for="POST-lon">Longitude : (Entre 4.70 et 5.10) </label><input id="POST-lon" type="number" name="POST-lon" min="4.70" max="5.00" step="0.01" value="4.80"></input>';
+var AddPopup = L.popup().setContent('<b>Choisissez votre véhicule :</b><br><form onsubmit=AddVehicle(event) method="POST" id="AddVehicle">'+LatEnter +'<br>' + LonEnter + '<br>' + TruckTypeSelect+'<br>'+LiquidTypeSelect+'<br>'+ CaserneNumber+'<br> <input type="submit"></form>');
 
 AddButton = L.easyButton('<img title = "Add a vehicle" src="../Img/my-icon.png" height=16 width=24 lenght=9>', function(btn, imap){AddPopup.setLatLng(imap.getCenter()).openOn(imap); }).addTo(map);
       
@@ -223,9 +173,6 @@ function AddVehicle(event){
   fetch("http://localhost:8082/vehicle/add", context)
       
 }
-
-
-
 
 
 
