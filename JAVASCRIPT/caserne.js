@@ -1,6 +1,6 @@
 function AffichageCasernes(){
 
-    fetch('http://localhost:8082/caserne')
+    fetch('http://localhost:8082/caserne/getall')
     .then(
         function(response) {
         if (response.status !== 200) {

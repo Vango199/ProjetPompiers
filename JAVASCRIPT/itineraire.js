@@ -1,4 +1,4 @@
-  function RecupCoord(IdV){ //appel de la liste avec tous les feux
+  function RecupCoord(IdV){ 
     fetch('http://localhost:8082/vehicle/'+IdV)
     .then(
       function(response) {
