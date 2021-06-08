@@ -40,21 +40,22 @@ public class DisplayRunnable implements Runnable {
 				
 				
 				for (Vehicle vehicle : this.vRepo.findAll()) {
-					if ( (vehicle.getIdFire().intValue() != 0 )|| (vehicle.getEtat() == Etat.RetourCaserne) ) {
-						if(fService.GetFireById(vehicle.getIdFire())== null) {
-							vehicle.setEtat(Etat.RetourCaserne);
-							vehicle.setIdFire(0);
-							vRepo.save(vehicle);
-						}
-						if (vehicle.getEtat()== Etat.RetourCaserne) {
-							this.moveRetour(vehicle);
-						}
-						
-						else {
-							this.Move(vehicle);
 					
-						}
+					if(fService.GetFireById(vehicle.getIdFire())== null && vehicle.getEtat()==Etat.EteindFeu) {
+						vehicle.setEtat(Etat.RetourCaserne);
+						vehicle.setIdFire(0);
+						vRepo.save(vehicle);
 					}
+					
+					if (vehicle.getEtat()== Etat.RetourCaserne) {
+						this.moveRetour(vehicle);
+					}
+						
+					if(vehicle.getEtat() == Etat.versFeu ) {
+						this.Move(vehicle);
+					
+					}
+					
 				}	
 					//System.out.println(vehicle.getId());
 				//}
