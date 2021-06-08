@@ -40,7 +40,7 @@ function displayJourneyReshaped(body, id) {
     });
     
     var firstpolyline = new L.Polyline(pointList, {
-    color : randomChoice(['red', 'blue', 'yellow', 'white', 'cyan']),
+    color : randomChoice(['red', 'blue', 'yellow', 'green', 'cyan']),
     weight: 3.5,
     opacity: 0.8,
     smoothFactor: 1
