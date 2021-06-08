@@ -154,9 +154,10 @@ function displayVehicle(body){
     mapIdVehicleLayerNew.set(vehicle.id,[mapIdVehicleLayerOld.get(vehicle.id)[0],mapIdVehicleLayerOld.get(vehicle.id)[1],mapIdVehicleLayerOld.get(vehicle.id)[2],mapIdVehicleLayerOld.get(vehicle.id)[3],mapIdVehicleLayerOld.get(vehicle.id)[4],mapIdVehicleLayerOld.get(vehicle.id)[5]]);
     mapIdVehicleLayerOld.delete(vehicle.id);
     }
-
+    //ADD IF IL SE DEPLACE
+    if (vehicle.idFire){
     RecupCoord(vehicle.id)
-                 
+    }             
   }
   
 

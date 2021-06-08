@@ -1,14 +1,6 @@
 function AffichageCasernes(){
 
 
-    const context = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-        }
-        
-    }
     fetch('http://localhost:8082/caserne/getall')
     .then(
         function(response) {
