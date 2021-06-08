@@ -10,6 +10,7 @@ import com.project.tools.GisTools;
 import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
 import com.sp.model.CoordEm;
+import com.sp.model.Etat;
 import com.sp.model.Vehicle;
 import com.sp.repository.VehicleRepository;
 
@@ -33,9 +34,22 @@ public class DisplayRunnable implements Runnable {
 				Thread.sleep(10);
 				this.vehicleToFire2();
 				//this.vehicleToFire();
+				
+				
 				for (Vehicle vehicle : this.vRepo.findAll()) {
-					if (vehicle.getIdFire().intValue() != 0) {
-						this.Move(vehicle);
+					if ( (vehicle.getIdFire().intValue() != 0 )|| (vehicle.getEtat() == Etat.RetourCaserne) ) {
+						if(fService.GetFireById(vehicle.getIdFire()).getIntensity() == 0.0 ) {
+							vehicle.setEtat(Etat.RetourCaserne);
+							vehicle.setIdFire(0);
+							vRepo.save(vehicle);
+						}
+						if (vehicle.getEtat()== Etat.RetourCaserne) {
+							this.moveRetour(vehicle);
+						}
+						
+						else {this.Move(vehicle);
+					
+						}
 					}
 				}	
 					//System.out.println(vehicle.getId());
@@ -314,6 +328,9 @@ public class DisplayRunnable implements Runnable {
 		return ;
 		
 	}
+	
+	
+	
 
 	
 	
