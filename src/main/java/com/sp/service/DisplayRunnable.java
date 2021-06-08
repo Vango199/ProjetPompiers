@@ -44,8 +44,7 @@ public class DisplayRunnable implements Runnable {
 					if(fService.GetFireById(vehicle.getIdFire())== null && vehicle.getEtat()==Etat.EteindFeu) {
 						vehicle.setEtat(Etat.RetourCaserne);
 						vehicle.setIdFire(0);
-						
-						
+						vService.addTrajetRetour( vehicle);
 						vRepo.save(vehicle);
 					}
 					
@@ -130,25 +129,38 @@ public class DisplayRunnable implements Runnable {
 	public void moveRetour(Vehicle _vehicle) {
 		
 		System.out.println("try to move to caserne vehicle "+_vehicle.getId());
-		
-		int pointeurCoo = _vehicle.getTrajetEtape();
-		//System.out.println("pointeur:"+ pointeurCoo);
-		
 		double angle = 0;
-		
-		if (pointeurCoo >=0) {
+		if (_vehicle.getTrajetEtape()<_vehicle.getTrajet().size()) {
+			
+			int pointeurCoo = _vehicle.getTrajetEtape();
+			System.out.println("pointeur:"+ pointeurCoo);
+			double deplacement = 0.0001;
+//			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
+//			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
+			
+			CoordEm coordArriv =_vehicle.getTrajet().get(_vehicle.getTrajetEtape());
+			
+			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
+			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
+			
+//			new GisTools();
+//			//transpositions en coordonnées en metres	
+//			Coord coordVehicle = new Coord(_vehicle.getLat(),_vehicle.getLon());
+//			coordVehicle.setProjection("4326");
+//			Coord coordArriv = new Coord(latArriv, lonArriv);
+//			coordArriv.setProjection("4326");
+//			
+//			coordVehicle = GisTools.transformCoord(coordVehicle,"3857");
+//			coordArriv = GisTools.transformCoord(coordArriv,"3857");
+			
+			//on rejoint le prochain checkpoint si on est assez près
 			
 			
-			double deplacement = 0.000001;
 			
-			CoordEm coordArriv =_vehicle.getTrajet().get(pointeurCoo);
 			
-			double latArriv = _vehicle.getTrajet().get(pointeurCoo).getLat();
-			double lonArriv = _vehicle.getTrajet().get(pointeurCoo).getLon();
 			
-		
 			if ((Math.abs(_vehicle.getLat()-coordArriv.getLat())<deplacement) &&(Math.abs(_vehicle.getLon()-coordArriv.getLon())<deplacement)) {
-				_vehicle.setTrajetEtape(pointeurCoo-1);
+				_vehicle.setTrajetEtape(_vehicle.getTrajetEtape()+1);
 				_vehicle.setLat(coordArriv.getLat());
 				_vehicle.setLon(coordArriv.getLon());
 				
@@ -170,33 +182,48 @@ public class DisplayRunnable implements Runnable {
 					}
 				
 				
+				//On actualise les coo
+				//_vehicle.setLon(Math.cos(angle)*deplacement+_vehicle.getLon());
+				//_vehicle.setLat(Math.sin(angle)*deplacement+_vehicle.getLat());
+				
+				
 				_vehicle.setLat(Math.cos(angle)*deplacement+_vehicle.getLat());
 				_vehicle.setLon(Math.sin(angle)*deplacement+_vehicle.getLon());
 			}	
+			
+			
+//			//on repasse en base lat long 
+//			coordVehicle = GisTools.transformCoord(coordVehicle,"4326");
+//			
+//			_vehicle.setLat(coordVehicle.getLat());
+//			_vehicle.setLon(coordVehicle.getLon());
+//			
+			
 			
 			System.out.println("Vehicule "+_vehicle.getId()+"-->"+_vehicle.getLat()+","+_vehicle.getLon() );
 			
 			
 			System.out.println("Arrivée-->"+coordArriv.getLon()+","+coordArriv.getLat() );
 			
+			//on put en repo et en simu le nouveau vehicle avec les coo actualisées
 			
 			
 		}
 		
 		else {
 			
-			System.out.println("Arrivé à la caserne");
-			CaserneService cService = null;
+			
+			CaserneService cService = new CaserneService();
 			Caserne caserne = cService.findById(_vehicle.getIdCaserne());
-			_vehicle.setEtat(Etat.attenteCaserne);
+
 			
 			_vehicle.setLat(caserne.getLat());
 			_vehicle.setLon(caserne.getLon());
 			
+			
+			System.out.println("Arrivé à la caserne");
+			_vehicle.setEtat(Etat.attenteCaserne);
 		}
-		
-		//on put en repo et en simu le nouveau vehicle avec les coo actualisées
-		
 		vService.PutVehicle(_vehicle);
 		
 	}	

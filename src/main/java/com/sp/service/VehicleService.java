@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
+import com.sp.model.Caserne;
 import com.sp.model.CoordEm;
 import com.sp.model.Vehicle;
 import com.sp.repository.VehicleRepository;
@@ -28,16 +29,16 @@ public class VehicleService {
 	
 	FireSimulationService fService;
 	VehicleRepository vRepository;
-	
+	CaserneService cService;
 	DisplayRunnable dRunnable;
 	private Thread displayThread;
 	
 
-	public VehicleService(VehicleRepository vRepository,FireSimulationService fService) {
+	public VehicleService(VehicleRepository vRepository,FireSimulationService fService, CaserneService cService) {
 		//Replace the @Autowire annotation....
 		this.vRepository=vRepository;
 		this.fService=fService;
-		
+		this.cService = cService;
 		//Create a Runnable is charge of executing cyclic actions 
 		this.dRunnable=new DisplayRunnable(this.vRepository,this.fService, this);
 		
@@ -151,7 +152,7 @@ public class VehicleService {
 		
 		
 		vehicle.setTrajet(ListRoute);
-		
+		vehicle.setTrajetEtape(0);
 		
 		
 		this.PutVehicle(vehicle);
@@ -159,6 +160,37 @@ public class VehicleService {
 		
 	}
 	
+	public void addTrajetRetour(Vehicle _vehicle) throws IOException {
+		
+		
+		Caserne caserne = cService.findById(_vehicle.getIdCaserne());
+		
+		JsonNode route = this.getTrajetVJson(_vehicle.getLat(), _vehicle.getLon(),caserne.getLat(), caserne.getLon());
+		
+		
+		ArrayList<CoordEm> ListRoute = new ArrayList<CoordEm>();
+		for ( int i = 0;i< route.get("geometry").get("coordinates").size();i++) {
+			
+//			Coord coo = new Coord();
+//			coo.setLat(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
+//			coo.setLon(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
+			
+			CoordEm coo = new CoordEm();
+			coo.setLat(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
+			coo.setLon(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
+	
+			ListRoute.add(coo);
+	    }
+		
+		
+		
+		_vehicle.setTrajet(ListRoute);
+		_vehicle.setTrajetEtape(0);
+		
+		
+		this.PutVehicle(_vehicle);
+		System.out.println("vehicle "+_vehicle.getId()+"--> caserne "+_vehicle.getIdCaserne());
+	}
 	
 //	public RouteDTO getTrajet(double intLat, double intLon, double finLat, double finLon) {
 //		String UrlGetTrajet = "https://api.mapbox.com/directions/v5/mapbox/driving/"+String.valueOf(intLat)+","+String.valueOf(intLon)+"; "+String.valueOf(finLat)+","+String.valueOf(finLon)+"?overview=full&geometries=geojson&access_token=pk.eyJ1IjoidG90by1ldC1nYWJvdSIsImEiOiJja3BlMTJwMHIwM2RvMndvNjVjNWcyeTdkIn0.8DWPSvTRKHCwUmXACaZP0w";
