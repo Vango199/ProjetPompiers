@@ -289,6 +289,12 @@ public class DisplayRunnable implements Runnable {
 		
 		else {
 			
+			FireDto fire = fService.GetFireById(_vehicle.getIdFire());
+			
+			_vehicle.setLat(fire.getLat());
+			_vehicle.setLon(fire.getLon());
+			
+			
 			System.out.println("Arrivé à destination");
 			_vehicle.setEtat(Etat.EteindFeu);
 		}
