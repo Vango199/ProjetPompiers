@@ -58,7 +58,7 @@ public class RestCrtVehicules {
 	
 
 	//ajouter un véhicule
-	@RequestMapping(method=RequestMethod.POST,value="") 
+	@RequestMapping(method=RequestMethod.POST,value="/add") 
 	public void PostVehicle(@RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
 	  
 		vService.PostVehicle(_vehicle);

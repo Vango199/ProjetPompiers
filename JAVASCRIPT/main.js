@@ -1,7 +1,7 @@
 map = L.map('mapid').setView([45.75, 4.85], 11);
 
 
-let TempsdeRefresh = 1000;
+let TempsdeRefresh = 500;
 
 mapIdFireLayerOld = new Map();
 
