@@ -315,7 +315,7 @@ public class DisplayRunnable implements Runnable {
 			
 			//on put en repo et en simu le nouveau vehicle avec les coo actualisées
 			
-			
+			vService.PutVehicle(_vehicle);
 		}
 		
 		else {
@@ -329,7 +329,7 @@ public class DisplayRunnable implements Runnable {
 			System.out.println("Arrivé à destination");
 			_vehicle.setEtat(Etat.EteindFeu);
 		}
-		vService.PutVehicle(_vehicle);
+		
 		
 	}	
 
@@ -434,6 +434,8 @@ public class DisplayRunnable implements Runnable {
 				}
 				if (vehicleRet != null) {
 					//vehicleRet.setIdFire(fireDto.getId());
+					vehicleRet.setEtat(Etat.versFeu);
+					vRepo.save(vehicleRet);
 					vService.addFireAndSetup(fireDto.getId(), vehicleRet.getId());
 					//vRepo.save(vehicleRet);
 				}

@@ -26,10 +26,10 @@ public class CaserneService {
 	    }
 	}
 	
-	public List<Caserne> findAll(){
+	/*public List<Caserne> findAll(){
 		List<Caserne> listCaserne = cRepository.findAll();
 		return listCaserne;
-	}
+	}*/
 	
 	
 }
