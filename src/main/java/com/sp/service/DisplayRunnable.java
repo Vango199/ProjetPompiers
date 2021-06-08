@@ -44,6 +44,7 @@ public class DisplayRunnable implements Runnable {
 					if(fService.GetFireById(vehicle.getIdFire())== null && vehicle.getEtat()==Etat.EteindFeu) {
 						vehicle.setEtat(Etat.RetourCaserne);
 						vehicle.setIdFire(0);
+						vService.addTrajetRetour( vehicle);
 						vRepo.save(vehicle);
 					}
 					
