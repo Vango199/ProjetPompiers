@@ -26,7 +26,7 @@ public class VehicleGenerator implements ApplicationRunner {
 		vService.deleteAll();
 		fService.resetFire();
 		
-		Caserne caserne1 = new Caserne(1,45.7578707,4.8555969);
+		Caserne caserne1 = new Caserne(1,4.8555969,45.7578707);
 		cRepo.save(caserne1);
 
 		Vehicle vehicle1 = new Vehicle((int) 40.0,(double) 4.75,(double) 45.75,VehicleType.CAR,(float) 10,LiquidType.ALL,(float) 10.5,(float)10.5,(float)1,(float)10.5,(int)2,(int) 2,(Integer) 1,(Integer) 1);
