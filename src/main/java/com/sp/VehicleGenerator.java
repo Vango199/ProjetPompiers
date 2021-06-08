@@ -35,19 +35,19 @@ public class VehicleGenerator implements ApplicationRunner {
 		Caserne caserne3 = new Caserne(3,4.909235,45.733753 );
 		cRepo.save(caserne3);
 
-		Vehicle vehicle1 = new Vehicle((int) 40.0,(double) 4.8555969,(double) 45.7578707,VehicleType.CAR,(float) 10,LiquidType.ALL,(float) 10.5,(float)10.5,(float)30,(float)0.5,(int)2,(int) 2,(Integer) 1,(Integer) 1);
+		Vehicle vehicle1 = new Vehicle((int) 40.0,(double) 4.8555969,(double) 45.7578707,VehicleType.CAR,(float) 10,LiquidType.WATER,(float) 10.5,(float)10.5,(float)30,(float)1,(int)2,(int) 2,(Integer) 1,(Integer) 1);
 		vService.PostVehicle(vehicle1);
 		
-		Vehicle vehicle2 = new Vehicle((int) 40.0,(double) 4.8555969,(double) 45.7578707,VehicleType.CAR,(float) 10,LiquidType.ALL,(float) 10.5,(float)10.5,(float)30,(float)0.5,(int)2,(int) 2,(Integer) 1,(Integer) 1);
+		Vehicle vehicle2 = new Vehicle((int) 40.0,(double) 4.8555969,(double) 45.7578707,VehicleType.FIRE_ENGINE,(float) 10,LiquidType.WATER_WITH_ADDITIVES,(float) 10.5,(float)10.5,(float)30,(float)1,(int)2,(int) 2,(Integer) 1,(Integer) 1);
 		vService.PostVehicle(vehicle2);
 		
-		Vehicle vehicle3 = new Vehicle((int) 40.0,(double) 4.765775,(double) 45.759839,VehicleType.CAR,(float) 10,LiquidType.ALL,(float) 10.5,(float)10.5,(float)30,(float)0.5,(int)2,(int) 2,(Integer) 1,(Integer) 2);
+		Vehicle vehicle3 = new Vehicle((int) 40.0,(double) 4.765775,(double) 45.759839,VehicleType.PUMPER_TRUCK,(float) 10,LiquidType.CARBON_DIOXIDE,(float) 10.5,(float)10.5,(float)30,(float)1,(int)2,(int) 2,(Integer) 1,(Integer) 2);
 		vService.PostVehicle(vehicle3);
 		
-		Vehicle vehicle4 = new Vehicle((int) 40.0,(double) 4.765775,(double) 45.759839,VehicleType.CAR,(float) 10,LiquidType.ALL,(float) 10.5,(float)10.5,(float)30,(float)0.5,(int)2,(int) 2,(Integer) 1,(Integer) 2);
+		Vehicle vehicle4 = new Vehicle((int) 40.0,(double) 4.765775,(double) 45.759839,VehicleType.TRUCK,(float) 10,LiquidType.WATER,(float) 10.5,(float)10.5,(float)30,(float)1,(int)2,(int) 2,(Integer) 1,(Integer) 2);
 		vService.PostVehicle(vehicle4);
 		
-		Vehicle vehicle5 = new Vehicle((int) 40.0,(double) 4.909235,(double) 45.733753 ,VehicleType.CAR,(float) 10,LiquidType.ALL,(float) 10.5,(float)10.5,(float)100,(float)0.5,(int)2,(int) 2,(Integer) 1,(Integer) 3);
+		Vehicle vehicle5 = new Vehicle((int) 40.0,(double) 4.909235,(double) 45.733753 ,VehicleType.WATER_TENDERS,(float) 10,LiquidType.ALL,(float) 10.5,(float)10.5,(float)100,(float)1,(int)2,(int) 2,(Integer) 1,(Integer) 3);
 		vService.PostVehicle(vehicle5);
 	}
 }

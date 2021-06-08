@@ -137,7 +137,7 @@ public class DisplayRunnable implements Runnable {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
-			double deplacement = 0.001;
+			double deplacement = 0.01;
 //			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 //			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
@@ -192,6 +192,7 @@ public class DisplayRunnable implements Runnable {
 				
 				_vehicle.setLat(Math.cos(angle)*deplacement+_vehicle.getLat());
 				_vehicle.setLon(Math.sin(angle)*deplacement+_vehicle.getLon());
+				_vehicle.setFuel(_vehicle.getFuel() - _vehicle.getFuelConsumption()*(float)deplacement);
 			}	
 			
 			
@@ -245,7 +246,7 @@ public class DisplayRunnable implements Runnable {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
-			double deplacement = 0.001;
+			double deplacement = 0.01;
 //			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 //			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
@@ -300,7 +301,7 @@ public class DisplayRunnable implements Runnable {
 				
 				_vehicle.setLat(Math.cos(angle)*deplacement+_vehicle.getLat());
 				_vehicle.setLon(Math.sin(angle)*deplacement+_vehicle.getLon());
-				_vehicle.setFuel(_vehicle.getFuel() - _vehicle.getFuelConsumption()*(float)deplacement);
+				
 			}	
 			
 			
@@ -328,6 +329,7 @@ public class DisplayRunnable implements Runnable {
 			
 			_vehicle.setLat(fire.getLat());
 			_vehicle.setLon(fire.getLon());
+			//_vehicle.setFuel(_vehicle.getFuel()-_vehicle.getFuelConsumption()*vService.getDistance(_vehicle.getLat(), _vehicle.getLon(), fireDto.getLat(), fireDto.getLon())*(float)deplacement) );
 			
 			
 			System.out.println("Arrivé à destination");
@@ -488,8 +490,7 @@ public class DisplayRunnable implements Runnable {
 						if (vehicle.getEtat() == Etat.attenteCaserne || vehicle.getEtat() == Etat.RetourCaserne ) {
 								
 							if ((vehicle.getFuel()-vehicle.getFuelConsumption()*vService.getDistance(vehicle.getLat(), vehicle.getLon(), fireDto.getLat(), fireDto.getLon())*2*(float)deplacement) > 0) {
-
-								
+																
 								
 						
 								Coord coordVehicle = new Coord(vehicle.getLon(),vehicle.getLat());
