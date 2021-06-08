@@ -41,7 +41,7 @@ public class DisplayRunnable implements Runnable {
 				
 				for (Vehicle vehicle : this.vRepo.findAll()) {
 					if ( (vehicle.getIdFire().intValue() != 0 )|| (vehicle.getEtat() == Etat.RetourCaserne) ) {
-						if(fService.GetFireById(vehicle.getIdFire()).getIntensity() == 0.0 ) {
+						if(fService.GetFireById(vehicle.getIdFire())== null) {
 							vehicle.setEtat(Etat.RetourCaserne);
 							vehicle.setIdFire(0);
 							vRepo.save(vehicle);
@@ -50,7 +50,8 @@ public class DisplayRunnable implements Runnable {
 							this.moveRetour(vehicle);
 						}
 						
-						else {this.Move(vehicle);
+						else {
+							this.Move(vehicle);
 					
 						}
 					}
@@ -207,7 +208,7 @@ public class DisplayRunnable implements Runnable {
 	public void Move(Vehicle _vehicle) {
 		System.out.println("try to move vehicle "+_vehicle.getId());
 		double angle = 0;
-		if (_vehicle.getTrajetEtape()<=_vehicle.getTrajet().size()) {
+		if (_vehicle.getTrajetEtape()<_vehicle.getTrajet().size()) {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
