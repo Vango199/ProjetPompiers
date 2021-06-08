@@ -34,12 +34,25 @@ public class DisplayRunnable implements Runnable {
 	public void run() {
 		while (!this.isEnd) {//uyghgfchgvchgv
 			try {
-				Thread.sleep(1);
+				Thread.sleep(10);
 				this.vehicleToFire2();
 				//this.vehicleToFire();
+				
+				
 				for (Vehicle vehicle : this.vRepo.findAll()) {
-					if (vehicle.getIdFire().intValue() != 0) {
-						this.Move(vehicle);
+					if ( (vehicle.getIdFire().intValue() != 0 )|| (vehicle.getEtat() == Etat.RetourCaserne) ) {
+						if(fService.GetFireById(vehicle.getIdFire()).getIntensity() == 0.0 ) {
+							vehicle.setEtat(Etat.RetourCaserne);
+							vehicle.setIdFire(0);
+							vRepo.save(vehicle);
+						}
+						if (vehicle.getEtat()== Etat.RetourCaserne) {
+							this.moveRetour(vehicle);
+						}
+						
+						else {this.Move(vehicle);
+					
+						}
 					}
 				}	
 					//System.out.println(vehicle.getId());
@@ -198,7 +211,7 @@ public class DisplayRunnable implements Runnable {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
-			double deplacement = 0.000001;
+			double deplacement = 0.0001;
 //			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 //			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
@@ -393,6 +406,9 @@ public class DisplayRunnable implements Runnable {
 		return ;
 		
 	}
+	
+	
+	
 
 	
 	
