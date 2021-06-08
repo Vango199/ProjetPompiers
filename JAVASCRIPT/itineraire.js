@@ -1,3 +1,7 @@
+//var id_vehicle_trajet = [];
+
+map_poly = new Map();
+
   function RecupCoord(IdV){ 
     fetch('http://localhost:8082/vehicle/'+IdV)
     .then(
@@ -10,9 +14,9 @@
   
         // Examine the text in the response
         response.json().then(function(data) {
-          if (data.idFire != 0) { //Si le véhicule est associé à un feu :
+          if (data.idFire != 0 && !(map_poly.has(data.id))&& (data.etat == "versFeu")) { //Si le véhicule est associé à un feu :
             console.log(data)
-            displayJourneyReshaped(data.trajet);
+            displayJourneyReshaped(data.trajet, data.id);
           }
        //   AffichageFeux(data);
           return data;
@@ -29,7 +33,7 @@ function randomChoice(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
   }
 
-function displayJourneyReshaped(body) {
+function displayJourneyReshaped(body, id) {
     var pointList = [];
     body.forEach(x => {
         //console.log(x.id, x.lat, x.lon);
@@ -46,19 +50,22 @@ function displayJourneyReshaped(body) {
     
     map.addLayer(firstpolyline);
     firstpolyline.addTo(Itineraire);
+    //id_vehicle_trajet.push(id);
 
-    test_iti(body.etat, firstpolyline) // appel fonction pour tester si l'itinéraire est fini ou pas
+    map_poly.set(id,firstpolyline);
+
 
     }
 
 
 
-    function test_iti(etat, firstpolyline) { // test si le véhicule est arrivé au bout de son itinéraire, pour remove le layer
-    //  while (map.hasLayer(firstpolyline)) { // Temps que le polyline concerné par ce trajet n'est pas remove
-        if ( etat == "EteindFeu" ) { // On test si on est arrivé à l'itinéraire
-          map.removeLayer(firstpolyline); // dans ce cas, on remove le layer de l'itinéraire car on est arrivé
-          Itineraire.removeLayer(firstpolyline);
-          setTimeout(test_iti, TempsdeRefresh);
+    function test_iti(data) { // test si le véhicule est arrivé au bout de son itinéraire, pour remove le layer
+      //while (Itineraire.hasLayer(firstpolyline)) { // Temps que le polyline concerné par ce trajet n'est pas remove
+        if ( map_poly.has(data.id) ) { // On test si on est arrivé à l'itinéraire
+          map.removeLayer(map_poly.get(data.id)); // dans ce cas, on remove le layer de l'itinéraire car on est arrivé
+          Itineraire.removeLayer(map_poly.get(data.id));
+          //id_vehicle_trajet.delete(data.id);
+          map_poly.delete(data.id);
         } 
      //}
     }
