@@ -18,10 +18,10 @@ import com.sp.service.CaserneService;
 
 @CrossOrigin
 @RestController
-//@RequestMapping("/caserne")
+@RequestMapping("/caserne")
 public class CaserneCrtrl {
 
-	/*@Autowired
+	@Autowired
 	CaserneService cService;
 	
 	@RequestMapping(method=RequestMethod.GET,value="/{id}") 
@@ -37,7 +37,7 @@ public class CaserneCrtrl {
 	  
 		return cService.findAll();
 		
-    }*/
+    }
 	
 	
 	
