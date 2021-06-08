@@ -137,7 +137,7 @@ public class DisplayRunnable implements Runnable {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
-			double deplacement = 0.01;
+			double deplacement = 0.001;
 //			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 //			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
@@ -247,7 +247,7 @@ public class DisplayRunnable implements Runnable {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
-			double deplacement = 0.01;
+			double deplacement = 0.001;
 //			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 //			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
