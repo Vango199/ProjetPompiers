@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sp.model.Caserne;
+import com.sp.model.Vehicle;
 import com.sp.repository.CaserneRepository;
 import com.sp.service.CaserneService;
 
@@ -34,6 +35,9 @@ public class CaserneCrtrl {
 		return cService.findById(id);
 		
     }
+	
+
+
 	
 	@RequestMapping(method=RequestMethod.GET,value="/getall") 
 	public List<Caserne> GetCasernes(HttpServletResponse response,HttpServletRequest request) {

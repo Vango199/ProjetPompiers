@@ -21,20 +21,22 @@ import com.sp.repository.VehicleRepository;
 public class DisplayRunnable implements Runnable {
 	private VehicleRepository vRepo;
 	private VehicleService vService;
+	private CaserneService cService;
 	boolean isEnd = false;
 	private FireSimulationService fService;
 
-	public DisplayRunnable(VehicleRepository vRepo,FireSimulationService fService,VehicleService vService) {
+	public DisplayRunnable(VehicleRepository vRepo,FireSimulationService fService,VehicleService vService ,CaserneService cService) {
 		this.vRepo = vRepo;
 		this.fService=fService;
 		this.vService= vService;
+		this.cService = cService;
 	}
 
 	@Override
 	public void run() {
 		while (!this.isEnd) {//uyghgfchgvchgv
 			try {
-				Thread.sleep(10);
+				Thread.sleep(1000);
 				this.vehicleToFire2();
 				//this.vehicleToFire();
 				
@@ -44,8 +46,9 @@ public class DisplayRunnable implements Runnable {
 					if(fService.GetFireById(vehicle.getIdFire())== null && vehicle.getEtat()==Etat.EteindFeu) {
 						vehicle.setEtat(Etat.RetourCaserne);
 						vehicle.setIdFire(0);
-						vService.addTrajetRetour(vehicle);
 						vRepo.save(vehicle);
+						vService.addTrajetRetour( vehicle);
+						
 					}
 					
 					if (vehicle.getEtat()== Etat.RetourCaserne) {
@@ -134,7 +137,7 @@ public class DisplayRunnable implements Runnable {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
-			double deplacement = 0.0001;
+			double deplacement = 0.001;
 //			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 //			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
@@ -213,7 +216,7 @@ public class DisplayRunnable implements Runnable {
 		else {
 			
 			
-			CaserneService cService = new CaserneService();
+			
 			Caserne caserne = cService.findById(_vehicle.getIdCaserne());
 
 			
@@ -242,7 +245,7 @@ public class DisplayRunnable implements Runnable {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
-			double deplacement = 0.0001;
+			double deplacement = 0.001;
 //			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 //			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
@@ -297,6 +300,7 @@ public class DisplayRunnable implements Runnable {
 				
 				_vehicle.setLat(Math.cos(angle)*deplacement+_vehicle.getLat());
 				_vehicle.setLon(Math.sin(angle)*deplacement+_vehicle.getLon());
+				_vehicle.setFuel(_vehicle.getFuel() - _vehicle.getFuelConsumption()*(float)deplacement);
 			}	
 			
 			
@@ -315,7 +319,7 @@ public class DisplayRunnable implements Runnable {
 			
 			//on put en repo et en simu le nouveau vehicle avec les coo actualisées
 			
-			vService.PutVehicle(_vehicle);
+			
 		}
 		
 		else {
@@ -330,7 +334,7 @@ public class DisplayRunnable implements Runnable {
 			_vehicle.setEtat(Etat.EteindFeu);
 		}
 		
-		
+		vService.PutVehicle(_vehicle);
 	}	
 
 
@@ -448,7 +452,81 @@ public class DisplayRunnable implements Runnable {
 	
 	
 	
+	public void  vehicleToFire3() throws IOException {
+		FireDto[] listfiredto =fService.getFire();
+		for (FireDto fireDto : listfiredto) {
+			double deplacement = 0.001;
+			Vehicle vehicleRet = null;
+			double distanceRet = 0;
+			double efficaciteRet = 0;
+			int distance;
+			Coord coordFire = new Coord(fireDto.getLon(),fireDto.getLat());
+			
 
+				// récupère la distance maximale
+				for (Vehicle vehicle : this.vRepo.findAll()) {
+					
+					if (vehicle.getIdFire() == 0) {
+						
+						Coord coordVehicle = new Coord(vehicle.getLon(),vehicle.getLat());
+						new GisTools();
+						distance = GisTools.computeDistance2(coordVehicle, coordFire);
+						
+						if (distance > distanceRet) {
+							distanceRet = distance;
+						}
+					}
+				}
+				//recupere le vehicule avec l'efficacité maximale
+				for (Vehicle vehicle : this.vRepo.findAll()) {
+				
+						if (vehicle.getIdFire().doubleValue() == fireDto.getId().doubleValue()) {
+							vehicleRet = null;
+							break;
+						}
+
+						if (vehicle.getEtat() == Etat.attenteCaserne || vehicle.getEtat() == Etat.RetourCaserne ) {
+								
+							if ((vehicle.getFuel()-vehicle.getFuelConsumption()*vService.getDistance(vehicle.getLat(), vehicle.getLon(), fireDto.getLat(), fireDto.getLon())*2*(float)deplacement) > 0) {
+
+								
+								
+						
+								Coord coordVehicle = new Coord(vehicle.getLon(),vehicle.getLat());
+								new GisTools();
+								double efficacite =1 - GisTools.computeDistance2(coordVehicle, coordFire) / distanceRet;
+								double sommeEfficacite = efficacite + (double) vehicle.getLiquidType().getEfficiency(fireDto.getType());
+							
+								if (efficaciteRet <= sommeEfficacite) {
+									if (efficaciteRet == sommeEfficacite) {
+										if (vehicle.getLiquidType().getEfficiency(fireDto.getType()) > vehicleRet.getLiquidType().getEfficiency(fireDto.getType())) {
+											efficaciteRet= sommeEfficacite;
+											vehicleRet = vehicle;	
+										}
+									}
+									else {
+										efficaciteRet= sommeEfficacite;
+										vehicleRet = vehicle;
+									}
+								}
+			
+							}
+						}
+					
+				}
+				if (vehicleRet != null) {
+					//vehicleRet.setIdFire(fireDto.getId());
+					vehicleRet.setEtat(Etat.versFeu);
+					vRepo.save(vehicleRet);
+					vService.addFireAndSetup(fireDto.getId(), vehicleRet.getId());
+					//vRepo.save(vehicleRet);
+				}
+				
+			
+		}
+		return ;
+		
+	}
 	
 	
 	

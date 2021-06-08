@@ -100,7 +100,7 @@ function displayInfoVehiculeMap(){
         return;
       }
       response.json().then(function(data) {
-        displayVehicle(data)
+        displayVehicle(data);
         return;
       });
     }
@@ -108,8 +108,7 @@ function displayInfoVehiculeMap(){
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
   });
-  setTimeout(displayInfoVehiculeMap, 1000);
-
+  setTimeout(displayInfoVehiculeMap, TempsdeRefresh);
 }
 
 function displayVehicle(body){
@@ -124,7 +123,7 @@ function displayVehicle(body){
           var Vehicle = L.marker([vehicle.lat, vehicle.lon])
           console.log('test'+vehicle.lon, vehicle.lat, vehicle.id)
           Vehicle.addTo(map);
-          Vehicle.bindPopup("Id : " + vehicle.id + "<br>Etat :"+vehicle.etat+"<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType + " " + vehicle.liquidQuantity + "L<br>" + "Fuel : " + vehicle.fuel + "<br><button type='button' id=" + vehicle.id + " onclick=deleteVehicle(this.id)>Supprimer</button><button id=" + vehicle.id + " type='button' onclick=editVehicle(this.id,"+vehicle.lat+","+vehicle.lon+")>changeier</button>");
+          Vehicle.bindPopup("Id : " + vehicle.id + "<br>Etat :"+vehicle.etat+"<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType + " " + vehicle.liquidQuantity + "L<br>" + "Fuel : " + vehicle.fuel + "<br><button type='button' id=" + vehicle.id + " onclick=deleteVehicle(this.id)>Supprimer</button><button id=" + vehicle.id + " type='button' onclick=editVehicle(this.id,"+vehicle.lat+","+vehicle.lon+")>Modifier véhicule</button>");
               
 
               if(vehicle.type == "CAR"){
@@ -155,9 +154,12 @@ function displayVehicle(body){
     mapIdVehicleLayerOld.delete(vehicle.id);
     }
     //ADD IF IL SE DEPLACE
-    if (vehicle.idFire){
+    if (vehicle.idFire != 0){
     RecupCoord(vehicle.id)
-    }             
+    }   
+    if (vehicle.etat == 'EteindFeu'){
+      test_iti(vehicle);
+    }          
   }
   
 

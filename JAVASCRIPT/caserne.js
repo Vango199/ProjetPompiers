@@ -22,6 +22,7 @@ function AffichageCasernes(){
     .catch(function(err) {
         console.log('Fetch Error :-S', err);
     });
+    //setTimeout(displayInfoVehiculeMap, TempsdeRefresh);
 }
 
 
@@ -39,12 +40,20 @@ var CaserneIcon = new L.Icon({
     });
 
 function DisplayCaserne(body) {
+
+    for(const Caserne of body){
+        var caserne = L.marker([Caserne.lat, Caserne.lon])
+        caserne.addTo(map)
+        caserne.bindPopup('Je suis une caserne');
+        caserne.setIcon(CaserneIcon);
+    }
+
      
-    body.forEach(element => x=[element.lat, element.lon]);
-        var Caserne = L.marker(x)
-        Caserne.addTo(map)
-    Caserne.bindPopup('Je suis une caserne');
-    Caserne.setIcon(CaserneIcon);
+   // body.forEach(element => x=[element.lat, element.lon]);
+      //  var Caserne = L.marker(x)
+      //  Caserne.addTo(map)
+      //  Caserne.bindPopup('Je suis une caserne');
+       // Caserne.setIcon(CaserneIcon);
            
 
 }
