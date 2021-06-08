@@ -135,7 +135,7 @@ function displayVehicle(body){
               if(vehicle.type == "PUMPER_TRUCK"){
                   Vehicle.setIcon(PumperTruckIcon);
               }
-              if(vehicle.type == "WATER_TENDER"){
+              if(vehicle.type == "WATER_TENDERS"){
                   Vehicle.setIcon(WaterTenderIcon);
               }
               if(vehicle.type == "TURNTABLE_LADDER_TRUCK"){
@@ -184,10 +184,10 @@ function deleteVehicle(id){
 }
 
 CaserneNumber = '<label for="CaserneNumber">Choose a firehouse (max 3 firehouses):<br></label><input type="number" id="Caserne" name="Caserne" min="1" max="3" value= "1" step="1">';
-TruckTypeSelect = '<label for="TruckType">Choose a type of car :<br></label><select id="TruckType" name="TruckType"><option value="CAR">CAR</option><option value="WATER_TENDER">WATER_TENDER</option><option value="TURNTABLE_LADDER_TRUCK">TURNTABLE_LADDER_TRUCK</option><option value="TRUCK">TRUCK</option><option value="FIRE_ENGINE">FIRE_ENGINE</option><option value="PUMPER_TRUCK">PUMPER_TRUCK</option></select>';    
+TruckTypeSelect = '<label for="TruckType">Choose a type of car :<br></label><select id="TruckType" name="TruckType"><option value="CAR">CAR</option><option value="WATER_TENDERS">WATER_TENDERS</option><option value="TURNTABLE_LADDER_TRUCK">TURNTABLE_LADDER_TRUCK</option><option value="TRUCK">TRUCK</option><option value="FIRE_ENGINE">FIRE_ENGINE</option><option value="PUMPER_TRUCK">PUMPER_TRUCK</option></select>';    
 LiquidTypeSelect = '<label for="LiquidType">Choose a type of liquid :</label><select id="LiquidType" name="LiquidType"><option value="ALL">ALL</option><option value="WATER">WATER</option><option value="WATER_WITH_ADDITIVES">WATER_WITH_ADDITIVES</option><option value="CARBON_DIOXIDE">CARBON_DIOXIDE</option><option value="POWDER">POWDER</option></select>';
-LatEnter = '<label for="POST-lat">Latitude : (Entre 45.60 et 45.82)</label><input id="POST-lat" type="number" name="POST-lat" min="45.60" max="45.82" step="0.01" value="45.75" value=></input>';
-LonEnter = '<label for="POST-lon">Longitude : (Entre 4.70 et 5.10) </label><input id="POST-lon" type="number" name="POST-lon" min="4.70" max="5.10" step="0.01" value="4.80"></input>';
+LatEnter = '<label for="POST-lat">Latitude : (Entre 45.65 et 45.82)</label><input id="POST-lat" type="number" name="POST-lat" min="45.65" max="45.82" step="0.01" value="45.75" value=></input>';
+LonEnter = '<label for="POST-lon">Longitude : (Entre 4.70 et 5.10) </label><input id="POST-lon" type="number" name="POST-lon" min="4.70" max="5.00" step="0.01" value="4.80"></input>';
 var AddPopup = L.popup().setContent('<b>Choisissez votre véhicule :</b><br><form onsubmit=AddVehicle(event) method="POST" id="AddVehicle">'+LatEnter +'<br>' + LonEnter + '<br>' + TruckTypeSelect+'<br>'+LiquidTypeSelect+'<br>'+ CaserneNumber+'<br> <input type="submit"></form>');
 
 AddButton = L.easyButton('<img title = "Add a vehicle" src="../Img/my-icon.png" height=16 width=24 lenght=9>', function(btn, imap){AddPopup.setLatLng(imap.getCenter()).openOn(imap); }).addTo(map);
