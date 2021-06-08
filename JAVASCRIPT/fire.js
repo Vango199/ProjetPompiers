@@ -11,7 +11,6 @@ function GetAllFire(){ //appel de la liste avec tous les feux
         // Examine the text in the response
         response.json().then(function(data) {
             displayFire(data);
-       //   AffichageFeux(data);
           return data;
         });
       }
@@ -153,14 +152,8 @@ function displayFire(body){
 
 function perc2color(perc) { //Création d'une échelle de couleurs en fonction de l'intensité du feu pour l'interieur du cercle
 	var r, g, b = 0;
-	//if(perc < 50) {
 		r = 253;
 		g = 255-(Math.round(5.1 * perc));
-	//}
-	//else {
-	//	r = 200;
-	//	g = Math.round(510 - 5.10 * perc);
-	//}
 	var h = r * 0x10000 + g * 0x100 + b * 0x1;
 	return '#' + ('000000' + h.toString(16)).slice(-6);
 }
@@ -168,14 +161,9 @@ function perc2color(perc) { //Création d'une échelle de couleurs en fonction d
 
 function perc2colorDark(perc) { //Création d'une échelle de couleurs en fonction de l'intensité du feu pour le contour du cercle
 	var r, g, b = 0;
-	//if(perc < 50) {
 		r = 255;
 		g = (255-(Math.round(5.1 * perc)));
-	//}
-	//else {
-	//	r = 200;
-	//	g = Math.round(510 - 5.10 * perc);
-	//}
+        
 	var h = r * 0x10000 + g * 0x100 + b * 0x1;
 	return '#' + ('000000' + h.toString(16)).slice(-6);
 }
