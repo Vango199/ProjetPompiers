@@ -2,7 +2,8 @@
 
 flag = false;
 
- //// AJOUT THOMAS : LES ICON 
+
+ ///// AJOUT THOMAS : LES ICON 
  
 var FiretruckIcon = new L.Icon({
   iconUrl: '../Img/firetruck.png',
