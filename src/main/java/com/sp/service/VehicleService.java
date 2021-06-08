@@ -204,6 +204,29 @@ public class VehicleService {
 //		return route;
 //	}
 	
+	public double getDistance (double intLat, double intLon, double finLat, double finLon) throws IOException {
+		
+		JsonNode route = this.getTrajetVJson(intLat, intLon,finLat, finLon);
+		
+		double distance  = route.get("distance").asDouble();
+		
+		
+				
+		return distance;
+	}
+	
+	public double getDuration (double intLat, double intLon, double finLat, double finLon) throws IOException {
+			
+			JsonNode route = this.getTrajetVJson(intLat, intLon,finLat, finLon);
+			
+			double duration  = route.get("duration").asDouble();
+			
+			
+					
+			return duration;
+	}
+		
+	
 	public JsonNode getTrajetVJson(double intLat, double intLon, double finLat, double finLon) throws IOException {
 		//String UrlGetTrajet = "https://api.mapbox.com/directions/v5/mapbox/driving/"+String.valueOf(intLat)+","+String.valueOf(intLon)+"; "+String.valueOf(finLat)+","+String.valueOf(finLon)+"?overview=full&geometries=geojson&access_token=pk.eyJ1IjoidG90by1ldC1nYWJvdSIsImEiOiJja3BlMTJwMHIwM2RvMndvNjVjNWcyeTdkIn0.8DWPSvTRKHCwUmXACaZP0w";
 		String url_mapbox = "https://api.mapbox.com/directions/v5/mapbox/driving/";
