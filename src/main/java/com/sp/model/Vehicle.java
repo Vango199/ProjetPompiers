@@ -60,11 +60,13 @@ public class Vehicle {
 		liquidType=LiquidType.ALL;
 		this.idFire =0;
 		this.trajet=new ArrayList<CoordEm>();
+		this.etat = Etat.attenteCaserne;
+		this.idCaserne=1;
 	}
 
 	public Vehicle(int id,double lon, double lat, com.project.model.dto.VehicleType type, float efficiency,
 			com.project.model.dto.LiquidType liquidType, float liquidQuantity, float liquidConsumption, float fuel,
-			float fuelConsumption, int crewMember, int crewMemberCapacity, Integer facilityRefID) {
+			float fuelConsumption, int crewMember, int crewMemberCapacity, Integer facilityRefID, Integer idCaserne) {
 		super();
 		this.id=id;
 		this.lon = lon;
@@ -81,7 +83,8 @@ public class Vehicle {
 		this.facilityRefID = facilityRefID;
 		this.idFire = 0;
 		this.trajet=new ArrayList<CoordEm>();
-		
+		this.etat = Etat.attenteCaserne;
+		this.idCaserne = idCaserne;
 	}
 
 	public double getLon() {

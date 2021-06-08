@@ -2,6 +2,7 @@ package com.sp.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,8 +10,11 @@ import com.project.model.dto.Coord;
 import com.project.tools.GisTools;
 import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
+import com.sp.model.Caserne;
 import com.sp.model.CoordEm;
+import com.sp.model.Etat;
 import com.sp.model.Vehicle;
+import com.sp.repository.CaserneRepository;
 import com.sp.repository.VehicleRepository;
 
 
@@ -30,12 +34,26 @@ public class DisplayRunnable implements Runnable {
 	public void run() {
 		while (!this.isEnd) {//uyghgfchgvchgv
 			try {
-				Thread.sleep(1);
+				Thread.sleep(10);
 				this.vehicleToFire2();
 				//this.vehicleToFire();
+				
+				
 				for (Vehicle vehicle : this.vRepo.findAll()) {
-					if (vehicle.getIdFire().intValue() != 0) {
-						this.Move(vehicle);
+					if ( (vehicle.getIdFire().intValue() != 0 )|| (vehicle.getEtat() == Etat.RetourCaserne) ) {
+						if(fService.GetFireById(vehicle.getIdFire())== null) {
+							vehicle.setEtat(Etat.RetourCaserne);
+							vehicle.setIdFire(0);
+							vRepo.save(vehicle);
+						}
+						if (vehicle.getEtat()== Etat.RetourCaserne) {
+							this.moveRetour(vehicle);
+						}
+						
+						else {
+							this.Move(vehicle);
+					
+						}
 					}
 				}	
 					//System.out.println(vehicle.getId());
@@ -105,7 +123,81 @@ public class DisplayRunnable implements Runnable {
 //		}
 //		
 	}
+	
+	public void moveRetour(Vehicle _vehicle) {
 		
+		System.out.println("try to move to caserne vehicle "+_vehicle.getId());
+		
+		int pointeurCoo = _vehicle.getTrajetEtape();
+		//System.out.println("pointeur:"+ pointeurCoo);
+		
+		double angle = 0;
+		
+		if (pointeurCoo >=0) {
+			
+			
+			double deplacement = 0.000001;
+			
+			CoordEm coordArriv =_vehicle.getTrajet().get(pointeurCoo);
+			
+			double latArriv = _vehicle.getTrajet().get(pointeurCoo).getLat();
+			double lonArriv = _vehicle.getTrajet().get(pointeurCoo).getLon();
+			
+		
+			if ((Math.abs(_vehicle.getLat()-coordArriv.getLat())<deplacement) &&(Math.abs(_vehicle.getLon()-coordArriv.getLon())<deplacement)) {
+				_vehicle.setTrajetEtape(pointeurCoo-1);
+				_vehicle.setLat(coordArriv.getLat());
+				_vehicle.setLon(coordArriv.getLon());
+				
+			}
+			
+			else  {
+					
+					//x>0 ety>0
+					if (((coordArriv.getLat()-_vehicle.getLat())> 0) && ((coordArriv.getLon()-_vehicle.getLon())>0)) {
+						angle = Math.atan((coordArriv.getLon()-_vehicle.getLon())/(coordArriv.getLat()-_vehicle.getLat()));
+					}
+						//x>0 et y<0
+					if (((coordArriv.getLat()-_vehicle.getLat())> 0) && ((coordArriv.getLon()-_vehicle.getLon())<0)) {
+						angle = Math.atan((coordArriv.getLon()-_vehicle.getLon())/(coordArriv.getLat()-_vehicle.getLat())) + 2* Math.PI;
+					}
+					//x<0
+					if((coordArriv.getLat()-_vehicle.getLat())< 0) {
+						angle = Math.atan((coordArriv.getLon()-_vehicle.getLon())/(coordArriv.getLat()-_vehicle.getLat())) + Math.PI;
+					}
+				
+				
+				_vehicle.setLat(Math.cos(angle)*deplacement+_vehicle.getLat());
+				_vehicle.setLon(Math.sin(angle)*deplacement+_vehicle.getLon());
+			}	
+			
+			System.out.println("Vehicule "+_vehicle.getId()+"-->"+_vehicle.getLat()+","+_vehicle.getLon() );
+			
+			
+			System.out.println("Arrivée-->"+coordArriv.getLon()+","+coordArriv.getLat() );
+			
+			
+			
+		}
+		
+		else {
+			
+			System.out.println("Arrivé à la caserne");
+			CaserneService cService = null;
+			Caserne caserne = cService.findById(_vehicle.getIdCaserne());
+			_vehicle.setEtat(Etat.attenteCaserne);
+			
+			_vehicle.setLat(caserne.getLat());
+			_vehicle.setLon(caserne.getLon());
+			
+		}
+		
+		//on put en repo et en simu le nouveau vehicle avec les coo actualisées
+		
+		vService.PutVehicle(_vehicle);
+		
+	}	
+
 		
 	
 	
@@ -116,11 +208,11 @@ public class DisplayRunnable implements Runnable {
 	public void Move(Vehicle _vehicle) {
 		System.out.println("try to move vehicle "+_vehicle.getId());
 		double angle = 0;
-		if (_vehicle.getTrajetEtape()<=_vehicle.getTrajet().size()) {
+		if (_vehicle.getTrajetEtape()<_vehicle.getTrajet().size()) {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
-			double deplacement = 0.000001;
+			double deplacement = 0.0001;
 //			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 //			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
@@ -193,14 +285,21 @@ public class DisplayRunnable implements Runnable {
 			
 			//on put en repo et en simu le nouveau vehicle avec les coo actualisées
 			
-			vService.PutVehicle(_vehicle);
+			
 		}
 		
 		else {
 			
+			FireDto fire = fService.GetFireById(_vehicle.getIdFire());
+			
+			_vehicle.setLat(fire.getLat());
+			_vehicle.setLon(fire.getLon());
+			
+			
 			System.out.println("Arrivé à destination");
+			_vehicle.setEtat(Etat.EteindFeu);
 		}
-		
+		vService.PutVehicle(_vehicle);
 		
 	}	
 
@@ -314,6 +413,9 @@ public class DisplayRunnable implements Runnable {
 		return ;
 		
 	}
+	
+	
+	
 
 	
 	
