@@ -30,7 +30,7 @@ public class DisplayRunnable implements Runnable {
 	public void run() {
 		while (!this.isEnd) {//uyghgfchgvchgv
 			try {
-				Thread.sleep(1);
+				Thread.sleep(10);
 				this.vehicleToFire2();
 				//this.vehicleToFire();
 				for (Vehicle vehicle : this.vRepo.findAll()) {
@@ -120,7 +120,7 @@ public class DisplayRunnable implements Runnable {
 			
 			int pointeurCoo = _vehicle.getTrajetEtape();
 			System.out.println("pointeur:"+ pointeurCoo);
-			double deplacement = 0.000001;
+			double deplacement = 0.0001;
 //			double latArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLat();
 //			double lonArriv = _vehicle.getTrajet().get(_vehicle.getTrajetEtape()).getLon();
 			
