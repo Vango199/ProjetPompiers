@@ -33,6 +33,8 @@ public class Vehicle {
 	private int crewMemberCapacity;
 	private Integer facilityRefID;
 	private Integer idFire ;
+	private Integer idCaserne;
+	private Etat etat;
 //	@ManyToMany
 //	@JoinTable(
 //			  name = "Geometry", 
@@ -201,6 +203,22 @@ public class Vehicle {
 
 	public void setTrajetEtape(int trajetEtape) {
 		this.trajetEtape = trajetEtape;
+	}
+
+	public Etat getEtat() {
+		return etat;
+	}
+
+	public void setEtat(Etat etat) {
+		this.etat = etat;
+	}
+
+	public Integer getIdCaserne() {
+		return idCaserne;
+	}
+
+	public void setIdCaserne(Integer idCaserne) {
+		this.idCaserne = idCaserne;
 	}
 	
 
