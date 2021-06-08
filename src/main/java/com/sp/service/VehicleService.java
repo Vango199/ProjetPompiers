@@ -231,7 +231,7 @@ public class VehicleService {
 		//String UrlGetTrajet = "https://api.mapbox.com/directions/v5/mapbox/driving/"+String.valueOf(intLat)+","+String.valueOf(intLon)+"; "+String.valueOf(finLat)+","+String.valueOf(finLon)+"?overview=full&geometries=geojson&access_token=pk.eyJ1IjoidG90by1ldC1nYWJvdSIsImEiOiJja3BlMTJwMHIwM2RvMndvNjVjNWcyeTdkIn0.8DWPSvTRKHCwUmXACaZP0w";
 		String url_mapbox = "https://api.mapbox.com/directions/v5/mapbox/driving/";
 		String mapboxSettings = "?geometries=geojson&access_token=";
-		String mapboxKey = "pk.eyJ1IjoidGhlbWRlaWwiLCJhIjoiY2twZTBuMXBzMXNzNjJubnhkdjU2YWVnaSJ9.JQOr5slR2vCCmEUEWNjI2A";
+		String mapboxKey = "pk.eyJ1IjoidG90by1ldC1nYWJvdSIsImEiOiJja3BlMTJwMHIwM2RvMndvNjVjNWcyeTdkIn0.8DWPSvTRKHCwUmXACaZP0w";
 				
 
 		
