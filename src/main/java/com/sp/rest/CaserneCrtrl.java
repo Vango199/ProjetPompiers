@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sp.model.Caserne;
+import com.sp.repository.CaserneRepository;
 import com.sp.service.CaserneService;
 
 
@@ -21,6 +22,8 @@ import com.sp.service.CaserneService;
 @RequestMapping("/caserne")
 public class CaserneCrtrl {
 
+	@Autowired
+	CaserneRepository cRepo;
 	@Autowired
 	CaserneService cService;
 	
@@ -32,10 +35,10 @@ public class CaserneCrtrl {
 		
     }
 	
-	@RequestMapping(method=RequestMethod.GET,value="") 
-	public List<Caserne> GetCasernes(@PathVariable Integer id , HttpServletResponse response,HttpServletRequest request) {
+	@RequestMapping(method=RequestMethod.GET,value="/getall") 
+	public List<Caserne> GetCasernes(HttpServletResponse response,HttpServletRequest request) {
 	  
-		return cService.findAll();
+		return cRepo.findAll();
 		
     }
 	

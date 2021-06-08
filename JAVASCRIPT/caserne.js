@@ -1,6 +1,7 @@
 function AffichageCasernes(){
 
-    fetch('http://localhost:8082/caserne')
+
+    fetch('http://localhost:8082/caserne/getall')
     .then(
         function(response) {
         if (response.status !== 200) {
@@ -23,13 +24,21 @@ function AffichageCasernes(){
     });
 }
 
+
+
+
+
+
+
+
+
 var CaserneIcon = new L.Icon({
     iconUrl: '../Img/caserne-de-pompiers.png',
     iconSize:     [30, 30],
     iconAnchor: new L.Point(16, 16),
     });
 
-function displayCaserne(body) {
+function DisplayCaserne(body) {
      
     body.forEach(element => x=[element.lat, element.lon]);
         var Caserne = L.marker(x)

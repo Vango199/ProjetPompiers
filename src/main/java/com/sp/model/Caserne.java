@@ -37,6 +37,14 @@ public class Caserne {
 
 	
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public double getLon() {
 		return lon;
 	}
