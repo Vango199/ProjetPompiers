@@ -37,7 +37,13 @@ public class RestCrtVehicules {
 	FireSimulationService fService;
 	
 	
-
+    @RequestMapping(method=RequestMethod.DELETE,value="/deleteallvehicle") 
+	public void deleteAll(HttpServletResponse response,HttpServletRequest request) {
+		 vService.deleteAll();
+		 
+		 
+		 return;
+    }
 	
 	//get un trajet
 		@RequestMapping(method=RequestMethod.GET,value="/trajet") 
@@ -69,7 +75,7 @@ public class RestCrtVehicules {
 		
     }
 	
-	
+ 
 	//modifier un véhicule
 	@RequestMapping(method=RequestMethod.PUT,value="/{id}") 
 	public void PutVehicle(@PathVariable Integer id , @RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
@@ -77,6 +83,16 @@ public class RestCrtVehicules {
 		return;
 		
     }
+	@CrossOrigin
+//modif d'un vehicule
+	@RequestMapping(method=RequestMethod.PUT,value="/change/{id}") 
+		public void ChangeVehicle(@PathVariable Integer id, @RequestBody Vehicle _vehicle, HttpServletResponse response,HttpServletRequest request) {
+		
+			vService.changeVehicle(_vehicle);
+			return;
+			
+		}
+
 	//get un véhicule
 	@RequestMapping(method=RequestMethod.GET,value="/{id}") 
 	public Vehicle GetVehicle(@PathVariable Integer id , HttpServletResponse response,HttpServletRequest request) {

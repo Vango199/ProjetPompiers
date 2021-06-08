@@ -20,7 +20,7 @@ var fire_emergency = L.layerGroup();
 
 
 
-var itineraire = L.layerGroup();
+var Itineraire = L.layerGroup();
 
 var pompier = L.layerGroup();
 
@@ -81,7 +81,7 @@ function init() {
 
     darkmode.addTo(map);
 
-    itineraire.addTo(map);
+    Itineraire.addTo(map);
     
  
     start_fire.addTo(map);
@@ -105,7 +105,7 @@ function init() {
     }
 
     var overlayMaps_itineraire = {
-      "Itinéraires" : itineraire
+      "Itinéraires" : Itineraire
     }
 
     var overlayMaps_fire = {
@@ -133,6 +133,7 @@ function init() {
     L.control.layers(null,overlayMaps_type).addTo(map);
 
   GetAllFire();
+
   //GetAllCamionsBomberos();
 }
 

@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
-
+import com.sp.model.CoordEm;
 import com.sp.model.Vehicle;
 import com.sp.repository.VehicleRepository;
 
@@ -71,7 +71,7 @@ public class VehicleService {
 	public void PutVehicle(Vehicle _vehicle) {
 		Vehicle vehicle = this.findById(_vehicle.getId());
 		vehicle= _vehicle;
-		vRepository.save(vehicle);
+		Vehicle vehicletmp =vRepository.save(vehicle);
 		fService.PutVehicle(this.toDto(vehicle));
 		
 	}
@@ -113,6 +113,15 @@ public class VehicleService {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	public void deleteAll() {
+		VehicleDto[] listVehicle = fService.GetVehicle();
+		for(VehicleDto vehicleDto : listVehicle) {
+			fService.DeleteVehicle(vehicleDto);
+		}
+		
+	}
 
 //ajout d'un feu au véhicle, et des coo du trajet
 	public void addFireAndSetup(Integer idFire, Integer idVehicle) throws IOException {
@@ -125,12 +134,16 @@ public class VehicleService {
 		JsonNode route = this.getTrajetVJson(vehicle.getLat(), vehicle.getLon(),fire.getLat(), fire.getLon());
 		
 		
-		ArrayList<Coord> ListRoute = new ArrayList<Coord>();
+		ArrayList<CoordEm> ListRoute = new ArrayList<CoordEm>();
 		for ( int i = 0;i< route.get("geometry").get("coordinates").size();i++) {
 			
-			Coord coo = new Coord();
-			coo.setLat(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
-			coo.setLon(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
+//			Coord coo = new Coord();
+//			coo.setLat(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
+//			coo.setLon(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
+			
+			CoordEm coo = new CoordEm();
+			coo.setLat(route.get("geometry").get("coordinates").get(i).get(1).asDouble());
+			coo.setLon(route.get("geometry").get("coordinates").get(i).get(0).asDouble());
 	
 			ListRoute.add(coo);
 	    }
@@ -142,6 +155,7 @@ public class VehicleService {
 		
 		
 		this.PutVehicle(vehicle);
+		System.out.println("vehicle "+vehicle.getId()+"--> fire "+vehicle.getIdFire());
 		
 	}
 	
@@ -159,15 +173,26 @@ public class VehicleService {
 //	}
 	
 	public JsonNode getTrajetVJson(double intLat, double intLon, double finLat, double finLon) throws IOException {
-		String UrlGetTrajet = "https://api.mapbox.com/directions/v5/mapbox/driving/"+String.valueOf(intLat)+","+String.valueOf(intLon)+"; "+String.valueOf(finLat)+","+String.valueOf(finLon)+"?overview=full&geometries=geojson&access_token=pk.eyJ1IjoidG90by1ldC1nYWJvdSIsImEiOiJja3BlMTJwMHIwM2RvMndvNjVjNWcyeTdkIn0.8DWPSvTRKHCwUmXACaZP0w";
-		String recupMapBox= new RestTemplate().getForObject(UrlGetTrajet, String.class);
+		//String UrlGetTrajet = "https://api.mapbox.com/directions/v5/mapbox/driving/"+String.valueOf(intLat)+","+String.valueOf(intLon)+"; "+String.valueOf(finLat)+","+String.valueOf(finLon)+"?overview=full&geometries=geojson&access_token=pk.eyJ1IjoidG90by1ldC1nYWJvdSIsImEiOiJja3BlMTJwMHIwM2RvMndvNjVjNWcyeTdkIn0.8DWPSvTRKHCwUmXACaZP0w";
+		String url_mapbox = "https://api.mapbox.com/directions/v5/mapbox/driving/";
+		String mapboxSettings = "?geometries=geojson&access_token=";
+		String mapboxKey = "pk.eyJ1IjoidGhlbWRlaWwiLCJhIjoiY2twZTBuMXBzMXNzNjJubnhkdjU2YWVnaSJ9.JQOr5slR2vCCmEUEWNjI2A";
+				
+
+		
+		String url_request = url_mapbox + String.valueOf(intLon) + "," + String.valueOf(intLat)
+		 + ";" + String.valueOf(finLon) + "," + String.valueOf(finLat)
+		 + mapboxSettings + mapboxKey;
+
+		
+		String recupMapBox= new RestTemplate().getForObject(url_request, String.class);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode jsn = objectMapper.readTree(recupMapBox);
 		JsonNode jsonRoute = jsn.get("routes").get(0);
 		
-		System.out.println("Weight " + jsonRoute.get("weight"));
-		System.out.println("Geom" + jsonRoute.get("geometry").get("coordinates").get(0));
+		//System.out.println("Weight " + jsonRoute.get("weight"));
+		//System.out.println("Geom" + jsonRoute.get("geometry").get("coordinates").get(0));
 		
 //		for (JsonNode route : jsonroutes) {
 //			System.out.println("Weight " + route.get("weight"));
@@ -182,7 +207,19 @@ public class VehicleService {
 		return jsonRoute;
 	}
 
-
+	public void changeVehicle(Vehicle _vehicle) {
+		// TODO Auto-generated method stub
+		Vehicle vehicle = this.findById(_vehicle.getId());
+		vehicle.setLat(_vehicle.getLat());
+		vehicle.setLon(_vehicle.getLon());
+		vehicle.setType(_vehicle.getType());
+		vehicle.setLiquidType(_vehicle.getLiquidType());
+		
+		
+		
+		Vehicle vehicletmp =vRepository.save(vehicle);
+		fService.PutVehicle(this.toDto(vehicle));
+	}
 
 
 //	public void Move(Vehicle _vehicle) {

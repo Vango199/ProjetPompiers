@@ -3,20 +3,15 @@ package com.sp.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Embedded;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
-import com.project.model.dto.Coord;
 import com.project.model.dto.LiquidType;
 import com.project.model.dto.VehicleType;
-
-import DTO.Geometry;
 
 @Entity(name="Vehicle")
 @Table(name="Vehicles")
@@ -38,14 +33,18 @@ public class Vehicle {
 	private int crewMemberCapacity;
 	private Integer facilityRefID;
 	private Integer idFire ;
+	private Integer idCaserne;
+	private Etat etat;
 //	@ManyToMany
 //	@JoinTable(
 //			  name = "Geometry", 
 //			  joinColumns = @JoinColumn(name = "vehicle_id"), 
 //			  inverseJoinColumns = @JoinColumn(name = "geometry_id")
 //			  )
-	@Embedded
-	private ArrayList<Coord>  trajet =new ArrayList();
+	//@Embedded
+	//@ElementCollection
+	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	private List<CoordEm>  trajet;
 	private int trajetEtape = 0;
 	
 	public Integer getIdFire() {
@@ -60,7 +59,7 @@ public class Vehicle {
 		crewMember= CREW_MEMBER_START_VALUE;
 		liquidType=LiquidType.ALL;
 		this.idFire =0;
-		
+		this.trajet=new ArrayList<CoordEm>();
 	}
 
 	public Vehicle(int id,double lon, double lat, com.project.model.dto.VehicleType type, float efficiency,
@@ -81,6 +80,7 @@ public class Vehicle {
 		this.crewMemberCapacity = crewMemberCapacity;
 		this.facilityRefID = facilityRefID;
 		this.idFire = 0;
+		this.trajet=new ArrayList<CoordEm>();
 		
 	}
 
@@ -188,12 +188,12 @@ public class Vehicle {
 		this.id = id;
 	}
 
-	public ArrayList<Coord>  getTrajet() {
+	public List<CoordEm>  getTrajet() {
 		return trajet;
 	}
 	
 
-	public void setTrajet(ArrayList<Coord> trajet) {
+	public void setTrajet(ArrayList<CoordEm> trajet) {
 		this.trajet = trajet;
 	}
 
@@ -203,6 +203,22 @@ public class Vehicle {
 
 	public void setTrajetEtape(int trajetEtape) {
 		this.trajetEtape = trajetEtape;
+	}
+
+	public Etat getEtat() {
+		return etat;
+	}
+
+	public void setEtat(Etat etat) {
+		this.etat = etat;
+	}
+
+	public Integer getIdCaserne() {
+		return idCaserne;
+	}
+
+	public void setIdCaserne(Integer idCaserne) {
+		this.idCaserne = idCaserne;
 	}
 	
 
