@@ -100,7 +100,7 @@ function displayInfoVehiculeMap(){
         return;
       }
       response.json().then(function(data) {
-        displayVehicle(data)
+        displayVehicle(data);
         return;
       });
     }
@@ -156,7 +156,10 @@ function displayVehicle(body){
     //ADD IF IL SE DEPLACE
     if (vehicle.idFire != 0){
     RecupCoord(vehicle.id)
-    }             
+    }   
+    if (vehicle.etat == 'EteindFeu'){
+      test_iti(vehicle);
+    }          
   }
   
 
