@@ -10,8 +10,10 @@
   
         // Examine the text in the response
         response.json().then(function(data) {
-            console.log(data.trajet)
+          if (data.idFire != 0) { //Si le véhicule est associé à un feu :
+            console.log(data)
             displayJourneyReshaped(data.trajet);
+          }
        //   AffichageFeux(data);
           return data;
         });
@@ -44,9 +46,22 @@ function displayJourneyReshaped(body) {
     
     map.addLayer(firstpolyline);
     firstpolyline.addTo(Itineraire);
+
+    test_iti(body.etat, firstpolyline) // appel fonction pour tester si l'itinéraire est fini ou pas
+
     }
 
 
+
+    function test_iti(etat, firstpolyline) { // test si le véhicule est arrivé au bout de son itinéraire, pour remove le layer
+    //  while (map.hasLayer(firstpolyline)) { // Temps que le polyline concerné par ce trajet n'est pas remove
+        if ( etat == "EteindFeu" ) { // On test si on est arrivé à l'itinéraire
+          map.removeLayer(firstpolyline); // dans ce cas, on remove le layer de l'itinéraire car on est arrivé
+          Itineraire.removeLayer(firstpolyline);
+          setTimeout(test_iti, TempsdeRefresh);
+        } 
+     //}
+    }
   
 
 
