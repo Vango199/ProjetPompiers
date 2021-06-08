@@ -106,7 +106,7 @@ function displayVehicle(body){
     mapIdVehicleLayerNew.set(vehicle.id,[mapIdVehicleLayerOld.get(vehicle.id)[0],mapIdVehicleLayerOld.get(vehicle.id)[1],mapIdVehicleLayerOld.get(vehicle.id)[2],mapIdVehicleLayerOld.get(vehicle.id)[3],mapIdVehicleLayerOld.get(vehicle.id)[4],mapIdVehicleLayerOld.get(vehicle.id)[5]]);
     mapIdVehicleLayerOld.delete(vehicle.id);
     }
-    if (vehicle.idFire != 0){ // si le camion est associé à un feu (donc va se déplacer)
+    if (vehicle.idFire != 0){ // si le véhicule est associé à un feu (donc va se déplacer)
     RecupCoord(vehicle.id)
     }   
     if (vehicle.etat == 'EteindFeu'){ // si il est en train d'éteindre le feu, on envoie a test_iti pour supprimer l'itinéraire sur la map
