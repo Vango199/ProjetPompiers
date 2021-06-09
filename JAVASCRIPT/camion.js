@@ -1,57 +1,9 @@
-/* 
-function GetAllCamionsBomberos(){ //appel de la liste avec tous les camions de pompier
-    fetch('http://localhost:8081/vehicle')
-    .then(
-      function(response) {
-        if (response.status !== 200) {
-          console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-          return;
-        }
-  
-        // Examine the text in the response
-        response.json().then(function(data) {
-          AffichageCamions(data);
-          return data;
-        });
-      }
-    )
-    .catch(function(err) {
-      console.log('Fetch Error :-S', err);
-    });
-    setTimeout(GetAllCamionsBomberos, TempsdeRefresh);
-  }
-  
-  function AffichageCamions(AllCamionsBomberosList){
-  
-  
-  
-  for (i in AllCamionsBomberosList){//On parcourt la liste des feux pour venir les afficher sur la map
-  
-  var myIcon = L.icon({
-    iconUrl: '../Img/my-icon.png',
-    iconSize: [30,  20],
-    iconAnchor: [29, 19],
-  });
-  
-  var my_marker =L.marker([AllCamionsBomberosList[i].lat, AllCamionsBomberosList[i].lon], {icon: myIcon});
-  my_marker.bindPopup(AffichageDonneeCamionsBomberos(AllCamionsBomberosList[i]));
-  my_marker.addTo(pompier);
-  pompier.addTo(map);
-  }
-  }
-  
-  function AffichageDonneeCamionsBomberos(Camion){ //Affichage des données liées au feu
-    y = '<p>' + '<img src="../Img/my-icon.png" width="25" height="25" />' + '<b>  Camion de Pompier : </b>'+ '<br />' + 'Id : ' + Camion.id+ '<br />' + 'Type : ' + Camion.type+ '<br />' + 'Capacité : ' + Camion.crewMemberCapacity + '<br />' + 'Fuel : : ' + Camion.fuel;
-    return y.toString()
-  }
-*/
-  
 ////////////////////////////////////////////////////// AFFICHAGE DES CAMIONS DE BOMBEROS /////////////////////////////////////////////////
 
 flag = false;
 
- //// AJOUT THOMAS : LES ICON 
+
+ ///// AJOUT THOMAS : LES ICON 
  
 var FiretruckIcon = new L.Icon({
   iconUrl: '../Img/firetruck.png',
@@ -101,6 +53,7 @@ function displayInfoVehiculeMap(){
       }
       response.json().then(function(data) {
         displayVehicle(data);
+        setTimeout(displayInfoVehiculeMap, TempsdeRefresh);
         return;
       });
     }
@@ -108,7 +61,6 @@ function displayInfoVehiculeMap(){
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
   });
-  setTimeout(displayInfoVehiculeMap, TempsdeRefresh);
 }
 
 function displayVehicle(body){
@@ -123,7 +75,7 @@ function displayVehicle(body){
           var Vehicle = L.marker([vehicle.lat, vehicle.lon])
           console.log('test'+vehicle.lon, vehicle.lat, vehicle.id)
           Vehicle.addTo(map);
-          Vehicle.bindPopup("Id : " + vehicle.id + "<br>Etat :"+vehicle.etat+"<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType + " " + vehicle.liquidQuantity + "L<br>" + "Fuel : " + vehicle.fuel + "<br><button type='button' id=" + vehicle.id + " onclick=deleteVehicle(this.id)>Supprimer</button><button id=" + vehicle.id + " type='button' onclick=editVehicle(this.id,"+vehicle.lat+","+vehicle.lon+")>Modifier véhicule</button>");
+          Vehicle.bindPopup("Id : " + vehicle.id + "<br>Etat :"+vehicle.etat+"<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType + " " + vehicle.liquidQuantity + "L<br>" + "Fuel : " + vehicle.fuel + "<br><button type='button' id=" + vehicle.id + " onclick=deleteVehicle(this.id)>Supprimer</button>");
               
 
               if(vehicle.type == "CAR"){
@@ -135,7 +87,7 @@ function displayVehicle(body){
               if(vehicle.type == "PUMPER_TRUCK"){
                   Vehicle.setIcon(PumperTruckIcon);
               }
-              if(vehicle.type == "WATER_TENDER"){
+              if(vehicle.type == "WATER_TENDERS"){
                   Vehicle.setIcon(WaterTenderIcon);
               }
               if(vehicle.type == "TURNTABLE_LADDER_TRUCK"){
@@ -149,15 +101,15 @@ function displayVehicle(body){
       mapIdVehicleLayerNew.set(vehicle.id,[vehicle.type,vehicle.liquidType,Vehicle,vehicle.facilityRefID,vehicle.liquidQuantity,vehicle.fuel])
     }  
     else{
-    mapIdVehicleLayerOld.get(vehicle.id)[2].setLatLng(L.latLng(vehicle.lat,vehicle.lon))
+    mapIdVehicleLayerOld.get(vehicle.id)[2].setLatLng(L.latLng(vehicle.lat,vehicle.lon));
+    mapIdVehicleLayerOld.get(vehicle.id)[2].getPopup().setContent("Id : " + vehicle.id + "<br>Etat :"+vehicle.etat+"<br>Type : " + vehicle.type + "<br>Liquid Load : " + vehicle.liquidType + " " + vehicle.liquidQuantity + "L<br>" + "Fuel : " + vehicle.fuel + "<br><button type='button' id=" + vehicle.id + " onclick=deleteVehicle(this.id)>Supprimer</button>");
     mapIdVehicleLayerNew.set(vehicle.id,[mapIdVehicleLayerOld.get(vehicle.id)[0],mapIdVehicleLayerOld.get(vehicle.id)[1],mapIdVehicleLayerOld.get(vehicle.id)[2],mapIdVehicleLayerOld.get(vehicle.id)[3],mapIdVehicleLayerOld.get(vehicle.id)[4],mapIdVehicleLayerOld.get(vehicle.id)[5]]);
     mapIdVehicleLayerOld.delete(vehicle.id);
     }
-    //ADD IF IL SE DEPLACE
-    if (vehicle.idFire != 0){
+    if (vehicle.idFire != 0){ // si le véhicule est associé à un feu (donc va se déplacer)
     RecupCoord(vehicle.id)
     }   
-    if (vehicle.etat == 'EteindFeu'){
+    if (vehicle.etat == 'EteindFeu'){ // si il est en train d'éteindre le feu, on envoie a test_iti pour supprimer l'itinéraire sur la map
       test_iti(vehicle);
     }          
   }
@@ -165,7 +117,6 @@ function displayVehicle(body){
 
 
     mapIdVehicleLayerOld.forEach(function(value, key) {
-    //console.log("Deleting unnecessary Vehicle Markers");
     map.removeLayer(value[2]);
     mapIdVehicleLayerOld.delete(key);
     });
@@ -182,11 +133,12 @@ function deleteVehicle(id){
   fetch('http://localhost:8082/vehicle/deletevehicle/'+id, context)
 }
 
+CaserneNumber = '<label for="CaserneNumber">Choose a firehouse (max 3 firehouses):<br></label><input type="number" id="Caserne" name="Caserne" min="1" max="3" value= "1" step="1">';
 TruckTypeSelect = '<label for="TruckType">Choose a type of car :<br></label><select id="TruckType" name="TruckType"><option value="CAR">CAR</option><option value="WATER_TENDERS">WATER_TENDERS</option><option value="TURNTABLE_LADDER_TRUCK">TURNTABLE_LADDER_TRUCK</option><option value="TRUCK">TRUCK</option><option value="FIRE_ENGINE">FIRE_ENGINE</option><option value="PUMPER_TRUCK">PUMPER_TRUCK</option></select>';    
 LiquidTypeSelect = '<label for="LiquidType">Choose a type of liquid :</label><select id="LiquidType" name="LiquidType"><option value="ALL">ALL</option><option value="WATER">WATER</option><option value="WATER_WITH_ADDITIVES">WATER_WITH_ADDITIVES</option><option value="CARBON_DIOXIDE">CARBON_DIOXIDE</option><option value="POWDER">POWDER</option></select>';
-LatEnter = '<label for="POST-lat">Latitude :</label><input id="POST-lat" type="text" name="POST-lat"></input>';
-LonEnter = '<label for="POST-lon">Longitude :</label><input id="POST-lon" type="text" name="POST-lon"></input>';
-var AddPopup = L.popup().setContent('<b>Choisissez votre véhicule :</b><br><form onsubmit=AddVehicle(event) method="POST" id="AddVehicle">'+LatEnter +'<br>' + LonEnter + '<br>' + TruckTypeSelect+'<br>'+LiquidTypeSelect+'<br><input type="submit"></form>');
+LatEnter = '<label for="POST-lat">Latitude : (Entre 45.65 et 45.82)</label><input id="POST-lat" type="number" name="POST-lat" min="45.65" max="45.82" step="0.01" value="45.75" value=></input>';
+LonEnter = '<label for="POST-lon">Longitude : (Entre 4.70 et 5.10) </label><input id="POST-lon" type="number" name="POST-lon" min="4.70" max="5.00" step="0.01" value="4.80"></input>';
+var AddPopup = L.popup().setContent('<b>Choisissez votre véhicule :</b><br><form onsubmit=AddVehicle(event) method="POST" id="AddVehicle">'+LatEnter +'<br>' + LonEnter + '<br>' + TruckTypeSelect+'<br>'+LiquidTypeSelect+'<br>'+ CaserneNumber+'<br> <input type="submit"></form>');
 
 AddButton = L.easyButton('<img title = "Add a vehicle" src="../Img/my-icon.png" height=16 width=24 lenght=9>', function(btn, imap){AddPopup.setLatLng(imap.getCenter()).openOn(imap); }).addTo(map);
       
@@ -207,7 +159,9 @@ function AddVehicle(event){
       "fuelConsumption": 10.0,
       "crewMember": 8,
       "crewMemberCapacity": 8,
-      "facilityRefID": 0
+      "facilityRefID": 0,
+      "idCaserne" : 1
+
   }
   const context = {
       method:'POST',
@@ -216,53 +170,9 @@ function AddVehicle(event){
           },
       body: JSON.stringify( charge ) 
   }
-  fetch("http://localhost:8082/vehicle", context)
+  fetch("http://localhost:8082/vehicle/add", context)
       
 }
-
-
-
-
-
-////////////// AJOUT THOMAS CE WEEKEND : CES DEUX FONTIONS ////////
-function editVehicle(id,lat,lon) {
-
-  TruckTypeSelect = '<label for="TruckTypeEdit">Choose a type of car :<br></label><select id="TruckTypeEdit" name="TruckTypeEdit"><option value="CAR">CAR</option><option value="WATER_TENDERS">WATER_TENDERS</option><option value="TURNTABLE_LADDER_TRUCK">TURNTABLE_LADDER_TRUCK</option><option value="TRUCK">TRUCK</option><option value="FIRE_ENGINE">FIRE_ENGINE</option><option value="PUMPER_TRUCK">PUMPER_TRUCK</option></select>';
-  LiquidTypeSelect = '<label for="LiquidTypeEdit">Choose a type of liquid :<br></label><select id="LiquidTypeEdit" name="LiquidTypeEdit"><option value="ALL">ALL</option><option value="WATER">WATER</option><option value="WATER_WITH_ADDITIVES">WATER_WITH_ADDITIVES</option><option value="CARBON_DIOXIDE">CARBON_DIOXIDE</option><option value="POWDER">POWDER</option></select>';
-  //CaserneNumber = '<label for="CaserneNumber">Choose a firehouse number(max 10 firehouses):<br></label><input type="number" id="CaserneEdit" name="CaserneEdit" min="0" value = "0" max="10" step="1">';
-  FuelEdit = '<br><label for="FuelEdit">Fuel:</label><br><input type="number" id="FuelEdit" name="FuelEdit" min="0" max="100" value="100>';
-  var EditPopup = L.popup().setContent('Define what vehicule you desire<br><form onsubmit=UpdateVehicle(event,' + id + ') method="POST" id="UpdateVehicle">' + TruckTypeSelect + '<br>' + LiquidTypeSelect + '<br>' +FuelEdit+ '<br><label for="latEdit"> <br> Latitude (Between 43,000 and 46,000):</label><br><input type="number" id="latEdit" name="latEdit" min="43.000" max="46.000" value = "'+lat+'" step="0.001"><br><label for="lonEdit">Longitude (Between 4,400 and 5,000):</label><br><input type="number" id="lonEdit" name="lonEdit" min="4,400" max="5.000" value = "'+lon+'" step="0.001"><input type="submit"></form>');
-  EditPopup.setLatLng(map.getCenter()).openOn(map);
-}
-function UpdateVehicle(event, id) {
-  event.preventDefault();
-  map.closePopup();
-  var charge = {
-      "id": id,
-      "lon": document.getElementById('lonEdit').value,
-      "lat": document.getElementById('latEdit').value,
-      "type": document.getElementById('TruckTypeEdit').value,
-      "efficiency": 10.0,
-      "liquidType": document.getElementById('LiquidTypeEdit').value,
-      "liquidQuantity": 100.0,
-      "liquidConsumption": 0.1,
-      "fuel": document.getElementById('FuelEdit').value,
-      "fuelConsumption": 10.0,
-      "crewMember": 8,
-      "crewMemberCapacity": 8,
-      "facilityRefID": 0 //document.getElementById('CaserneEdit').value
-  }
-  const context = {
-      method: 'PUT',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(charge)
-  }
-  fetch("http://localhost:8082/vehicule/change/" + id, context)
-
-}
-
 
 
 
